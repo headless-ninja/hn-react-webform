@@ -26,7 +26,13 @@ class FormComponent extends React.Component {
     const form = [];
     if (formElements) {
       for (const [elementKey, element] of entries(formElements)) {
-        form.push(<FormElementComponent key={elementKey} name={elementKey} props={element} store={this.store} />);
+        form.push(<FormElementComponent
+          key={elementKey}
+          name={elementKey}
+          props={element}
+          store={this.store}
+          settings={this.props.settings}
+        />);
       }
     }
     return form;

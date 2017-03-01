@@ -169,6 +169,7 @@ class FormElementComponent extends React.Component {
         props={this.props.props}
         store={this.store}
         validations={this.getValidations()}
+        settings={this.props.settings}
       />);
     }
     return false;

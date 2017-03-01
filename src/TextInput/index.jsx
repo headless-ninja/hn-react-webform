@@ -23,6 +23,7 @@ class TextFormComponent extends React.Component {
         value={this.state.value}
         name={this.props.name}
         validations={this.props.validations}
+        style={{padding: this.props.settings.padding}}
       />
     );
   }
