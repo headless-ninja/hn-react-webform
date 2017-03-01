@@ -5,6 +5,7 @@ import TextArea from './TextArea';
 import Checkbox from './Checkbox';
 import EmailInput from './EmailInput';
 import PhoneInput from './PhoneInput';
+import Paragraph from './Paragraph';
 import Select from './Select';
 
 const components = {
@@ -13,6 +14,7 @@ const components = {
   checkbox: Checkbox,
   email: EmailInput,
   tel: PhoneInput,
+  webform_message: Paragraph,
   select: Select,
 };
 
