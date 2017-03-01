@@ -34,7 +34,7 @@ class CheckboxFormComponent extends React.Component {
         value={this.state.value}
         name={this.props.name}
         validations={this.props.validations}
-        styleName="checkbox active"
+        styleName="checkbox"
       />
     );
   }
