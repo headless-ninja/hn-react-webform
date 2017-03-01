@@ -31,7 +31,6 @@ class FormComponent extends React.Component {
           name={elementKey}
           props={element}
           store={this.store}
-          settings={this.props.settings}
         />);
       }
     }
