@@ -1,0 +1,10 @@
+// Checkbox Input
+
+.checkbox {
+  transform: scale(2);
+  color: var(--mainColor);
+
+  & .hidden{
+
+  }
+}
