@@ -1,66 +1,94 @@
 import React from 'react';
-import Validation from 'react-validation';
 import getNested from 'get-nested';
 import fetch from 'fetch-everywhere';
-import { observer } from 'mobx-react';
-import FormStore from './formStore';
-import { entries } from '../utils';
+import{ observer } from 'mobx-react';
+import CSSModules from 'react-css-modules';
+import FormStore from './FormStore';
 import SubmitButton from '../SubmitButton';
-import FormElementComponent from '../WebformElement';
+import WebformElement from '../WebformElement';
+import rules from './rules';
+import styles from './styles.scss';
 
+@CSSModules(styles, { allowMultiple: true })
 @observer
-class FormComponent extends React.Component {
+class Webform extends React.Component {
+  static propTypes = {
+    form: React.PropTypes.shape({
+      form_id: React.PropTypes.string.isRequired,
+      settings: React.PropTypes.object,
+      elements: React.PropTypes.arrayOf(React.PropTypes.shape({
+        '#type': React.PropTypes.string.isRequired,
+      })).isRequired,
+      token: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.bool]),
+    }).isRequired,
+  };
+
   constructor(props) {
     super(props);
-    this.store = new FormStore();
-    this.state = {
-      value: 'Default',
-    };
 
-    this.onSubmit = this.onSubmit.bind(this);
-    this.validate = this.validate.bind(this);
+    this.formStore = new FormStore();
+
+    this.components = [];
+
+    this.state = {
+      hasErrors: false,
+      errors: [],
+    };
   }
 
-  getFormElements() {
-    const formElements = getNested(() => this.props.form.elements);
-    const form = [];
-    if (formElements) {
-      for (const [elementKey, element] of entries(formElements)) {
-        form.push(<FormElementComponent
-          key={elementKey}
-          name={elementKey}
-          props={element}
-          store={this.store}
-        />);
-      }
-    }
-    return form;
+  componentDidMount() {
+    this.validateState();
   }
 
   onSubmit(e) {
     e.preventDefault();
     const isValid = this.validate();
-    if (isValid) {
-      this.updateSubmission(false);
+    if(isValid) {
+      this.updateSubmission();
     }
   }
 
-  validate() {
-    if (this.refs.formElement) {
-      const errors = this.refs.formElement.validateAll();
-      this.refs.formElement.validateState();
-      return Object.keys(errors).length === 0;
-    }
-    return false;
+  getFormElements() {
+    const formElements = getNested(() => this.props.form.elements, []);
+    return formElements.map((field) => {
+     return <WebformElement
+        key={field['#webform_key']}
+        field={field}
+        formStore={this.formStore}
+      />});
   }
 
-  updateSubmission(draft = true) {
+  hasErrors() {
+    Object.keys(this.components).reduce((prev, name) => {
+      const component = this.components[name];
+      const validations = component.props.validations;
+      const length = validations.length;
+
+      for(let i = 0; i < length; i += 1) {
+        if(!rules[validations[i]].rule(component.state.value, this.components)) {
+          prev[name] = prev[name] || [];
+          prev[name].push(validations[i]);
+        }
+      }
+
+      return prev;
+    }, {});
+  }
+
+  validateState() {
+    const hasErrors = this.hasErrors();
+    this.setState({ hasErrors });
+  }
+
+  updateSubmission(draft = false) {
     const headers = new Headers({
       'Content-Type': 'application/json',
       'X-CSRF-Token': this.props.form.token,
     });
     const values = {};
-    this.store.fields.forEach(field => values[field.id] = field.value);
+    this.formStore.fields.forEach((field) => {
+      values[field.id] = field.value;
+    });
     fetch('/api/form', {
       headers,
       method: 'POST',
@@ -76,18 +104,19 @@ class FormComponent extends React.Component {
   }
 
   render() {
-    const form = this.getFormElements();
-    console.log(form);
+    const formElements = this.getFormElements();
     return (
       <div>
-        {form &&
-        <Validation.components.Form ref="formElement" method="POST" onSubmit={this.onSubmit}>
-          {form}
-          <SubmitButton form={this.props.form} formElement={getNested(() => this.refs.formElement)} />
-        </Validation.components.Form>
-        }
+        <form ref="formElement" method="POST" onSubmit={this.onSubmit}>
+          {formElements}
+          <SubmitButton
+            form={this.props.form}
+            formElement={getNested(() => this.refs.formElement)}
+          />
+        </form>
       </div>
     );
   }
 }
-export default FormComponent;
+
+export default Webform;

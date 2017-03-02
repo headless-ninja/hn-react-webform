@@ -1,6 +1,6 @@
 import React from 'react';
 import Validation from 'react-validation';
-import styles from './styles.css';
+import styles from './styles.scss';
 import CSSModules from 'react-css-modules';
 
 @CSSModules(styles)
@@ -8,17 +8,7 @@ class CheckboxFormComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      value: false,
-    };
-
     this.onChange = this.onChange.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value && nextProps.value !== this.state.value) {
-      // this.setState({ value: nextProps.value });
-    }
   }
 
   onChange(e) {
@@ -28,12 +18,11 @@ class CheckboxFormComponent extends React.Component {
 
   render() {
     return (
-      <Validation.components.Input
+      <input
         type="checkbox"
         onChange={this.onChange}
-        value={this.state.value}
-        name={this.props.name}
-        validations={this.props.validations}
+        value={this.props.value}
+        name={this.props.field['#webform_key']}
         styleName="checkbox"
       />
     );

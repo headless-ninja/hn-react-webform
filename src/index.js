@@ -1,19 +1,17 @@
 import 'babel-polyfill';
 import Webform from './Webform';
-import TextInput from './TextInput';
 import TextArea from './TextArea';
 import Checkbox from './Checkbox';
-import EmailInput from './EmailInput';
-import PhoneInput from './PhoneInput';
 import Paragraph from './Paragraph';
 import Select from './Select';
+import GeneralInput from './GeneralInput';
 
 const components = {
-  textfield: TextInput,
+  textfield: GeneralInput,
   textarea: TextArea,
   checkbox: Checkbox,
-  email: EmailInput,
-  tel: PhoneInput,
+  email: GeneralInput,
+  tel: GeneralInput,
   webform_message: Paragraph,
   select: Select,
 };

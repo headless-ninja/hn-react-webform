@@ -1,14 +1,13 @@
 import React from 'react';
-import Validation from 'react-validation';
+import getNested from 'get-nested';
 
 class SubmitButtonComponent extends React.Component {
-
   render() {
-    const settings = this.props.form ? this.props.form.settings : {};
+    const settings = getNested(() => this.props.form.settings, {});
     return (
       <div>
         {settings &&
-          <Validation.components.Button {...settings.form_submit_attributes}>{settings.form_submit_label}</Validation.components.Button>
+        <button {...settings.form_submit_attributes}>{settings.form_submit_label}</button>
         }
       </div>
     );

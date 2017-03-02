@@ -1,7 +1,6 @@
 import React from 'react';
-import Validation from 'react-validation';
 
-class TextFormComponent extends React.Component {
+class GeneralInput extends React.Component {
   constructor(props) {
     super(props);
 
@@ -11,7 +10,7 @@ class TextFormComponent extends React.Component {
   }
 
   render() {
-    return (
+    return(
       <input
         type='text'
         onChange={this.props.onChange}
@@ -22,4 +21,4 @@ class TextFormComponent extends React.Component {
   }
 }
 
-export default TextFormComponent;
+export default GeneralInput;

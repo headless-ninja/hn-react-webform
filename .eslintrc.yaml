@@ -1,2 +1,27 @@
 extends: airbnb
+rules:
+  keyword-spacing:
+    - 2
+    -
+      after: false
+      overrides:
+        from:
+          after: true
+        case:
+          after: true
+        return:
+          after: true
+  no-param-reassign:
+    - 2
+    -
+      props: false
+  max-len:
+    - 2
+    -
+      code: 140
+      ignoreComments: true
+      ignoreUrls: true
+      ignoreStrings: true
+      ignoreTemplateLiterals: true
+
 parser: babel-eslint
