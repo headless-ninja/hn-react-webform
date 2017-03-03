@@ -28,5 +28,6 @@
     height: var(--spacingUnit);
     margin-right: calc(var(--spacingUnit) / 2);
     background-color: var(--inputColor);
+    border: 1px solid var(--borderColor);
     border-radius: 50%;
 }
