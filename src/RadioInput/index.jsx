@@ -14,13 +14,22 @@ class RadioFormComponent extends React.Component {
 
   render() {
     return (
-      <input
-        type='radio'
-        onChange={this.onChange}
-        value={this.props.value}
-        name={this.props.field['#webform_key']}
-        id={this.props.field['#webform_key']}
-      />
+      <div>
+        {
+          this.props.field && Object.keys(this.props.field['#options']).map((option) =>
+            <label key={option}>
+              <input
+                type='radio'
+                onChange={this.onChange}
+                value={option}
+                name={this.props.field['#webform_key']}
+                id={this.props.field['#webform_key']}
+              />
+              { this.props.field['#options'][option]}
+            </label>,
+          )
+        }
+      </div>
     );
   }
 }
