@@ -21,6 +21,7 @@ class WebformElement extends React.Component {
       ]),
       '#validationError': React.PropTypes.string,
       '#title': React.PropTypes.string,
+      '#states': React.PropTypes.object,
     }).isRequired,
     formStore: React.PropTypes.instanceOf(FormStore).isRequired,
     label: React.PropTypes.oneOfType([
@@ -69,12 +70,13 @@ class WebformElement extends React.Component {
       visible: true,
       required: props.field['#required'] || false,
       enabled: true,
+      error: '',
     };
 
     Object.assign(rules, {
       required: {
         rule: value => value.toString().trim(),
-        hint: () => <span className="form-error is-visible">Required</span>,
+        hint: () => <span className='form-error is-visible'>Required</span>,
       },
     });
 
@@ -84,7 +86,7 @@ class WebformElement extends React.Component {
         [`pattern_${this.key}`]: {
           rule: (value = '') => new RegExp(pattern).test(value),
           hint: value =>
-            <span className="form-error is-visible">
+            <span className='form-error is-visible'>
               <strong>{value}</strong> heeft niet het goede formaat ({props.field['#validationError'] || pattern})
             </span>,
         },
@@ -154,6 +156,10 @@ class WebformElement extends React.Component {
     }
 
     return false;
+  }
+
+  hasErrors() {
+    return this.validate();
   }
 
   // conditional logic
@@ -237,6 +243,10 @@ class WebformElement extends React.Component {
     }
   }
 
+  validate() {
+    return this.props.validations.reduce((prev, validation) => validation.rule(this.state.value) || prev, false);
+  }
+
   render() {
     const element = this.getFormElement();
     // const validations = this.getValidations();
@@ -247,13 +257,17 @@ class WebformElement extends React.Component {
           {element}
           {!element &&
           <input
-            type="text"
+            type='text'
             onChange={this.onChange}
             value={this.getValue()}
             name={this.key}
+            id={this.key}
           />
           }
         </label>
+        <span className="error">
+          {this.state.error}
+        </span>
       </div>
     );
   }

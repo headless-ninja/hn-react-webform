@@ -9,7 +9,7 @@ class EmailFormComponent extends React.Component {
     rules = Object.assign(rules, {
       email: {
         rule: value => validator.isEmail(value),
-        hint: value => <span className="form-error is-visible">{value} isn&sbquo;t an Email.</span>,
+        hint: value => <span className='form-error is-visible'>{value} isn&sbquo;t an Email.</span>,
       },
     });
   }
@@ -21,6 +21,7 @@ class EmailFormComponent extends React.Component {
         onChange={this.props.onChange}
         value={this.props.value}
         name={this.props.field['#webform_key']}
+        id={this.props.field['#webform_key']}
       />
     );
   }

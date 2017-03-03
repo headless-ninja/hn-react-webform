@@ -1,6 +1,4 @@
 import React from 'react';
-import Validation from 'react-validation';
-import validator from 'validator';
 import Select from 'react-select';
 import getNested from 'get-nested';
 import { entries } from '../utils';
@@ -34,6 +32,7 @@ class SelectFormComponent extends React.Component {
     return (
       <Select
         name={this.props.field['#webform_key']}
+        id={this.props.field['#webform_key']}
         value={this.props.value}
         multi={this.props.props['#multiple']}
         options={options}

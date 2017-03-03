@@ -22,7 +22,6 @@
     "react-input-mask": "^0.7.7",
     "react-router": "^2.6.1",
     "react-select": "^1.0.0-rc.3",
-    "react-validation": "^2.10.9",
     "validator": "^6.2.1"
   },
   "devDependencies": {

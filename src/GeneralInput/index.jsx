@@ -10,12 +10,13 @@ class GeneralInput extends React.Component {
   }
 
   render() {
-    return(
+    return (
       <input
         type='text'
         onChange={this.props.onChange}
         value={this.props.value}
         name={this.props.field['#webform_key']}
+        id={this.props.field['#webform_key']}
       />
     );
   }

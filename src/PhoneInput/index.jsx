@@ -31,7 +31,8 @@ class PhoneFormComponent extends React.Component {
         onChange={this.props.onChange}
         value={this.props.value}
         type='text'
-        name={this.props.key}
+        name={this.props.field['#webform_key']}
+        id={this.props.field['#webform_key']}
         mask={this.state.mask.pattern}
         alwaysShowMask={this.state.mask.always_visible}
       />

@@ -11,6 +11,8 @@ rules:
           after: true
         return:
           after: true
+        const:
+          after: true
   no-param-reassign:
     - 2
     -
@@ -23,5 +25,8 @@ rules:
       ignoreUrls: true
       ignoreStrings: true
       ignoreTemplateLiterals: true
+  jsx-quotes:
+    - 2
+    - prefer-single
 
 parser: babel-eslint

@@ -16,4 +16,4 @@ const components = {
 };
 
 export default Webform;
-export { components };
+export{ components };

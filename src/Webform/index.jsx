@@ -6,7 +6,6 @@ import CSSModules from 'react-css-modules';
 import FormStore from './FormStore';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
-import rules from './rules';
 import styles from './styles.scss';
 
 @CSSModules(styles, { allowMultiple: true })
@@ -50,34 +49,20 @@ class Webform extends React.Component {
 
   getFormElements() {
     const formElements = getNested(() => this.props.form.elements, []);
-    return formElements.map((field) => {
-     return <WebformElement
+    return formElements.map(field =>
+      <WebformElement
         key={field['#webform_key']}
         field={field}
         formStore={this.formStore}
-      />});
+      />);
   }
 
   hasErrors() {
-    Object.keys(this.components).reduce((prev, name) => {
-      const component = this.components[name];
-      const validations = component.props.validations;
-      const length = validations.length;
-
-      for(let i = 0; i < length; i += 1) {
-        if(!rules[validations[i]].rule(component.state.value, this.components)) {
-          prev[name] = prev[name] || [];
-          prev[name].push(validations[i]);
-        }
-      }
-
-      return prev;
-    }, {});
+    this.components.reduce((prev, component) => component.hasErrors() || prev, false);
   }
 
   validateState() {
-    const hasErrors = this.hasErrors();
-    this.setState({ hasErrors });
+    return this.hasErrors();
   }
 
   updateSubmission(draft = false) {
@@ -105,13 +90,13 @@ class Webform extends React.Component {
 
   render() {
     const formElements = this.getFormElements();
+    const hasErrors = this.validateState();
     return (
       <div>
-        <form ref="formElement" method="POST" onSubmit={this.onSubmit}>
+        <form method='POST' onSubmit={this.onSubmit}>
           {formElements}
           <SubmitButton
             form={this.props.form}
-            formElement={getNested(() => this.refs.formElement)}
           />
         </form>
       </div>
