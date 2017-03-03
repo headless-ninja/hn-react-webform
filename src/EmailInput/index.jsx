@@ -6,12 +6,13 @@ class EmailFormComponent extends React.Component {
   constructor(props) {
     super(props);
 
-    rules = Object.assign(rules, {
-      email: {
-        rule: value => validator.isEmail(value),
-        hint: value => <span className='form-error is-visible'>{value} isn&sbquo;t an Email.</span>,
-      },
-    });
+    // Hanneke disabled this because it generated an error
+    // rules = Object.assign(rules, {
+    //   email: {
+    //     rule: value => validator.isEmail(value),
+    //     hint: value => <span className='form-error is-visible'>{value} isn&sbquo;t an Email.</span>,
+    //   },
+    // });
   }
 
   render() {
