@@ -10,8 +10,10 @@
             &:before {
                 content: '';
                 position: absolute;
-                width: calc(var(--spacingUnit) * .8);
-                height: calc(var(--spacingUnit) * .8);
+                top: 25%;
+                left: 25%;
+                width: 50%;
+                height: 50%;
                 background-color: var(--checkedColor);
                 border-radius: 50%;
             }
@@ -26,5 +28,6 @@
     height: var(--spacingUnit);
     margin-right: calc(var(--spacingUnit) / 2);
     background-color: var(--inputColor);
+    border: 1px solid var(--borderColor);
     border-radius: 50%;
 }
