@@ -3,5 +3,10 @@
 
   &.error {
     font-size: 30px;
+    color: var(--errorColor);
   }
+}
+
+.formtitle {
+    margin: 0 0 calc(var(--spacingUnit) / 2) 0;
 }
