@@ -1,5 +1,8 @@
 import React from 'react';
+import CSSModules from 'react-css-modules';
+import styles from './styles.css';
 
+@CSSModules(styles)
 class GeneralInput extends React.Component {
   constructor(props) {
     super(props);
@@ -17,6 +20,7 @@ class GeneralInput extends React.Component {
         value={this.props.value}
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
+        styleName="input"
       />
     );
   }

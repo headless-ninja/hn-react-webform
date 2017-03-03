@@ -1,5 +1,16 @@
 @import '../styles/_variables.css';
 
+.formrow {
+    margin-bottom: var(--spacingUnit);
+}
+
 label {
-    color: var(--primaryColor); 
+    display: inline-block;
+    width: 100%;
+    margin-bottom: calc(var(--spacingUnit) / 2);
+
+    @media (min-width: 768px) {
+        width: 50%;
+        padding-right: calc(var(--spacingUnit) / 2);
+    }
 }

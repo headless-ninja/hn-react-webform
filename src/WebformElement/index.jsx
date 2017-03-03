@@ -5,10 +5,12 @@ import { entries } from '../utils';
 import { components } from '../index';
 import FormStore from '../Webform/FormStore';
 import rules from '../Webform/rules';
+import CSSModules from 'react-css-modules';
 import cssstyles from './styles.css';
 
 const styles = {};
 
+@CSSModules(cssstyles)
 class WebformElement extends React.Component {
   static propTypes = {
     field: React.PropTypes.shape({
@@ -252,20 +254,20 @@ class WebformElement extends React.Component {
     const element = this.getFormElement();
     // const validations = this.getValidations();
     return (
-      <div>
+      <div styleName="formrow">
         <label htmlFor={this.key} className={classNames({ [styles.hidden]: !this.state.visible })}>
           {this.props.label || this.props.field['#title']}
-          {element}
-          {!element &&
-          <input
-            type='text'
-            onChange={this.onChange}
-            value={this.getValue()}
-            name={this.key}
-            id={this.key}
-          />
-          }
         </label>
+        {element}
+        {!element &&
+        <input
+          type='text'
+          onChange={this.onChange}
+          value={this.getValue()}
+          name={this.key}
+          id={this.key}
+        />
+        }
         <span className="error">
           {this.state.error}
         </span>
