@@ -5,7 +5,6 @@
 
     &:checked {
         & + .indicator {
-            display: inline-block;
             background-position: center center;
             background-repeat: no-repeat;
             background-image: url(var(--iconCheckbox));
