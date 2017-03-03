@@ -6,7 +6,7 @@ import CSSModules from 'react-css-modules';
 import FormStore from './FormStore';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
-import styles from './styles.scss';
+import styles from './styles.css';
 
 @CSSModules(styles, { allowMultiple: true })
 @observer
