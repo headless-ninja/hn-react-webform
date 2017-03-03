@@ -1,3 +1,4 @@
+@import '../styles/_variables.css';
 
 .checkbox {
   transform: scale(2);

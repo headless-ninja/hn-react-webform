@@ -1,0 +1,3 @@
+:root {
+    --primaryColor: var(--primaryColor, 'rebeccapurple');
+}
