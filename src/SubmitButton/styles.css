@@ -1,0 +1,19 @@
+@import '../styles/_variables.css';
+
+.button {
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin: 0;
+    font-size: 1em;
+    line-height: inherit;
+    font-family: inherit;
+    border: none;
+
+    background-color: var(--primaryColor);
+    border-radius: var(--borderRadius);
+    padding: calc(var(--spacingUnit) / 2) calc(var(--spacingUnit) / 1);
+
+    &:hover {
+        background-color: var(--secondaryColor);
+    }
+}
