@@ -1,3 +1,4 @@
 :root {
-    --primaryColor: var(--primaryColor, 'rebeccapurple');
+    // TODO - this doesnt work yet, but it does prevent a webpack error
+    --primaryColor: var(--primaryColor, pink);
 }

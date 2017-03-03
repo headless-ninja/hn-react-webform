@@ -5,6 +5,7 @@ import { entries } from '../utils';
 import { components } from '../index';
 import FormStore from '../Webform/FormStore';
 import rules from '../Webform/rules';
+import cssstyles from './styles.css';
 
 const styles = {};
 
