@@ -4,6 +4,7 @@ import Checkbox from './Checkbox';
 import Paragraph from './Paragraph';
 import Select from './Select';
 import GeneralInput from './GeneralInput';
+import RadioInput from './RadioInput';
 
 const components = {
   textfield: GeneralInput,
@@ -13,6 +14,7 @@ const components = {
   tel: GeneralInput,
   webform_message: Paragraph,
   select: Select,
+  radio: RadioInput,
 };
 
 export default Webform;

@@ -25,17 +25,18 @@ class WebformElement extends React.Component {
       '#validationError': React.PropTypes.string,
       '#title': React.PropTypes.string,
       '#states': React.PropTypes.object,
+      '#options': React.PropTypes.object,
     }).isRequired,
     formStore: React.PropTypes.instanceOf(FormStore).isRequired,
     label: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.element,
       React.PropTypes.bool]),
-  }
+  };
 
   static defaultProps = {
     label: false,
-  }
+  };
 
   static checkConditionType(condition, state, states) {
     switch(state) {
