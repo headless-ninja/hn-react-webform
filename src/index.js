@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import Webform from './Webform';
 import TextArea from './TextArea';
 import Checkbox from './Checkbox';
