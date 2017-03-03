@@ -10,8 +10,10 @@
             &:before {
                 content: '';
                 position: absolute;
-                width: calc(var(--spacingUnit) * .8);
-                height: calc(var(--spacingUnit) * .8);
+                top: 25%;
+                left: 25%;
+                width: 50%;
+                height: 50%;
                 background-color: var(--checkedColor);
                 border-radius: 50%;
             }
