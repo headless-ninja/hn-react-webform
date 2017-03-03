@@ -1,5 +1,8 @@
 import React from 'react';
+import CSSModules from 'react-css-modules';
+import styles from './styles.css';
 
+@CSSModules(styles)
 class RadioFormComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -24,7 +27,9 @@ class RadioFormComponent extends React.Component {
                 value={option}
                 name={this.props.field['#webform_key']}
                 id={this.props.field['#webform_key']}
+                styleName="radio"
               />
+              <div styleName="indicator"></div>
               { this.props.field['#options'][option]}
             </label>,
           )
