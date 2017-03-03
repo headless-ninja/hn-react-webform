@@ -253,12 +253,17 @@ class WebformElement extends React.Component {
 
   render() {
     const element = this.getFormElement();
+    console.log(element);
     // const validations = this.getValidations();
     return (
       <div styleName="formrow">
-        <label htmlFor={this.key} className={classNames({ [styles.hidden]: !this.state.visible })}>
-          {this.props.label || this.props.field['#title']}
-        </label>
+        {
+          element && element.props.field['#has_own_label'] ?
+            <span className={classNames({ [styles.hidden]: !this.state.visible})}>{ this.props.label || this.props.field['#title'] }</span> :
+            <label htmlFor={this.key} className={classNames({ [styles.hidden]: !this.state.visible })}>
+              {this.props.label || this.props.field['#title']}
+            </label>
+        }
         {element}
         {!element &&
         <input
