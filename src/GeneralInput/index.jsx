@@ -20,6 +20,7 @@ class GeneralInput extends React.Component {
         value={this.props.value}
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
+        placeholder={this.props.field['#placeholder']}
         styleName="input"
       />
     );
