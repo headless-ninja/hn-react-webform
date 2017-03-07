@@ -251,19 +251,47 @@ class WebformElement extends React.Component {
     return this.props.validations.reduce((prev, validation) => validation.rule(this.state.value) || prev, false);
   }
 
+  renderTextContent(element, selector, cssClass, checkSelector, checkValue) {
+    var doReturn = false;
+
+    // check if we can access the element and if the selector can be found
+    if(element && element.props.field[selector]) {
+
+      // enable return if the checkSelector value matches the checkValue
+      if(checkSelector != undefined && checkValue != undefined) {
+        if(element.props.field[checkSelector] == checkValue){
+          doReturn = true;
+        }
+      } else {
+        // also, return if there's no checkSelector or checkValue supplied
+        doReturn = true;
+      }
+
+      if(doReturn) {
+        return (<span styleName={classNames(cssClass)}>{this.props.field[selector]}</span>);
+      }
+
+    }
+  }
+
   render() {
     const element = this.getFormElement();
     console.log(element);
     // const validations = this.getValidations();
     return (
       <div styleName="formrow">
+        { this.renderTextContent(element, '#description', 'description-before', '#description_display', 'before') }
+
         {
           element && element.props.field['#has_own_label'] ?
-            <span className={classNames({ [styles.hidden]: !this.state.visible})}>{ this.props.label || this.props.field['#title'] }</span> :
-            <label htmlFor={this.key} className={classNames({ [styles.hidden]: !this.state.visible })}>
+            <span className={classNames({ [styles.hidden]: !this.state.visible}, [`display-${this.props.field['#title_display']}`])}>{ this.props.label || this.props.field['#title'] }</span> :
+            <label htmlFor={this.key} className={classNames({ [styles.hidden]: !this.state.visible }, [`display-${this.props.field['#title_display']}`])}>
               {this.props.label || this.props.field['#title']}
             </label>
         }
+
+        { this.renderTextContent(element, '#field_prefix', 'prefix') }
+
         {element}
         {!element &&
         <input
@@ -274,6 +302,11 @@ class WebformElement extends React.Component {
           id={this.key}
         />
         }
+
+        { this.renderTextContent(element, '#field_suffix', 'suffix') }
+        
+        { this.renderTextContent(element, '#description', 'description-after', '#description_display', 'after') }
+
         <span className="error">
           {this.state.error}
         </span>

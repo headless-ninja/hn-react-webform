@@ -1,5 +1,9 @@
 @import '../styles/_variables.css';
 
+.radio-options {
+    color:blue;
+}
+
 .radio {
     display: none;
 

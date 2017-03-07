@@ -17,7 +17,7 @@ class RadioFormComponent extends React.Component {
 
   render() {
     return (
-      <div>
+      <div class="radio-options">
         {
           this.props.field && Object.keys(this.props.field['#options']).map((option) =>
             <label key={option}>
