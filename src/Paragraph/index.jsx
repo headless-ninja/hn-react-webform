@@ -1,6 +1,6 @@
 import React from 'react';
 
-class TextFormComponent extends React.Component {
+class Paragraph extends React.Component {
   render() {
     return (
       <p>{this.props.field['#message_message']}</p>
@@ -8,4 +8,4 @@ class TextFormComponent extends React.Component {
   }
 }
 
-export default TextFormComponent;
+export default Paragraph;

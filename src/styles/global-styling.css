@@ -1,9 +1,9 @@
 /* @import 'vendor/_stdcss.0.0.7.scss'; */
 
-// These stylings are here to test the basic styling
+/* These stylings are here to test the basic styling */
 body {
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.2em;
-    color: #555;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.2em;
+  color: #555;
 }

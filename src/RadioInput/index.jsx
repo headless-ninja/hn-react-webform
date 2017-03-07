@@ -3,33 +3,22 @@ import CSSModules from 'react-css-modules';
 import styles from './styles.css';
 
 @CSSModules(styles)
-class RadioFormComponent extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.onChange = this.onChange.bind(this);
-  }
-
-  onChange(e) {
-    this.setState({ value: e.target.checked });
-    this.props.onChange(e.target.checked, false);
-  }
-
+class RadioInput extends React.Component {
   render() {
     return (
-      <div class="radio-options">
+      <div styleName='radio-options'>
         {
           this.props.field && Object.keys(this.props.field['#options']).map((option) =>
             <label key={option}>
               <input
                 type='radio'
-                onChange={this.onChange}
+                onChange={this.props.onChange}
                 value={option}
                 name={this.props.field['#webform_key']}
                 id={this.props.field['#webform_key']}
-                styleName="radio"
+                styleName='radio'
               />
-              <div styleName="indicator"></div>
+              <div styleName='indicator' />
               { this.props.field['#options'][option]}
             </label>,
           )
@@ -39,4 +28,4 @@ class RadioFormComponent extends React.Component {
   }
 }
 
-export default RadioFormComponent;
+export default RadioInput;

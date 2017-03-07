@@ -3,7 +3,7 @@ import styles from './styles.css';
 import React from 'react';
 
 @CSSModules(styles)
-class TextAreaFormComponent extends React.Component {
+class TextArea extends React.Component {
   render() {
     return (
       <textarea
@@ -11,10 +11,10 @@ class TextAreaFormComponent extends React.Component {
         value={this.props.value}
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
-        styleName="textarea"
+        styleName='textarea'
       />
     );
   }
 }
 
-export default TextAreaFormComponent;
+export default TextArea;

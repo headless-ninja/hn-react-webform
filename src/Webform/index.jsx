@@ -1,7 +1,7 @@
 import React from 'react';
 import getNested from 'get-nested';
 import fetch from 'fetch-everywhere';
-import{ observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import CSSModules from 'react-css-modules';
 import FormStore from './FormStore';
 import SubmitButton from '../SubmitButton';
@@ -30,24 +30,24 @@ class Webform extends React.Component {
 
     this.formStore = new FormStore();
 
-    this.components = [];
+    this.components = {}; // Will be filled by each individual element
 
     this.state = {
       hasErrors: false,
       errors: [],
     };
-  }
 
-  componentDidMount() {
-    this.validateState();
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onSubmit(e) {
     e.preventDefault();
-    const isValid = this.validate();
+    const isValid = this.isValid();
     if(isValid) {
-      this.updateSubmission();
+      return this.updateSubmission();
     }
+
+    return console.warn('One or more fields are invalid...');
   }
 
   getFormElements() {
@@ -57,18 +57,26 @@ class Webform extends React.Component {
         key={field['#webform_key']}
         field={field}
         formStore={this.formStore}
+        webform={this}
+        ref={(component) => {
+          if(component) {
+            this.components[component.key] = component;
+          }
+        }}
       />);
   }
 
-  hasErrors() {
-    this.components.reduce((prev, component) => component.hasErrors() || prev, false);
-  }
-
-  validateState() {
-    return this.hasErrors();
+  isValid() {
+    console.log(this.components);
+    return Object.keys(this.components).reduce((prev, componentKey) => {
+      const component = this.components[componentKey];
+      component.validate();
+      return prev && component.getValue('valid');
+    }, true);
   }
 
   updateSubmission(draft = false) {
+    return console.info('Simulate form sending...');
     const headers = new Headers({
       'Content-Type': 'application/json',
       'X-CSRF-Token': this.props.form.token,
@@ -93,10 +101,9 @@ class Webform extends React.Component {
 
   render() {
     const formElements = this.getFormElements();
-    const hasErrors = this.validateState();
     return (
       <div>
-        <h1 styleName="formtitle" >{getNested(() => this.props.settings.title)}</h1>
+        <h1 styleName='formtitle'>{getNested(() => this.props.settings.title)}</h1>
         <form method='POST' onSubmit={this.onSubmit}>
           {formElements}
 

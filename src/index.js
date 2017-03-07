@@ -2,18 +2,18 @@ import Webform from './Webform';
 import TextArea from './TextArea';
 import Checkbox from './Checkbox';
 import Paragraph from './Paragraph';
-import Select from './Select';
-import GeneralInput from './GeneralInput';
+import SelectField from './SelectField';
+import Input from './Input';
 import RadioInput from './RadioInput';
 
 const components = {
-  textfield: GeneralInput,
+  textfield: Input,
   textarea: TextArea,
   checkbox: Checkbox,
-  email: GeneralInput,
-  tel: GeneralInput,
+  email: Input,
+  tel: Input,
   webform_message: Paragraph,
-  select: Select,
+  select: SelectField,
   radio: RadioInput,
 };
 

@@ -7,7 +7,7 @@ Validation.rules = Object.assign(Validation.rules, {
   phone: {
     // Example usage with external 'validator'
     rule: value => validator.isMobilePhone(value),
-    hint: value => <span className="form-error is-visible">{value} isn't a Phone.</span>,
+    hint: value => <span className='form-error is-visible'>{value} isn&lsquot;t a Phone.</span>,
   },
 });
 
@@ -16,7 +16,7 @@ Validation.rules = Object.assign(Validation.rules, {
  * @source https://github.com/sanniassin/react-input-mask
  */
 
-class PhoneFormComponent extends React.Component {
+class Phone extends React.Component {
   constructor(props) {
     super(props);
 
@@ -40,4 +40,4 @@ class PhoneFormComponent extends React.Component {
   }
 }
 
-export default PhoneFormComponent;
+export default Phone;

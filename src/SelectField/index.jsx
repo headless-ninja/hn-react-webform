@@ -8,7 +8,7 @@ import { entries } from '../utils';
  * @source https://github.com/JedWatson/react-select
  */
 
-class SelectFormComponent extends React.Component {
+class SelectField extends React.Component {
   constructor(props) {
     super(props);
 
@@ -42,4 +42,4 @@ class SelectFormComponent extends React.Component {
   }
 }
 
-export default SelectFormComponent;
+export default SelectField;

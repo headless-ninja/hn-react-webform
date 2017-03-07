@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules';
 import styles from './styles.css';
 
 @CSSModules(styles)
-class CheckboxFormComponent extends React.Component {
+class Checkbox extends React.Component {
   constructor(props) {
     super(props);
 
@@ -11,26 +11,25 @@ class CheckboxFormComponent extends React.Component {
   }
 
   onChange(e) {
-    this.setState({ value: e.target.checked });
-    this.props.onChange(e.target.checked, false);
+    this.props.onChange(e.target.checked);
   }
 
   render() {
     return (
       <label htmlFor={this.key}>
         <input
-          type="checkbox"
+          type='checkbox'
           onChange={this.onChange}
           value={this.props.value}
           name={this.props.field['#webform_key']}
           id={this.props.field['#webform_key']}
-          styleName="checkbox"
+          styleName='checkbox'
         />
-        <div styleName="indicator"></div>
+        <div styleName='indicator' />
         {this.props.label || this.props.field['#title']}
       </label>
     );
   }
 }
 
-export default CheckboxFormComponent;
+export default Checkbox;
