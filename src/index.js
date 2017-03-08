@@ -1,10 +1,10 @@
 import Webform from './Webform';
 import TextArea from './TextArea';
-import Checkbox from './CheckboxInput';
-import Paragraph from './Paragraph';
-import SelectField from './SelectField';
+import Checkbox from './CheckboxField';
+import Paragraph from './ParagraphField';
+import Select from './SelectField';
 import Input from './Input';
-import RadioInput from './RadioInput';
+import Radio from './RadioField';
 
 const components = {
   textfield: Input,
@@ -13,8 +13,8 @@ const components = {
   email: Input,
   tel: Input,
   webform_message: Paragraph,
-  select: SelectField,
-  radio: RadioInput,
+  select: Select,
+  radio: Radio,
 };
 
 export default Webform;
