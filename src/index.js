@@ -14,7 +14,7 @@ const components = {
   tel: Input,
   webform_message: ParagraphField,
   select: SelectField,
-  radio: RadioField,
+  radios: RadioField,
 };
 
 export default Webform;

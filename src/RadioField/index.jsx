@@ -2,8 +2,8 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
 
-@CSSModules(styles, {allowMultiple:true})
-class RadioInput extends React.Component {
+@CSSModules(styles, { allowMultiple: true })
+class RadioField extends React.Component {
   render() {
     return (
       <div>
@@ -30,4 +30,4 @@ class RadioInput extends React.Component {
   }
 }
 
-export default RadioInput;
+export default RadioField;
