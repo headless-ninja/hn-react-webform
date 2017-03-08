@@ -2,14 +2,16 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.css';
 
-@CSSModules(styles)
+@CSSModules(styles, {allowMultiple:true})
 class RadioInput extends React.Component {
   render() {
     return (
-      <div styleName='radio-options'>
+      <div>
         {
+          /* TODO: radio-options-sidebyside should be loaded from json option #options_display */
+
           this.props.field && Object.keys(this.props.field['#options']).map((option) =>
-            <label key={option}>
+            <label key={option} styleName="radio-options-side_by_side">
               <input
                 type='radio'
                 onChange={this.props.onChange}

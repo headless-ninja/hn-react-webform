@@ -17,7 +17,7 @@ class CheckboxField extends React.Component {
 
   render() {
     return (
-      <label htmlFor={this.key}>
+      <label htmlFor={this.key} styleName='checkbox-label'>
         <Input
           {...this.props}
           onChange={this.onChange}

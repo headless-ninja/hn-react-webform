@@ -1,5 +1,9 @@
 @import '../styles/_variables.css';
 
+.checkbox-label {
+    width: auto;
+}
+
 .checkbox {
     display: none;
 
