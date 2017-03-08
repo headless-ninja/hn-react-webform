@@ -67,11 +67,11 @@ class Webform extends React.Component {
   }
 
   isValid() {
-    console.log(this.components);
+    console.log('Validating...');
     return Object.keys(this.components).reduce((prev, componentKey) => {
       const component = this.components[componentKey];
       component.validate();
-      return prev && component.getValue('valid');
+      return prev && component.isValid();
     }, true);
   }
 
