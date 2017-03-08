@@ -23,7 +23,7 @@ class SelectField extends React.Component {
 
   render() {
     const options = [];
-    for(const [optionKey, optionValue] of entries(getNested(() => this.props.props['#options'], {}))) {
+    for(const [optionKey, optionValue] of entries(getNested(() => this.props.field['#options'], {}))) {
       options.push({
         label: optionValue,
         value: optionKey,
@@ -34,7 +34,7 @@ class SelectField extends React.Component {
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
         value={this.props.value}
-        multi={this.props.props['#multiple']}
+        multi={this.props.field['#multiple']}
         options={options}
         onChange={this.handleChange}
       />
