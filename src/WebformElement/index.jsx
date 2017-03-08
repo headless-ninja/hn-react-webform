@@ -32,9 +32,6 @@ class WebformElement extends React.Component {
       React.PropTypes.string,
       React.PropTypes.element,
       React.PropTypes.bool]),
-    webform: React.PropTypes.shape({
-      render: React.PropTypes.func,
-    }).isRequired,
   };
 
   static defaultProps = {
@@ -86,8 +83,7 @@ class WebformElement extends React.Component {
       Object.assign(rules, {
         [`pattern_${this.key}`]: {
           rule: (value = '') => new RegExp(pattern).test(value),
-          hint: value =>
-            <RuleHint key={`pattern_${this.key}`} hint={props.field['#patternError'] || 'The value :value doesn\'t match the right pattern'} tokens={{ value }} />,
+          hint: value => <RuleHint key={`pattern_${this.key}`} hint={props.field['#patternError'] || 'The value :value doesn\'t match the right pattern'} tokens={{ value }} />,
         },
       });
     }
@@ -120,21 +116,27 @@ class WebformElement extends React.Component {
     this.validate();
   }
 
-  getFormElement() {
-    const element = getNested(() => components[this.props.field['#type']]);
-    if(element) {
-      const Component = element;
-      return (
-        <Component
-          value={this.getValue()}
-          name={this.key}
-          onChange={this.onChange}
-          field={this.props.field}
-          store={this.formStore}
-          validations={this.state.validations}
-          webformElement={this}
-        />);
+  getFormElement(force = false) {
+    if(force || !this.element) {
+      const element = getNested(() => components[this.props.field['#type']]);
+      if(element) {
+        const Component = element;
+        return (
+          <Component
+            value={this.getValue()}
+            name={this.key}
+            onChange={this.onChange}
+            field={this.props.field}
+            store={this.formStore}
+            validations={this.state.validations}
+            webformElement={this}
+            ref={component => this.element = component}
+          />);
+      }
+    } else if(this.element) {
+      return this.element;
     }
+
     return false;
   }
 
@@ -276,14 +278,15 @@ class WebformElement extends React.Component {
     return valid;
   }
 
-  renderTextContent(element, selector, cssClass, checkSelector, checkValue) {
+  renderTextContent(selector, cssClass, checkValue) {
+    const element = this.getFormElement();
     let doReturn = false;
 
     // check if we can access the element and if the selector can be found
     if(element && element.props.field[selector]) {
       // enable return if the checkSelector value matches the checkValue
       if(typeof checkSelector !== 'undefined' && typeof checkValue !== 'undefined') {
-        if(element.props.field[checkSelector] === checkValue) {
+        if(element.props.field[selector + '_display'] === checkValue) {
           doReturn = true;
         }
       } else {
@@ -292,7 +295,7 @@ class WebformElement extends React.Component {
       }
 
       if(doReturn) {
-        return (<span styleName={classNames(cssClass)}>{this.props.field[selector]}</span>);
+        return (<span styleName={cssClass}>{this.props.field[selector]}</span>);
       }
     }
 
@@ -301,33 +304,27 @@ class WebformElement extends React.Component {
 
   render() {
     const element = this.getFormElement();
+    if(!element) {
+      return null;
+    }
     return (
       <div styleName='formrow'>
-        { this.renderTextContent(element, '#description', 'description-before', '#description_display', 'before') }
+        { this.renderTextContent('#description', 'description-before', '#description_display', 'before') }
         {
-          element && element.props.field['#has_own_label'] ?
-            <span className={classNames({ [styles.hidden]: !this.state.visible }, [`display-${this.props.field['#title_display']}`])}>{ this.props.label || this.props.field['#title'] }</span> :
-            <label htmlFor={this.key} className={classNames({ [styles.hidden]: !this.state.visible }, [`display-${this.props.field['#title_display']}`])}>
+         element.props.field['#has_own_label'] ?
+            <span>{ this.props.label || this.props.field['#title'] }</span> :
+            <label htmlFor={this.key}>
               {this.props.label || this.props.field['#title']}
             </label>
         }
 
-        { this.renderTextContent(element, '#field_prefix', 'prefix') }
+        { this.renderTextContent('#field_prefix', 'prefix') }
 
         {element}
-        {!element &&
-        <input
-          type='text'
-          onChange={this.onChange}
-          value={this.getValue()}
-          name={this.key}
-          id={this.key}
-        />
-        }
 
-        { this.renderTextContent(element, '#field_suffix', 'suffix') }
+        { this.renderTextContent('#field_suffix', 'suffix') }
 
-        { this.renderTextContent(element, '#description', 'description-after', '#description_display', 'after') }
+        { this.renderTextContent('#description', 'description-after', '#description_display', 'after') }
 
         <ul>
           {this.state.errors}

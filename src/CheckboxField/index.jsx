@@ -1,9 +1,10 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.css';
+import Input from '../Input';
 
 @CSSModules(styles)
-class Checkbox extends React.Component {
+class CheckboxInput extends React.Component {
   constructor(props) {
     super(props);
 
@@ -17,12 +18,10 @@ class Checkbox extends React.Component {
   render() {
     return (
       <label htmlFor={this.key}>
-        <input
-          type='checkbox'
+        <Input
+          {...this.props}
           onChange={this.onChange}
-          value={this.props.value}
-          name={this.props.field['#webform_key']}
-          id={this.props.field['#webform_key']}
+          type='checkbox'
           styleName='checkbox'
         />
         <div styleName='indicator' />
@@ -32,4 +31,4 @@ class Checkbox extends React.Component {
   }
 }
 
-export default Checkbox;
+export default CheckboxInput;

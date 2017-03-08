@@ -1,5 +1,5 @@
 :root {
   /* TODO - this doesnt work yet, but it does prevent a webpack error */
   --primaryColor: var(--primaryColor, pink);
-  --primaryColor: var(--errorColor, red);
+  --errorColor: var(--errorColor, red);
 }

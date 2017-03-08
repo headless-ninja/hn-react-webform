@@ -1,6 +1,6 @@
 import Webform from './Webform';
 import TextArea from './TextArea';
-import Checkbox from './Checkbox';
+import Checkbox from './CheckboxInput';
 import Paragraph from './Paragraph';
 import SelectField from './SelectField';
 import Input from './Input';
