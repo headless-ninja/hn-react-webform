@@ -1,0 +1,13 @@
+@import '../styles/_variables.css';
+
+.input {
+    margin: 0;
+    font-size: .9em;
+    line-height: inherit;
+    font-family: inherit;
+
+    border: 1px solid var(--borderColor);
+    background-color: var(--inputColor);
+    border-radius: var(--borderRadius);
+    padding: calc(var(--spacingUnit) / 4) calc(var(--spacingUnit) / 2);
+}
