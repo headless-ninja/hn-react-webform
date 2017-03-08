@@ -1,9 +1,8 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
-import getNested from 'get-nested';
 import styles from './styles.pcss';
 
-@CSSModules(styles)
+@CSSModules(styles, { allowMultiple: true })
 class Input extends React.Component {
   render() {
     return (
@@ -14,7 +13,8 @@ class Input extends React.Component {
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
         placeholder={this.props.field['#placeholder']}
-        styleName={`input`}
+        styleName='input'
+        className={this.props.className ? this.props.className : ''}
       />
     );
   }
