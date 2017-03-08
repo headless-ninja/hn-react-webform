@@ -1,7 +1,7 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import getNested from 'get-nested';
-import styles from './styles.css';
+import styles from './styles.pcss';
 
 @CSSModules(styles)
 class Input extends React.Component {

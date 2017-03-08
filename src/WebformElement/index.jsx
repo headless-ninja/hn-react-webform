@@ -5,7 +5,7 @@ import { entries } from '../utils';
 import { components } from '../index';
 import FormStore from '../Webform/FormStore';
 import rules from '../Webform/rules';
-import styles from './styles.css';
+import styles from './styles.pcss';
 import RuleHint from '../RuleHint';
 
 @CSSModules(styles, { allowMultiple: true })
@@ -290,7 +290,9 @@ class WebformElement extends React.Component {
   renderTextContent(selector, checkValue = false) {
     const value = this.props.field[selector]; // Value in #description field
     const displayValue = this.props.field[`${selector}_display`];
-    const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}--${checkValue}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
+    const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
+
+    console.log(cssClass);
 
     if(!value || (!!checkValue && checkValue !== displayValue)) {
       return false;

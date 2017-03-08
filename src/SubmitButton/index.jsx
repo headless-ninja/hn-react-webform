@@ -1,7 +1,7 @@
 import React from 'react';
 import getNested from 'get-nested';
 import CSSModules from 'react-css-modules';
-import styles from './styles.css';
+import styles from './styles.pcss';
 
 @CSSModules(styles)
 class SubmitButton extends React.Component {

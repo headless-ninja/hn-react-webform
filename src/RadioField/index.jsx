@@ -1,6 +1,6 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
-import styles from './styles.css';
+import styles from './styles.pcss';
 
 @CSSModules(styles, {allowMultiple:true})
 class RadioInput extends React.Component {

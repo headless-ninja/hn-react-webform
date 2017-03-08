@@ -1,5 +1,5 @@
 import CSSModules from 'react-css-modules';
-import styles from './styles.css';
+import styles from './styles.pcss';
 import React from 'react';
 
 @CSSModules(styles)
