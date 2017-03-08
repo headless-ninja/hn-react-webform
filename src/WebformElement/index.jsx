@@ -1,6 +1,5 @@
 import React from 'react';
 import getNested from 'get-nested';
-import classNames from 'classnames';
 import CSSModules from 'react-css-modules';
 import { entries } from '../utils';
 import { components } from '../index';
@@ -83,7 +82,8 @@ class WebformElement extends React.Component {
       Object.assign(rules, {
         [`pattern_${this.key}`]: {
           rule: (value = '') => new RegExp(pattern).test(value),
-          hint: value => <RuleHint key={`pattern_${this.key}`} hint={props.field['#patternError'] || 'The value :value doesn\'t match the right pattern'} tokens={{ value }} />,
+          hint: value =>
+            <RuleHint key={`pattern_${this.key}`} hint={props.field['#patternError'] || 'The value :value doesn\'t match the right pattern'} tokens={{ value }} />,
         },
       });
     }
@@ -116,25 +116,21 @@ class WebformElement extends React.Component {
     this.validate();
   }
 
-  getFormElement(force = false) {
-    if(force || !this.element) {
-      const element = getNested(() => components[this.props.field['#type']]);
-      if(element) {
-        const Component = element;
-        return (
-          <Component
-            value={this.getValue()}
-            name={this.key}
-            onChange={this.onChange}
-            field={this.props.field}
-            store={this.formStore}
-            validations={this.state.validations}
-            webformElement={this}
-            ref={component => this.element = component}
-          />);
-      }
-    } else if(this.element) {
-      return this.element;
+  getFormElement() {
+    const element = getNested(() => components[this.props.field['#type']]);
+    if(element) {
+      const Component = element;
+      return (
+        <Component
+          value={this.getValue()}
+          name={this.key}
+          onChange={this.onChange}
+          field={this.props.field}
+          store={this.formStore}
+          validations={this.state.validations}
+          webformElement={this}
+          ref={component => this.element = component}
+        />);
     }
 
     return false;
@@ -159,6 +155,7 @@ class WebformElement extends React.Component {
 
   getFieldStorage(fields = false, key = this.key) {
     const field = this.props.formStore.fields.find(x => x.id === key);
+
     if(field) {
       if(Array.isArray(fields)) {
         const data = {};
@@ -169,6 +166,7 @@ class WebformElement extends React.Component {
       }
       return field;
     }
+
     return false;
   }
 
@@ -181,7 +179,10 @@ class WebformElement extends React.Component {
     }
   }
 
-  // conditional logic
+  isValid(key = this.key) {
+    return this.getFieldStorage('valid', key);
+  }
+
   checkConditionals() {
     const states = {
       visible: this.state.visible,
@@ -270,7 +271,7 @@ class WebformElement extends React.Component {
     const errors = fails.map(rule => rule.hint(this.getValue()));
     const valid = errors.length === 0;
 
-    console.log('Validating', this.key, '=> is', valid ? 'valid' : 'invalid');
+    console.log(this.key, '=> is', valid ? 'valid' : 'invalid');
 
     this.setFieldStorage({ valid });
     this.setState({ errors });
@@ -278,28 +279,15 @@ class WebformElement extends React.Component {
     return valid;
   }
 
-  renderTextContent(selector, cssClass, checkValue) {
-    const element = this.getFormElement();
-    let doReturn = false;
+  renderTextContent(selector, checkValue = false) {
+    const value = this.props.field[selector]; // Value in #description field
+    const displayValue = this.props.field[`${selector}_display`];
+    const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}--${checkValue}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
 
-    // check if we can access the element and if the selector can be found
-    if(element && element.props.field[selector]) {
-      // enable return if the checkSelector value matches the checkValue
-      if(typeof checkSelector !== 'undefined' && typeof checkValue !== 'undefined') {
-        if(element.props.field[selector + '_display'] === checkValue) {
-          doReturn = true;
-        }
-      } else {
-        // also, return if there's no checkSelector or checkValue supplied
-        doReturn = true;
-      }
-
-      if(doReturn) {
-        return (<span styleName={cssClass}>{this.props.field[selector]}</span>);
-      }
+    if(!value || (!!checkValue && checkValue !== displayValue)) {
+      return false;
     }
-
-    return false;
+    return (<span styleName={styles[cssClass] ? cssClass : ''}>{value}</span>);
   }
 
   render() {
@@ -309,22 +297,19 @@ class WebformElement extends React.Component {
     }
     return (
       <div styleName='formrow'>
-        { this.renderTextContent('#description', 'description-before', '#description_display', 'before') }
-        {
-         element.props.field['#has_own_label'] ?
-            <span>{ this.props.label || this.props.field['#title'] }</span> :
-            <label htmlFor={this.key}>
-              {this.props.label || this.props.field['#title']}
-            </label>
-        }
+        { this.renderTextContent('#description', 'before') }
 
-        { this.renderTextContent('#field_prefix', 'prefix') }
+        <label htmlFor={this.key}>
+          {this.props.label || this.props.field['#title']}
+        </label>
+
+        { this.renderTextContent('#field_prefix') }
 
         {element}
 
-        { this.renderTextContent('#field_suffix', 'suffix') }
+        { this.renderTextContent('#field_suffix') }
 
-        { this.renderTextContent('#description', 'description-after', '#description_display', 'after') }
+        { this.renderTextContent('#description', 'after') }
 
         <ul>
           {this.state.errors}
