@@ -1,7 +1,9 @@
 @import '../styles/_variables.css';
 
-.radio-options {
-    color:blue;
+.radio-options-side_by_side, .radio-options-two_columns, .radio-options-three_columns {
+    display: inline-block;
+    width: auto;
+    margin-right: calc(var(--spacingUnit) / 3)
 }
 
 .radio {
