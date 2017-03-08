@@ -179,8 +179,12 @@ class WebformElement extends React.Component {
     }
   }
 
-  isValid(key = this.key) {
-    return this.getFieldStorage('valid', key);
+  getLabelClass() {
+    const labelClass = `display-${this.props.field['#title_display']}`;
+    if(styles[labelClass]) {
+      return labelClass;
+    }
+    return '';
   }
 
   checkConditionals() {
@@ -263,12 +267,8 @@ class WebformElement extends React.Component {
     }
   }
 
-  getLabelClass() {
-    const labelClass = `display-${this.props.field['#title_display']}`;
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-    return '';
+  isValid(key = this.key) {
+    return this.getFieldStorage('valid', key);
   }
 
   validate() {
@@ -291,8 +291,6 @@ class WebformElement extends React.Component {
     const value = this.props.field[selector]; // Value in #description field
     const displayValue = this.props.field[`${selector}_display`];
     const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
-
-    console.log(cssClass);
 
     if(!value || (!!checkValue && checkValue !== displayValue)) {
       return false;
