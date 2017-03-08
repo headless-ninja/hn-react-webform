@@ -292,7 +292,7 @@ class WebformElement extends React.Component {
       }
 
       if(doReturn) {
-        return (<span styleName={classNames(cssClass)}>{this.props.field[selector]}</span>);
+        return (<span styleName={cssClass}>{this.props.field[selector]}</span>);
       }
     }
 
