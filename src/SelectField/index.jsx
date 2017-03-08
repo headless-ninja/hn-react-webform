@@ -1,13 +1,17 @@
 import React from 'react';
 import Select from 'react-select';
 import getNested from 'get-nested';
+import '!style!css!postcss!react-select/dist/react-select.css';
+import CSSModules from 'react-css-modules';
 import { entries } from '../utils';
+import styles from './styles.pcss';
 
 /**
  * Select2
  * @source https://github.com/JedWatson/react-select
  */
 
+@CSSModules(styles, { allowMultiple: true })
 class SelectField extends React.Component {
   constructor(props) {
     super(props);
@@ -16,8 +20,6 @@ class SelectField extends React.Component {
   }
 
   handleChange(value) {
-    this.setState({ value });
-
     this.props.onChange(value, false);
   }
 
