@@ -5,10 +5,8 @@
 
     &:checked {
         & + .indicator {
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-image: url(var(--iconCheckbox));
-            background-size: calc(var(--spacingUnit) * .8) auto;
+          background: url(var(--iconCheckbox)) no-repeat center center;
+          background-size: calc(var(--spacingUnit) * .8) auto;
         }
     }
 }

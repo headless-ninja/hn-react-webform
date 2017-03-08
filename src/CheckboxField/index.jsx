@@ -4,7 +4,7 @@ import styles from './styles.css';
 import Input from '../Input';
 
 @CSSModules(styles)
-class CheckboxInput extends React.Component {
+class CheckboxField extends React.Component {
   constructor(props) {
     super(props);
 
@@ -31,4 +31,4 @@ class CheckboxInput extends React.Component {
   }
 }
 
-export default CheckboxInput;
+export default CheckboxField;
