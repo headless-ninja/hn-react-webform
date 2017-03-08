@@ -9,7 +9,8 @@ import rules from '../Webform/rules';
 import styles from './styles.css';
 import RuleHint from '../RuleHint';
 
-@CSSModules(styles)
+// @CSSModules(styles, {'allowMultiple':true})
+@CSSModules(styles, {allowMultiple: true})
 class WebformElement extends React.Component {
   static propTypes = {
     field: React.PropTypes.shape({
@@ -304,10 +305,11 @@ class WebformElement extends React.Component {
     return (
       <div styleName='formrow'>
         { this.renderTextContent(element, '#description', 'description-before', '#description_display', 'before') }
+        {this.props.field['#title_display']}
         {
           element && element.props.field['#has_own_label'] ?
-            <span className={classNames({ [styles.hidden]: !this.state.visible }, [`display-${this.props.field['#title_display']}`])}>{ this.props.label || this.props.field['#title'] }</span> :
-            <label htmlFor={this.key} className={classNames({ [styles.hidden]: !this.state.visible }, [`display-${this.props.field['#title_display']}`])}>
+            <span styleName={this.props.field['#title_display']=='inline'?'display-inline':''}>{ this.props.label || this.props.field['#title'] }</span> :
+            <label htmlFor={this.key} styleName={'test','iets', 'anders'} >
               {this.props.label || this.props.field['#title']}
             </label>
         }
