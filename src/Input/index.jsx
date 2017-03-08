@@ -30,29 +30,16 @@ class Input extends React.Component {
     }
   }
 
-  getInputType() {
-    const type = this.props.field['#type'];
-    switch(type) {
-      case 'email':
-        return 'email';
-      case 'tel':
-        return 'tel';
-      case 'textfield':
-      default:
-        return 'text';
-    }
-  }
-
   render() {
     return (
       <input
-        type={this.getInputType()}
+        type={this.props.type}
         onChange={this.props.onChange}
         value={this.props.value}
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
         placeholder={this.props.field['#placeholder']}
-        styleName='input'
+        styleName={`input`}
       />
     );
   }
