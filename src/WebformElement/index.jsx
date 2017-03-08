@@ -8,7 +8,7 @@ import rules from '../Webform/rules';
 import styles from './styles.css';
 import RuleHint from '../RuleHint';
 
-@CSSModules(styles)
+@CSSModules(styles, {allowMultiple: true})
 class WebformElement extends React.Component {
   static propTypes = {
     field: React.PropTypes.shape({
@@ -302,6 +302,18 @@ class WebformElement extends React.Component {
         <label htmlFor={this.key}>
           {this.props.label || this.props.field['#title']}
         </label>
+
+        { this.renderTextContent('#description', 'description-before', '#description_display', 'before') }
+
+        {
+          element.props.field['#has_own_label'] ?
+          <span styleName={'test',this.props.field['#title_display']=='inline'?'display-inline':'', this.props.field['#title_display']=='before'?'display-before':'', this.props.field['#title_display']=='invisible'?'display-invisible':''} >
+            { this.props.label || this.props.field['#title'] }
+          </span> :
+          <label htmlFor={this.key} styleName={'test',this.props.field['#title_display']=='inline'?'display-inline':'', this.props.field['#title_display']=='before'?'display-before':'', this.props.field['#title_display']=='invisible'?'display-invisible':''} >
+            {this.props.label || this.props.field['#title']}
+          </label>
+        }
 
         { this.renderTextContent('#field_prefix') }
 

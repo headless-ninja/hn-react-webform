@@ -23,9 +23,12 @@ label {
 
 .display-invisible { display: none; }
 .display-before { display: block; }
+.display-inline { display: inline-block; }
 
 
 /* Field Description */
+
+.test,.iets,.anders {color:red;}
 
 .description-before, .description-after {
     display: block;
