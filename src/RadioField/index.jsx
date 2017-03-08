@@ -4,6 +4,13 @@ import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })
 class RadioField extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.wrapper = 'fieldset';
+    this.label = 'legend';
+  }
+
   render() {
     return (
       <div>

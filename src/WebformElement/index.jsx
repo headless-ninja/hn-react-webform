@@ -7,6 +7,7 @@ import FormStore from '../Webform/FormStore';
 import rules from '../Webform/rules';
 import styles from './styles.pcss';
 import RuleHint from '../RuleHint';
+import Wrapper from '../Wrapper';
 
 @CSSModules(styles, { allowMultiple: true })
 class WebformElement extends React.Component {
@@ -66,6 +67,7 @@ class WebformElement extends React.Component {
     super(props);
 
     this.key = props.field['#webform_key'];
+    this.element = {};
 
     this.onChange = this.onChange.bind(this);
 
@@ -304,13 +306,16 @@ class WebformElement extends React.Component {
       return null;
     }
     return (
-      <div styleName='formrow'>
-
+      <Wrapper component={this.element.wrapper || 'div'} styleName='formrow'>
         { this.renderTextContent('#description', 'before') }
 
-        <label htmlFor={this.key} styleName={`${this.getLabelClass()}`}>
+        <Wrapper
+          component={this.element.label || 'label'}
+          htmlFor={this.key}
+          styleName={this.getLabelClass()}
+        >
           {this.props.label || this.props.field['#title']}
-        </label>
+        </Wrapper>
 
         { this.renderTextContent('#field_prefix') }
 
@@ -323,7 +328,7 @@ class WebformElement extends React.Component {
         <ul>
           {this.state.errors}
         </ul>
-      </div>
+      </Wrapper>
     );
   }
 }
