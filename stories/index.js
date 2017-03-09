@@ -35,7 +35,7 @@ storiesOf('Examples', module)
       settings={{
         title: 'Routeboekje form'
       }}
-      form=form={{
+      form={{
       form_id: "natuurmonumenten_routeboekje",
       settings: {
         page: true,
