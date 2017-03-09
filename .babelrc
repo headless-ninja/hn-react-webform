@@ -9,5 +9,10 @@
     "react",
     "stage-1"
   ],
-  "plugins": ["transform-decorators-legacy"]
+  "plugins": [
+    "transform-decorators-legacy",
+    ["transform-runtime", {
+      "polyfill": true
+    }]
+  ]
 }

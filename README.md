@@ -1,6 +1,26 @@
-# Make it NPM Linkable
+# React-Drupal-Webform
+With this awesome React component, you can render complete Drupal Webforms in React. With validation, easy custom styling and a modern, clean interface.
 
-- In this repository, run `sudo npm link`.
-- In the other repository, run `npm link react-drupal-webform`.
-- In the other repository, run `sudo npm install ../react-drupal-webform`.
-- In this repository, run `npm start`.
+## Installation
+
+First, install *react-drupal-webform* in your project:
+```bash
+$ npm install react-drupal-webform
+# or
+$ yarn add react-drupal-webform
+```
+Then, import the component:
+```javascript
+// ES6
+import Webform from 'react-drupal-webform';
+// ES5
+var Webform = require('react-drupal-webform').default;
+```
+This project uses *CSS Modules*, *CSS.next* and *ES7* to ease styling. Your web-bundler (like Webpack) needs to support *CSS Modules* to correctly parse all styling. For more informations about enabling *CSS Modules*, see [Configure your webbundler](doc/CONFIGURE_WEBBUNDLER.md).
+# Contributing
+
+If you want to help contributing, follow these steps:
+
+1. Run `npm start`.
+2. In another terminal, run `npm storybook`.
+3. Edit files in `/src` and view changes on http://localhost:6006/
