@@ -4,7 +4,8 @@ import Markdown from 'react-remarkable';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/default.css';
 import Readme from '../README.md';
-import Webform from '../lib';
+import Webform, { FetchForm } from '../lib';
+import RemoteForm from './RemoteForm';
 
 storiesOf('RDW - Documentation', module)
   .add('Readme', () => (
@@ -484,4 +485,7 @@ storiesOf('Examples', module)
         token: '8eW0cn6zaaHXP6wzVHYA6X2E0-vHUC6HuB9cXqsXqdU',
       }}
     />
+  ))
+  .add('Remote form', () => (
+    <RemoteForm />
   ));

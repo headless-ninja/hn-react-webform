@@ -2,7 +2,7 @@ import React from 'react';
 
 const Wrapper = (p) => {
   const props = Object.assign({}, p);
-  const { children, component} = props;
+  const { children, component } = props;
   delete props.children;
   delete props.component;
 

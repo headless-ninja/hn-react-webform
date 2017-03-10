@@ -17,8 +17,8 @@ class RadioField extends React.Component {
         {
           /* TODO: radio-options-sidebyside should be loaded from json option #options_display */
 
-          this.props.field && Object.keys(this.props.field['#options']).map((option) =>
-            <label key={option} styleName="radio-options-side_by_side">
+          this.props.field && Object.keys(this.props.field['#options']).map(option =>
+            <label key={option} styleName='radio-options-side_by_side'>
               <input
                 type='radio'
                 onChange={this.props.onChange}

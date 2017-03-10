@@ -6,6 +6,7 @@ import ParagraphField from './ParagraphField';
 import SelectField from './SelectField';
 import Input from './Input';
 import RadioField from './RadioField';
+import FetchForm from './FetchForm';
 
 const components = {
   textfield: Input,
@@ -19,4 +20,4 @@ const components = {
 };
 
 export default Webform;
-export{ components };
+export { components, FetchForm };
