@@ -2,6 +2,10 @@ stages:
   - build
   - deploy
 
+cache:
+  paths:
+  - node_modules/
+
 build:
   stage: build
   image: node:7
@@ -13,8 +17,9 @@ build:
       - lib
 pages:
   stage: deploy
-  image: alpine
+  image: node:7
   script:
+    - npm install
     - npm run build-storybook -- -o public
   artifacts:
       paths:
