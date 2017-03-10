@@ -1,0 +1,25 @@
+stages:
+  - build
+  - deploy
+
+build:
+  stage: build
+  image: node:7
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - lib
+pages:
+  stage: deploy
+  image: alpine
+  script:
+    - npm run build-storybook -- -o public
+  artifacts:
+      paths:
+        - public
+  dependencies:
+    - build
+  only:
+    - master
