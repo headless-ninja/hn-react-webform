@@ -1,4 +1,4 @@
-@import '../styles/_variables.css';
+@import '../styles/_variables.pcss';
 
 .checkbox-label {
     width: auto;
@@ -9,7 +9,7 @@
 
     &:checked {
         & + .indicator {
-          background: url(var(--iconCheckbox)) no-repeat center center;
+          background: var(--iconCheckbox) no-repeat center center;
           background-size: calc(var(--spacingUnit) * .8) auto;
         }
     }

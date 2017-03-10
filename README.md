@@ -21,6 +21,9 @@ This project uses *CSS Modules*, *CSS.next* and *ES7* to ease styling. Your web-
 
 If you want to help contributing, follow these steps:
 
-1. Run `npm start`.
-2. In another terminal, run `npm storybook`.
-3. Edit files in `/src` and view changes on http://localhost:6006/
+1. Clone this repo
+2. `cd` into the folder
+3. Run `npm install`
+4. Run `npm start`.
+5. In another terminal, run `npm storybook`.
+6. Edit files in `/src` and view changes on http://localhost:6006/

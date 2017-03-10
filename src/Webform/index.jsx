@@ -1,6 +1,6 @@
 import React from 'react';
 import getNested from 'get-nested';
-import fetch from 'fetch-everywhere';
+import fetch, { Headers } from 'fetch-everywhere';
 import { observer } from 'mobx-react';
 import CSSModules from 'react-css-modules';
 import FormStore from './FormStore';
@@ -102,7 +102,7 @@ class Webform extends React.Component {
   render() {
     const formElements = this.getFormElements();
     return (
-      <div>
+      <div styleName='webform'>
         <h1 styleName='formtitle'>{getNested(() => this.props.settings.title)}</h1>
         <form method='POST' onSubmit={this.onSubmit}>
           {formElements}

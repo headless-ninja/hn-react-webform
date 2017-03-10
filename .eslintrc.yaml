@@ -17,7 +17,11 @@ rules:
           after: true
         import:
           after: true
+        export:
+          after: true
         else:
+          after: true
+        try:
           after: true
   no-param-reassign:
     - 2
