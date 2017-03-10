@@ -20,7 +20,7 @@ export default class extends Component {
     super(props);
 
     this.state = {
-      url: 'https://test-t6dnbai-zodr7ajad7mea.eu.platform.sh/api/v1/url?url=/node/1&_format=json',
+      url: 'https://test-t6dnbai-zodr7ajad7mea.eu.platform.sh/api/v1/url?url=/node/2&_format=json',
       field: 'field_form',
     };
   }
