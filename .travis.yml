@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+- node
+
+script:
+- npm run build
+- npm run build-storybook
+
+deploy:
+  skip_cleanup: true
+  provider: pages
+  local-dir: storybook-static
+  github-token:
+    secure: "x/R4S+VMX54VHZ9y/yqOkuN45gNPDRBoXJY5wuKq3GwjCKo60N0mNC2Q1U+IXQd358Yutw75u5oHWhC+y7SCW/el1WlHII2q+3DNgAnxIDE0I46m8SfajZ6OVpUcd0s6WG7BZwNr7Hu0+wGMnjUAvnH265juIqrPW43JkWf3u3980bj0ckv5Rxug0T4KAbsEFX9891UI8FRi4/4giUB/b/Tq8sbbtjHbcn9VjkA7RcNTt8KRHbwAPLzs1aNGq7YPpZiuZIetIdHYmNsT+ZwMYkq0metT5pqP+KUqavf6Dls/TJxjFOFaDWTsrlxGbAgcCy2eKXEYPozO2AI6HxQ+L1w2ivCHABAwEXi818unbFrt25/M42eF0fj/LMA31rfWsBXyqyBMAM7DoINXvBrSDmfJ/Fo7zXhduvkYUlzkLG97/j5nwWoAysuLAUlqZ2yLvc5QTZczjJ/Cev0Kso2ewJ9OogO6enW5PwlX2mLkC78VSQkzzAYWBLVwKheP4/H8gJql7rBMvyrYPwQAH+9DJYVW5BwGNGbc65d/7OnWm6TGAPBQPByXqpQCC45dgvvAPG9wfz6rRbxqhv9a9h28ue9wanxVbb2x9QdM8cIJ9uD61LU5IL5ygrO37XzFUTVjuiK/QdJ6RkvKoPUuo7YLhFnffFgBmDiWTA0Y7alCCSU="
