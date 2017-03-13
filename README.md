@@ -17,6 +17,7 @@ import Webform from 'react-drupal-webform';
 var Webform = require('react-drupal-webform').default;
 ```
 This project uses *CSS Modules*, *CSS.next* and *ES7* to ease styling. Your web-bundler (like Webpack) needs to support *CSS Modules* to correctly parse all styling. For more informations about enabling *CSS Modules*, see [Configure your webbundler](doc/CONFIGURE_WEBBUNDLER.md).
+
 # Contributing
 
 If you want to help contributing, follow these steps:
@@ -25,5 +26,5 @@ If you want to help contributing, follow these steps:
 2. `cd` into the folder
 3. Run `npm install`
 4. Run `npm start`.
-5. In another terminal, run `npm storybook`.
+5. In another terminal, run `npm run storybook`.
 6. Edit files in `/src` and view changes on http://localhost:6006/
