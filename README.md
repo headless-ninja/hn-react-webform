@@ -26,6 +26,5 @@ If you want to help contributing, follow these steps:
 2. `cd` into the folder
 3. Run `npm install`
 4. Run `npm start`.
-5. Make sure npm storybook is installed: https://getstorybook.io/docs/react-storybook/basics/quick-start-guide
-6. In another terminal, run `npm run storybook`.
-7. Edit files in `/src` and view changes on http://localhost:6006/
+5. In another terminal, run `npm run storybook`.
+6. Edit files in `/src` and view changes on http://localhost:6006/
