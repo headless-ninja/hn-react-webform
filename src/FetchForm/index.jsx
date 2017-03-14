@@ -1,6 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import Webform from '../Webform';
+import React from 'react';
 import fetch from 'fetch-everywhere';
+import Webform from '../Webform';
 
 const LOAD_STATES = {
   LOADING: 0,
@@ -8,7 +8,15 @@ const LOAD_STATES = {
   ERROR: 2,
 };
 
-export default class FetchForm extends Component {
+class FetchForm extends React.Component {
+  static propTypes = {
+    url: React.PropTypes.string.isRequired,
+    field: React.PropTypes.string,
+  }
+
+  static defaultProps = {
+    field: 'field_form',
+  }
 
   constructor(props) {
     super(props);
@@ -25,8 +33,9 @@ export default class FetchForm extends Component {
   componentDidMount() {
     this.fetchForm();
   }
+
   componentDidUpdate(prevProps) {
-    if(prevProps.url != this.props.url || prevProps.field != this.props.field) {
+    if(prevProps.url !== this.props.url || prevProps.field !== this.props.field) {
       this.fetchForm();
     }
   }
@@ -46,7 +55,7 @@ export default class FetchForm extends Component {
         if(typeof json.content !== 'object' || (!this.props.field && !json.content.form_id) || (this.props.field && !json.content[this.props.field].form_id)) {
           throw Error('Combination of url && field didn\'t work');
         }
-      console.error('JSON!', json.content[this.props.field]);
+        console.error('JSON!', json.content[this.props.field]);
         this.setState({
           form: this.props.field ? json.content[this.props.field] : json.content,
           loadState: LOAD_STATES.SUCCESS,
@@ -71,12 +80,11 @@ export default class FetchForm extends Component {
             title: 'Routeboekje form',
           }}
         />);
+      default:
+        return null;
     }
   }
 
 }
 
-FetchForm.propTypes = {
-  url: PropTypes.string.isRequired,
-  field: PropTypes.string,
-};
+export default FetchForm;
