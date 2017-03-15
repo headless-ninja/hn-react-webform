@@ -75,7 +75,7 @@ class WebformElement extends React.Component {
       required: {
         rule: value => value.toString().trim() !== '',
         hint: value =>
-          <RuleHint key={`req_${this.key}`} hint={props.field['#validationError'] || 'This field is required'} tokens={{ value }} />,
+          <RuleHint key={`req_${this.key}`} hint={props.field['#required_error'] || 'This field is required'} tokens={{ value }} />,
       },
     });
 
