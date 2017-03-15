@@ -87,7 +87,7 @@ class Webform extends React.Component {
       'Content-Type': 'application/json',
       'X-CSRF-Token': this.props.form.token,
     });
-    console.log('token', this.props.form.token)
+
     const values = {};
     this.formStore.fields.forEach((field) => {
       values[field.id] = field.value;
