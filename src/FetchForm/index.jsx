@@ -10,7 +10,8 @@ const LOAD_STATES = {
 
 class FetchForm extends React.Component {
   static propTypes = {
-    url: React.PropTypes.string.isRequired,
+    baseUrl: React.PropTypes.string.isRequired,
+    node: React.PropTypes.number.isRequired,
     field: React.PropTypes.string,
   }
 
@@ -35,27 +36,27 @@ class FetchForm extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps.url !== this.props.url || prevProps.field !== this.props.field) {
+    if(prevProps.baseUrl !== this.props.baseUrl || prevProps.node !== this.props.node || prevProps.field !== this.props.field) {
       this.fetchForm();
     }
   }
 
   fetchForm() {
-    if(!this.props.url) {
+    if(!this.props.baseUrl) {
       this.setState({ loadState: LOAD_STATES.ERROR });
       return;
     }
 
-    console.error('Loading..');
+    console.info('Loading..');
     this.setState({ loadState: LOAD_STATES.LOADING });
 
-    this.fetch = fetch(this.props.url)
+    this.fetch = fetch(`${this.props.baseUrl}/url?url=/node/${this.props.node}&_format=json`)
       .then(data => data.json())
       .then((json) => {
         if(typeof json.content !== 'object' || (!this.props.field && !json.content.form_id) || (this.props.field && !json.content[this.props.field].form_id)) {
           throw Error('Combination of url && field didn\'t work');
         }
-        console.error('JSON!', json.content[this.props.field]);
+        console.info('JSON!', json.content[this.props.field]);
         this.setState({
           form: this.props.field ? json.content[this.props.field] : json.content,
           loadState: LOAD_STATES.SUCCESS,
@@ -67,7 +68,6 @@ class FetchForm extends React.Component {
       });
   }
 
-
   render() {
     switch(this.state.loadState) {
       case LOAD_STATES.LOADING:
@@ -76,15 +76,16 @@ class FetchForm extends React.Component {
         return <div>ERROR LOADING FORM.</div>;
       case LOAD_STATES.SUCCESS:
         return (<Webform
-          form={this.state.form} settings={{
+          form={this.state.form}
+          settings={{
             title: 'Routeboekje form',
+            postUrl: `${this.props.baseUrl}/form?_format=json`,
           }}
         />);
       default:
         return null;
     }
   }
-
 }
 
 export default FetchForm;

@@ -4,7 +4,7 @@ import Markdown from 'react-remarkable';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/default.css';
 import Readme from '../README.md';
-import Webform, { FetchForm } from '../lib';
+import Webform  from '../src';
 import RemoteForm from './RemoteForm';
 
 storiesOf('RDW - Documentation', module)
@@ -38,6 +38,7 @@ storiesOf('Examples', module)
     <Webform
       settings={{
         title: 'Routeboekje form',
+        postUrl: false,
       }}
       form={{
         form_id: 'natuurmonumenten_routeboekje',

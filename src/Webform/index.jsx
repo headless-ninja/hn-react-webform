@@ -1,6 +1,6 @@
 import React from 'react';
 import getNested from 'get-nested';
-import fetch, { Headers } from 'fetch-everywhere';
+import fetch from 'fetch-everywhere';
 import { observer } from 'mobx-react';
 import CSSModules from 'react-css-modules';
 import FormStore from './FormStore';
@@ -14,6 +14,10 @@ class Webform extends React.Component {
   static propTypes = {
     settings: React.PropTypes.shape({
       title: React.PropTypes.string.isRequired,
+      postUrl: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.bool,
+      ]).isRequired,
     }).isRequired,
     form: React.PropTypes.shape({
       form_id: React.PropTypes.string.isRequired,
@@ -76,16 +80,19 @@ class Webform extends React.Component {
   }
 
   updateSubmission(draft = false) {
-    return console.info('Simulate form sending...');
+    if(!this.props.settings.postUrl) {
+      return console.info('Simulate form sending...');
+    }
     const headers = new Headers({
       'Content-Type': 'application/json',
       'X-CSRF-Token': this.props.form.token,
     });
+    console.log('token', this.props.form.token)
     const values = {};
     this.formStore.fields.forEach((field) => {
       values[field.id] = field.value;
     });
-    fetch('/api/form', {
+    return fetch(this.props.settings.postUrl, {
       headers,
       method: 'POST',
       body: JSON.stringify(Object.assign({
