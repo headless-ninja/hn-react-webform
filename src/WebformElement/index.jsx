@@ -21,7 +21,7 @@ class WebformElement extends React.Component {
         React.PropTypes.string,
         React.PropTypes.instanceOf(RegExp),
       ]),
-      '#validationError': React.PropTypes.string,
+      '#required_error': React.PropTypes.string,
       '#patternError': React.PropTypes.string,
       '#title': React.PropTypes.string,
       '#states': React.PropTypes.object,
