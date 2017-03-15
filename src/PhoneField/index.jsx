@@ -10,7 +10,7 @@ class PhoneField extends React.Component {
       <Input
         {...this.props}
         onChange={this.onChange}
-        type='phone'
+        type='tel'
         styleName='phone'
       />
     );
