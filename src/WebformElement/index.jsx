@@ -174,7 +174,7 @@ class WebformElement extends React.Component {
 
   setFieldStorage(patch, key = this.key) {
     const index = this.props.formStore.fields.findIndex(x => x.id === key);
-    if(index) {
+    if(index !== false) {
       const fields = this.props.formStore.fields;
       const field = fields[index];
       fields[index] = Object.assign({}, field, patch);
