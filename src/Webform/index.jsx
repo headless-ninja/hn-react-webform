@@ -40,16 +40,12 @@ class Webform extends React.Component {
   constructor(props) {
     super(props);
 
-    this.components = {}; // Will be filled by each individual element
-
     this.state = {
       status: Webform.formStates.DEFAULT,
-      response: '',
       errors: {},
     };
 
     this.key = props.form.settings.form_id;
-
     this.formStore = new FormStore(this.key);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -65,6 +61,10 @@ class Webform extends React.Component {
     return console.warn('One or more fields are invalid...');
   }
 
+  componentWillMount() {
+    this.formStore.fields = [];
+  }
+
   getFormElements() {
     const formElements = getNested(() => this.props.form.elements, []);
     return formElements.map(field =>
@@ -73,26 +73,20 @@ class Webform extends React.Component {
         field={field}
         formStore={this.formStore}
         webform={this}
-        ref={(component) => {
-          if(component) {
-            this.components[component.key] = component;
-          }
-        }}
       />);
   }
 
   isValid() {
-    console.log('Validating...');
-    return Object.keys(this.components).reduce((prev, componentKey) => {
-      const component = this.components[componentKey];
-      component.validate();
-      return prev && component.isValid();
+    //console.log('Validating...');
+    return this.formStore.fields.reduce((prev, field) => {
+      const component = field.component;
+      return prev && component.validate();
     }, true);
   }
 
-  updateSubmission(draft = false) {
+  updateSubmission() {
     if(!this.props.settings.postUrl) {
-      return console.info('Simulate form sending...');
+      // return console.info('Simulate form sending...');
     }
     const headers = new Headers({
       'Content-Type': 'application/json',
@@ -101,7 +95,7 @@ class Webform extends React.Component {
 
     const values = {};
     this.formStore.fields.forEach((field) => {
-      values[field.id] = field.value;
+      values[field.key] = field.value;
     });
     this.setState({ status: Webform.formStates.PENDING });
     return fetch(this.props.settings.postUrl, {
@@ -109,25 +103,22 @@ class Webform extends React.Component {
       method: 'POST',
       body: JSON.stringify(Object.assign({
         form_id: this.props.form.form_id,
-        in_draft: draft,
       }, values)),
     })
-      .then(response => response.json())
+      .then(response => response.text()) // TODO fix that Drupal returns JSON ALWAYS!
       .then((response) => {
-        if(!response) {
-          this.setState({ status: Webform.formStates.SENT, response });
+        if(response.length === 0) {
+          this.setState({ status: Webform.formStates.SENT });
         } else {
-          this.setState({ status: Webform.formStates.ERROR, errors: response });
-          if(window) {
-            window.scrollTo(0, 0);
-          }
+          const json = JSON.parse(response);
+          this.setState({ status: Webform.formStates.ERROR, errors: json });
         }
-      });
+      })
+      .catch(console.error);
   }
 
   render() {
     const formElements = this.getFormElements();
-    const message = `Thanks, ${this.state.response}`;
     return (
       <div styleName='webform'>
         <h1 styleName='formtitle'>{getNested(() => this.props.settings.title)}</h1>
@@ -140,7 +131,7 @@ class Webform extends React.Component {
             <SubmitButton
               form={this.props.form} status={this.state.status}
             />
-          </form> : <ThankYouMessage message={message} />
+          </form> : <ThankYouMessage message={this.props.form.settings.confirmation_message} />
         }
       </div>
     );

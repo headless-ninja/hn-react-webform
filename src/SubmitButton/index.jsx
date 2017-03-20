@@ -1,13 +1,13 @@
 import React from 'react';
-import getNested from 'get-nested';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
+import Webform from '../Webform';
 
 @CSSModules(styles)
 class SubmitButton extends React.Component {
   render() {
     const settings = this.props.form.settings;
-    let disabled = this.props.status === 'pending';
+    const disabled = this.props.status === Webform.formStates.PENDING;
 
     return (
       <div>

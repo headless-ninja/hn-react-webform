@@ -3,11 +3,13 @@ import remotedev from 'mobx-remotedev';
 
 class Field {
   key = null;
+  component = null;
 
   @observable valid = true;
   @observable value = null;
 
-  constructor(key, value, valid = false) {
+  constructor(component, key, value, valid = false) {
+    this.component = component;
     this.key = key;
     this.valid = valid;
     this.value = value;
@@ -23,8 +25,8 @@ class FormStore {
     this.key = formId;
   }
 
-  createField(key, value = '', valid) {
-    const field = new Field(key, value, valid);
+  createField(component, key, value = '', valid) {
+    const field = new Field(component, key, value, valid);
     this.fields.push(field);
   }
 

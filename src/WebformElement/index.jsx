@@ -99,7 +99,9 @@ class WebformElement extends React.Component {
   }
 
   componentDidMount() {
-    this.props.formStore.createField(this.key, this.props.field['#default_value']);
+    if(this.getFormElementComponent()) {
+      this.props.formStore.createField(this, this.key, this.props.field['#default_value']);
+    }
   }
 
   componentWillReceiveProps() {
@@ -113,12 +115,16 @@ class WebformElement extends React.Component {
     this.validate();
   }
 
-  getFormElement() {
+  getFormElementComponent() {
     const element = components[this.props.field['#type']];
-    if(element) {
-      const Component = element;
+    return element || false;
+  }
+
+  getFormElement() {
+    const Component = this.getFormElementComponent();
+    if(Component) {
       return {
-        class: element,
+        class: Component,
         element: <Component
           value={this.getValue()}
           name={this.key}
@@ -250,7 +256,8 @@ class WebformElement extends React.Component {
     const errors = fails.map(rule => rule.hint(this.getValue()));
     const valid = errors.length === 0;
 
-    // console.info(this.key, '=> is', valid ? 'valid' : 'invalid');
+    //const log = valid ? console.info : console.warn;
+    //log(this.key, '=> is', valid ? 'valid' : 'invalid');
 
     this.props.formStore.setFieldStorage({ valid }, this.key);
     this.setState({ errors });
