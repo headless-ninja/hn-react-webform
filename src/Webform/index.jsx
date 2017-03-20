@@ -51,6 +51,10 @@ class Webform extends React.Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  componentWillMount() {
+    this.formStore.fields = [];
+  }
+
   onSubmit(e) {
     e.preventDefault();
     const isValid = this.isValid();
@@ -59,10 +63,6 @@ class Webform extends React.Component {
     }
 
     return console.warn('One or more fields are invalid...');
-  }
-
-  componentWillMount() {
-    this.formStore.fields = [];
   }
 
   getFormElements() {
@@ -77,7 +77,7 @@ class Webform extends React.Component {
   }
 
   isValid() {
-    //console.log('Validating...');
+    // console.log('Validating...');
     return this.formStore.fields.reduce((prev, field) => {
       const component = field.component;
       return prev && component.validate();
