@@ -27,8 +27,6 @@ class FetchForm extends React.Component {
     };
 
     this.fetchForm = this.fetchForm.bind(this);
-
-    console.error(this.state);
   }
 
   componentDidMount() {

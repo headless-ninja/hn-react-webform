@@ -56,7 +56,7 @@ class RemoteForm extends React.Component {
     return (
       <div>
         <div style={Object.assign({}, style.formWrapper, this.state.visible ? {} : style.collapsed)}>
-          <form style={style.form}>
+          <form style={style.form} onSubmit={e => e.preventDefault()}>
             <label htmlFor='baseUrl' style={style.label}>Drupal baseUrl:</label>
             <input id='baseUrl' style={style.input} type='text' onChange={e => this.setState({ baseUrl: e.target.value })} value={this.state.baseUrl} />
             <br />
@@ -77,7 +77,7 @@ class RemoteForm extends React.Component {
           style={Object.assign({}, style.expand, !this.state.visible ? {} : style.expanded)}
           onClick={() => this.setState({ visible: !this.state.visible })}
         >&#8659;</span>
-        <FetchForm baseUrl={this.state.baseUrl} node={this.state.node} field={this.state.field} />
+        <FetchForm ref={component => this.form = component} baseUrl={this.state.baseUrl} node={this.state.node} field={this.state.field} />
       </div>
     );
   }
