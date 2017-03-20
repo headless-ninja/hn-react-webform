@@ -38,30 +38,30 @@ class WebformElement extends React.Component {
     label: false,
   };
 
-  static checkConditionType(condition, state, states) {
-    switch(state) {
-      case 'visible':
-        states.visible = condition;
-        break;
-      case 'invisible':
-        states.visible = !condition;
-        break;
-      case 'enabled':
-        states.enabled = condition;
-        break;
-      case 'disabled':
-        states.enabled = !condition;
-        break;
-      case 'required':
-        states.required = condition;
-        break;
-      case 'optional':
-        states.required = !condition;
-        break;
-      default:
-        break;
-    }
-  }
+  // static checkConditionType(condition, state, states) {
+  //  switch(state) {
+  //    case 'visible':
+  //      states.visible = condition;
+  //      break;
+  //    case 'invisible':
+  //      states.visible = !condition;
+  //      break;
+  //    case 'enabled':
+  //      states.enabled = condition;
+  //      break;
+  //    case 'disabled':
+  //      states.enabled = !condition;
+  //      break;
+  //    case 'required':
+  //      states.required = condition;
+  //      break;
+  //    case 'optional':
+  //      states.required = !condition;
+  //      break;
+  //    default:
+  //      break;
+  //  }
+  // }
 
   constructor(props) {
     super(props);
