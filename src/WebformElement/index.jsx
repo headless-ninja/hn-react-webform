@@ -159,83 +159,83 @@ class WebformElement extends React.Component {
   }
 
   // checkConditionals() {
-    // const states = {
-    //  visible: this.state.visible,
-    //  enabled: this.state.enabled,
-    //  required: this.state.required,
-    // };
-    //
-    // const fieldStates = getNested(() => this.props.field['#states']);
+  // const states = {
+  //  visible: this.state.visible,
+  //  enabled: this.state.enabled,
+  //  required: this.state.required,
+  // };
+  //
+  // const fieldStates = getNested(() => this.props.field['#states']);
 
-    // EXAMPLE
-    /*
-     "#states": {
-     "visible": {
-     ":input[name=\"checkbox\"]": {
-     "checked": true
-     }
-     },
-     "required": {
-     ":input[name=\"checkbox\"]": {
-     "checked": true
-     }
-     }
-     }
-     Above states that the field with this #states prop:
-     - is visible when the checkbox 'checkbox' is checked
-     - is required when the checkbox 'checkbox' is checked
-     */
+  // EXAMPLE
+  /*
+   "#states": {
+   "visible": {
+   ":input[name=\"checkbox\"]": {
+   "checked": true
+   }
+   },
+   "required": {
+   ":input[name=\"checkbox\"]": {
+   "checked": true
+   }
+   }
+   }
+   Above states that the field with this #states prop:
+   - is visible when the checkbox 'checkbox' is checked
+   - is required when the checkbox 'checkbox' is checked
+   */
 
-    // if(fieldStates) {
-    //  // loop through #states.
-    //  for(const [fieldStateKey /* e.g. 'visible' */, fieldState] of entries(fieldStates)) {
-    //    // fieldState is an object when there is a single condition, otherwise an array. Make sure that it is always an array.
-    //    const conditions = Array.isArray(fieldState) ? fieldState : [fieldState];
-    //    // loop through conditions.
-    //    conditions.forEach((condition) => {
-    //      for(const [dependencyKey /* e.g. ':input[name="checkbox"]' */, dependency] of entries(condition)) {
-    //        const dependencyValueSelector = getNested(() => dependencyKey.match(/name="((\S)*)"/)[1]); // Get key part from name, so ':input[name="checkbox"]' becomes 'checkbox'.
-    //        // Get current value of dependency 'checkbox'
-    //        const dependencyValue = getNested(() => this.getValue(dependencyValueSelector));
-    //
-    //        // See what the action of the condition should be.
-    //        switch(Object.keys(dependency)[0]) {
-    //          case 'filled':
-    //            WebformElement.checkConditionType(dependencyValue.toString().trim() !== '', fieldStateKey, states);
-    //            break;
-    //          case 'empty':
-    //            WebformElement.checkConditionType(dependencyValue.toString().trim() === '', fieldStateKey, states);
-    //            break;
-    //          case 'checked':
-    //            // When dependencyValue is true, then it is checked.
-    //            WebformElement.checkConditionType(dependencyValue === true, fieldStateKey, states);
-    //            break;
-    //          case 'unchecked':
-    //            // When dependencyValue is true, then it is checked.
-    //            WebformElement.checkConditionType(dependencyValue !== true, fieldStateKey, states);
-    //            break;
-    //          case 'expanded': // TODO
-    //            break;
-    //          case 'collapsed': // TODO
-    //            break;
-    //          case 'value':
-    //            // Check if value matches condition
-    //            WebformElement.checkConditionType(dependencyValue === dependency.value, fieldStateKey, states);
-    //            break;
-    //          default:
-    //            break;
-    //        }
-    //      }
-    //    });
-    //  }
-    //
-    //  // doesn't work if there are multiple checks!
-    //  this.setState({
-    //    visible: states.visible,
-    //    enabled: states.enabled,
-    //    required: states.required,
-    //  });
-    // }
+  // if(fieldStates) {
+  //  // loop through #states.
+  //  for(const [fieldStateKey /* e.g. 'visible' */, fieldState] of entries(fieldStates)) {
+  //    // fieldState is an object when there is a single condition, otherwise an array. Make sure that it is always an array.
+  //    const conditions = Array.isArray(fieldState) ? fieldState : [fieldState];
+  //    // loop through conditions.
+  //    conditions.forEach((condition) => {
+  //      for(const [dependencyKey /* e.g. ':input[name="checkbox"]' */, dependency] of entries(condition)) {
+  //        const dependencyValueSelector = getNested(() => dependencyKey.match(/name="((\S)*)"/)[1]); // Get key part from name, so ':input[name="checkbox"]' becomes 'checkbox'.
+  //        // Get current value of dependency 'checkbox'
+  //        const dependencyValue = getNested(() => this.getValue(dependencyValueSelector));
+  //
+  //        // See what the action of the condition should be.
+  //        switch(Object.keys(dependency)[0]) {
+  //          case 'filled':
+  //            WebformElement.checkConditionType(dependencyValue.toString().trim() !== '', fieldStateKey, states);
+  //            break;
+  //          case 'empty':
+  //            WebformElement.checkConditionType(dependencyValue.toString().trim() === '', fieldStateKey, states);
+  //            break;
+  //          case 'checked':
+  //            // When dependencyValue is true, then it is checked.
+  //            WebformElement.checkConditionType(dependencyValue === true, fieldStateKey, states);
+  //            break;
+  //          case 'unchecked':
+  //            // When dependencyValue is true, then it is checked.
+  //            WebformElement.checkConditionType(dependencyValue !== true, fieldStateKey, states);
+  //            break;
+  //          case 'expanded': // TODO
+  //            break;
+  //          case 'collapsed': // TODO
+  //            break;
+  //          case 'value':
+  //            // Check if value matches condition
+  //            WebformElement.checkConditionType(dependencyValue === dependency.value, fieldStateKey, states);
+  //            break;
+  //          default:
+  //            break;
+  //        }
+  //      }
+  //    });
+  //  }
+  //
+  //  // doesn't work if there are multiple checks!
+  //  this.setState({
+  //    visible: states.visible,
+  //    enabled: states.enabled,
+  //    required: states.required,
+  //  });
+  // }
   // }
 
   isValid(key = this.key) {
