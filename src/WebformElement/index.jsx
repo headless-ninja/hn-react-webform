@@ -26,6 +26,7 @@ class WebformElement extends React.Component {
       '#title': React.PropTypes.string,
       '#states': React.PropTypes.object,
       '#options': React.PropTypes.object,
+      '#title_display': React.PropTypes.string,
     }).isRequired,
     formStore: React.PropTypes.instanceOf(FormStore).isRequired,
     label: React.PropTypes.oneOfType([
@@ -100,11 +101,7 @@ class WebformElement extends React.Component {
   }
 
   componentDidMount() {
-    this.props.formStore.fields.push({
-      id: this.key,
-      value: this.props.field['#default_value'] || '',
-      valid: this.validate(),
-    });
+    this.props.formStore.createField(this.key, this.props.field['#default_value']);
   }
 
   componentWillReceiveProps() {
@@ -114,7 +111,7 @@ class WebformElement extends React.Component {
   onChange(e) {
     // update store value for field
     const value = e.target ? e.target.value : e; // Check if 'e' is event, or direct value
-    this.setFieldStorage({ value });
+    this.props.formStore.setFieldStorage({ value }, this.key);
     this.validate();
   }
 
@@ -152,33 +149,7 @@ class WebformElement extends React.Component {
   }
 
   getValue(key = this.key) {
-    return this.getFieldStorage('value', key);
-  }
-
-  getFieldStorage(fields = false, key = this.key) {
-    const field = this.props.formStore.fields.find(x => x.id === key);
-
-    if(field) {
-      if(Array.isArray(fields)) {
-        const data = {};
-        fields.forEach(f => data[f] = field[f]); // Add property from field storage for each field key in fields array
-        return data;
-      } else if(typeof fields === 'string') {
-        return field[fields];
-      }
-      return field;
-    }
-
-    return false;
-  }
-
-  setFieldStorage(patch, key = this.key) {
-    const index = this.props.formStore.fields.findIndex(x => x.id === key);
-    if(index !== false) {
-      const fields = this.props.formStore.fields;
-      const field = fields[index];
-      fields[index] = Object.assign({}, field, patch);
-    }
+    return this.props.formStore.getFieldStorage('value', key) || '';
   }
 
   getLabelClass() {
@@ -270,7 +241,7 @@ class WebformElement extends React.Component {
   }
 
   isValid(key = this.key) {
-    return this.getFieldStorage('valid', key);
+    return this.props.formStore.getFieldStorage('valid', key);
   }
 
   validate() {
@@ -283,7 +254,7 @@ class WebformElement extends React.Component {
 
     console.log(this.key, '=> is', valid ? 'valid' : 'invalid');
 
-    this.setFieldStorage({ valid });
+    this.props.formStore.setFieldStorage({ valid }, this.key);
     this.setState({ errors });
 
     return valid;

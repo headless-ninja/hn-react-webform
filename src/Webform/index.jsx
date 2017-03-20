@@ -33,8 +33,6 @@ class Webform extends React.Component {
   constructor(props) {
     super(props);
 
-    this.formStore = new FormStore();
-
     this.components = {}; // Will be filled by each individual element
 
     this.state = {
@@ -42,6 +40,10 @@ class Webform extends React.Component {
       response: '',
       errors: {},
     };
+
+    this.key = props.form.settings.form_id;
+
+    this.formStore = new FormStore(this.key);
 
     this.onSubmit = this.onSubmit.bind(this);
   }
