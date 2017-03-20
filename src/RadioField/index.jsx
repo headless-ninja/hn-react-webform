@@ -4,19 +4,16 @@ import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })
 class RadioField extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.wrapper = 'fieldset';
-    this.label = 'legend';
-  }
+  static meta = {
+    wrapper: 'fieldset',
+    label: 'legend',
+  };
 
   render() {
     return (
       <div>
         {
           /* TODO: radio-options-sidebyside should be loaded from json option #options_display */
-
           this.props.field && Object.keys(this.props.field['#options']).map(option =>
             <label key={option} styleName='radio-options-side_by_side'>
               <input

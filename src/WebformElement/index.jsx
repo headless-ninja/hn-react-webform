@@ -68,7 +68,6 @@ class WebformElement extends React.Component {
     super(props);
 
     this.key = props.field['#webform_key'];
-    this.element = {};
 
     this.onChange = this.onChange.bind(this);
 
@@ -116,11 +115,12 @@ class WebformElement extends React.Component {
   }
 
   getFormElement() {
-    const element = getNested(() => components[this.props.field['#type']]);
+    const element = components[this.props.field['#type']];
     if(element) {
       const Component = element;
-      return (
-        <Component
+      return {
+        class: element,
+        element: <Component
           value={this.getValue()}
           name={this.key}
           onChange={this.onChange}
@@ -128,11 +128,9 @@ class WebformElement extends React.Component {
           store={this.formStore}
           validations={this.state.validations}
           webformElement={this}
-          ref={component => this.element = component}
-        />);
+        />,
+      };
     }
-
-    return false;
   }
 
   getValidations() {
@@ -277,11 +275,11 @@ class WebformElement extends React.Component {
       return null;
     }
     return (
-      <Wrapper component={this.element.wrapper || 'div'} styleName='formrow'>
+      <Wrapper component={getNested(() => element.class.meta.wrapper, 'div')} styleName='formrow'>
         { this.renderTextContent('#description', 'before') }
 
         <Wrapper
-          component={this.element.label || 'label'}
+          component={getNested(() => element.class.meta.label, 'label')}
           htmlFor={this.key}
           styleName={this.getLabelClass()}
         >
@@ -290,7 +288,7 @@ class WebformElement extends React.Component {
 
         { this.renderTextContent('#field_prefix') }
 
-        { element }
+        { element.element }
 
         { this.renderTextContent('#field_suffix') }
 
