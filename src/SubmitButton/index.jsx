@@ -7,9 +7,11 @@ import styles from './styles.pcss';
 class SubmitButton extends React.Component {
   render() {
     const settings = this.props.form.settings;
+    let disabled = this.props.status === 'pending';
+
     return (
       <div>
-        <button styleName='button' {...settings.form_submit_attributes}>{settings.form_submit_label}</button>
+        <button styleName='button' disabled={disabled} {...settings.form_submit_attributes}>{settings.form_submit_label}</button>
       </div>
     );
   }

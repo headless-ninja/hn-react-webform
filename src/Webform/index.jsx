@@ -6,6 +6,7 @@ import CSSModules from 'react-css-modules';
 import FormStore from './FormStore';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
+import ThankYouMessage from '../ThankYouMessage';
 import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })
@@ -39,6 +40,8 @@ class Webform extends React.Component {
     this.state = {
       hasErrors: false,
       errors: [],
+      status: 'default',
+      response: '',
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -92,6 +95,7 @@ class Webform extends React.Component {
     this.formStore.fields.forEach((field) => {
       values[field.id] = field.value;
     });
+    this.setState({ status: 'pending' });
     return fetch(this.props.settings.postUrl, {
       headers,
       method: 'POST',
@@ -100,24 +104,34 @@ class Webform extends React.Component {
         in_draft: draft,
       }, values)),
     })
-      .then(response => response.json())
       .then((response) => {
+        response.json();
+      })
+      .then((response) => {
+        if(!response) {
+          this.setState({ status: 'sent', response: response });
+        } else {
+          this.setState({ status: 'error' });
+        }
+        console.log('status ===', this.state.status);
         console.log('response', response);
       });
   }
 
   render() {
     const formElements = this.getFormElements();
+    let message = 'Thanks, ' + this.state.response;
     return (
       <div styleName='webform'>
         <h1 styleName='formtitle'>{getNested(() => this.props.settings.title)}</h1>
-        <form method='POST' onSubmit={this.onSubmit}>
-          {formElements}
+        { this.state.status !== 'sent' ?
+          <form method='POST' onSubmit={this.onSubmit}>{formElements}
 
-          <SubmitButton
-            form={this.props.form}
-          />
-        </form>
+            <SubmitButton
+              form={this.props.form} status={this.state.status}
+            />
+          </form> : <ThankYouMessage message={message} />
+        }
       </div>
     );
   }
