@@ -38,10 +38,9 @@ class Webform extends React.Component {
     this.components = {}; // Will be filled by each individual element
 
     this.state = {
-      hasErrors: false,
-      errors: [],
       status: 'default',
       response: '',
+      errors: {},
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -104,26 +103,26 @@ class Webform extends React.Component {
         in_draft: draft,
       }, values)),
     })
-      .then((response) => {
-        response.json();
-      })
+      .then(response => response.json())
       .then((response) => {
         if(!response) {
           this.setState({ status: 'sent', response: response });
         } else {
-          this.setState({ status: 'error' });
+          this.setState({ status: 'error', errors: response });
+          window.scrollTo(0,0);
         }
-        console.log('status ===', this.state.status);
-        console.log('response', response);
       });
   }
 
   render() {
     const formElements = this.getFormElements();
-    let message = 'Thanks, ' + this.state.response;
+    const message = 'Thanks, ' + this.state.response;
     return (
       <div styleName='webform'>
         <h1 styleName='formtitle'>{getNested(() => this.props.settings.title)}</h1>
+        { this.state.status === 'error' && Object.keys(this.state.errors).map(error =>
+          <span key={error} styleName='element error'>{ this.state.errors[error] }</span>,
+        )}
         { this.state.status !== 'sent' ?
           <form method='POST' onSubmit={this.onSubmit}>{formElements}
 
