@@ -12,6 +12,13 @@ import styles from './styles.pcss';
 @CSSModules(styles, { allowMultiple: true })
 @observer
 class Webform extends React.Component {
+  static formStates = {
+    DEFAULT: 'DEFAULT',
+    SENT: 'SENT',
+    ERROR: 'ERROR',
+    PENDING: 'PENDING',
+  };
+
   static propTypes = {
     settings: React.PropTypes.shape({
       title: React.PropTypes.string.isRequired,
@@ -36,7 +43,7 @@ class Webform extends React.Component {
     this.components = {}; // Will be filled by each individual element
 
     this.state = {
-      status: 'default',
+      status: Webform.formStates.DEFAULT,
       response: '',
       errors: {},
     };
@@ -96,7 +103,7 @@ class Webform extends React.Component {
     this.formStore.fields.forEach((field) => {
       values[field.id] = field.value;
     });
-    this.setState({ status: 'pending' });
+    this.setState({ status: Webform.formStates.PENDING });
     return fetch(this.props.settings.postUrl, {
       headers,
       method: 'POST',
@@ -108,24 +115,26 @@ class Webform extends React.Component {
       .then(response => response.json())
       .then((response) => {
         if(!response) {
-          this.setState({ status: 'sent', response: response });
+          this.setState({ status: Webform.formStates.SENT, response });
         } else {
-          this.setState({ status: 'error', errors: response });
-          window.scrollTo(0,0);
+          this.setState({ status: Webform.formStates.ERROR, errors: response });
+          if(window) {
+            window.scrollTo(0, 0);
+          }
         }
       });
   }
 
   render() {
     const formElements = this.getFormElements();
-    const message = 'Thanks, ' + this.state.response;
+    const message = `Thanks, ${this.state.response}`;
     return (
       <div styleName='webform'>
         <h1 styleName='formtitle'>{getNested(() => this.props.settings.title)}</h1>
-        { this.state.status === 'error' && Object.keys(this.state.errors).map(error =>
+        { this.state.status === Webform.formStates.ERROR && Object.keys(this.state.errors).map(error =>
           <span key={error} styleName='element error'>{ this.state.errors[error] }</span>,
         )}
-        { this.state.status !== 'sent' ?
+        { this.state.status !== Webform.formStates.SENT ?
           <form method='POST' onSubmit={this.onSubmit}>{formElements}
 
             <SubmitButton
