@@ -55,6 +55,12 @@ class Webform extends React.Component {
     this.formStore.fields = [];
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(this.props.form.form_id !== nextProps.form.form_id) {
+      this.formStore = new FormStore(this.key);
+    }
+  }
+
   onSubmit(e) {
     e.preventDefault();
     const isValid = this.isValid();
