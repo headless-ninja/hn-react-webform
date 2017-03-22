@@ -28,10 +28,6 @@ class WebformElement extends React.Component {
       '#title_display': React.PropTypes.string,
     }).isRequired,
     formStore: React.PropTypes.instanceOf(FormStore).isRequired,
-    label: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.element,
-      React.PropTypes.bool]),
   };
 
   static defaultProps = {
@@ -266,7 +262,7 @@ class WebformElement extends React.Component {
   }
 
   renderTextContent(selector, checkValue = false) {
-    const value = this.props.field[selector]; // Value in #description field
+    const value = this.props.field[getNested(() => this.getFormElement().class.meta.field_display[selector], selector)]; // Value in #description field
     const displayValue = this.props.field[`${selector}_display`];
     const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
 
@@ -290,7 +286,7 @@ class WebformElement extends React.Component {
           htmlFor={this.key}
           styleName={this.getLabelClass()}
         >
-          {this.props.label || this.props.field['#title']}
+          {this.props.field['#title']}
         </Wrapper>
 
         { this.renderTextContent('#field_prefix') }
