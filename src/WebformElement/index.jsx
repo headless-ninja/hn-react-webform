@@ -101,6 +101,8 @@ class WebformElement extends React.Component {
   componentDidMount() {
     if(this.getFormElementComponent()) {
       this.props.formStore.createField(this, this.key, this.props.field['#default_value']);
+
+      if(this.props.field['#required']) { this.props.formStore.formProperties.hasRequiredFields = true; }
     }
   }
 
@@ -292,6 +294,7 @@ class WebformElement extends React.Component {
           styleName={this.getLabelClass()}
         >
           { this.props.label || this.props.field['#title'] }
+          { this.props.field['#required'] ? (<small>*</small>) : null }
         </Wrapper>
 
         { this.renderTextContent('#field_prefix') }

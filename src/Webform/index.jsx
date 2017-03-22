@@ -127,6 +127,7 @@ class Webform extends React.Component {
     return (
       <div styleName='webform'>
         <h1 styleName='formtitle'>{getNested(() => this.props.settings.title)}</h1>
+        { this.formStore.formProperties.hasRequiredFields ? (<span>Required fields are marked with <small>*</small></span>) : null }
         { this.state.status === Webform.formStates.ERROR && Object.keys(this.state.errors).map(error =>
           <span key={error} styleName='element error'>{ this.state.errors[error] }</span>,
         )}

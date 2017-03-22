@@ -19,6 +19,9 @@ class Field {
 @remotedev
 class FormStore {
   @observable fields = [];
+  @observable formProperties = {
+    hasRequiredFields: false
+  };
   key = null;
 
   constructor(formId) {
