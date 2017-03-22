@@ -28,10 +28,6 @@ class WebformElement extends React.Component {
       '#title_display': React.PropTypes.string,
     }).isRequired,
     formStore: React.PropTypes.instanceOf(FormStore).isRequired,
-    label: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.element,
-      React.PropTypes.bool]),
   };
 
   static defaultProps = {
@@ -306,7 +302,7 @@ class WebformElement extends React.Component {
 
         { this.renderTextContent('#description', 'after') }
 
-        { this.state.errors.length > 0 ? (<ul role="alert"> {this.state.errors} </ul>) : null }
+        { this.state.errors.length > 0 ? (<ul role='alert'> {this.state.errors} </ul>) : null }
 
       </Wrapper>
     );
