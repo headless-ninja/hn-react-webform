@@ -256,8 +256,8 @@ class WebformElement extends React.Component {
     const errors = fails.map(rule => rule.hint(this.getValue()));
     const valid = errors.length === 0;
 
-    //const log = valid ? console.info : console.warn;
-    //log(this.key, '=> is', valid ? 'valid' : 'invalid');
+    // const log = valid ? console.info : console.warn;
+    // log(this.key, '=> is', valid ? 'valid' : 'invalid');
 
     this.props.formStore.setFieldStorage({ valid }, this.key);
     this.setState({ errors });
