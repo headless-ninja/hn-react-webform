@@ -7,7 +7,7 @@ class Input extends React.Component {
   render() {
     var attrs = {};
     this.props.webformElement.state.errors.length > 0 ? attrs['aria-invalid'] = 'true' : null;
-    this.props.validations.includes('required') ? attrs['aria-required'] = 'true' : null;
+    this.props.field['#required'] ? attrs['aria-required'] = 'true' : null;
 
     return (
       <input
