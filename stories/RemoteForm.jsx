@@ -46,7 +46,7 @@ class RemoteForm extends React.Component {
 
     this.state = {
       baseUrl: 'https://test-t6dnbai-zodr7ajad7mea.eu.platform.sh/api/v1',
-      node: 4,
+      node: 2,
       field: 'field_form',
       visible: false,
     };
