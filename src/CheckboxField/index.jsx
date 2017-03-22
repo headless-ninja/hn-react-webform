@@ -5,6 +5,14 @@ import Input from '../Input';
 
 @CSSModules(styles)
 class CheckboxField extends React.Component {
+  static meta = {
+    wrapper: 'fieldset',
+    label: 'legend',
+    field_display: {
+      '#description': 'NO_DESCRIPTION',
+    },
+  };
+
   constructor(props) {
     super(props);
 
@@ -25,7 +33,7 @@ class CheckboxField extends React.Component {
           styleName='checkbox'
         />
         <div styleName='indicator' />
-        {this.props.label || this.props.field['#title']}
+        {this.props.field['#description']}
       </label>
     );
   }
