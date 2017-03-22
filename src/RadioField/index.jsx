@@ -21,7 +21,6 @@ class RadioField extends React.Component {
                 onChange={this.props.onChange}
                 value={option}
                 name={this.props.field['#webform_key']}
-                id={this.props.field['#webform_key']}
                 styleName='radio'
               />
               <div styleName='indicator' />
