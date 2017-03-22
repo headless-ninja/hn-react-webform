@@ -28,6 +28,10 @@ class WebformElement extends React.Component {
       '#title_display': React.PropTypes.string,
     }).isRequired,
     formStore: React.PropTypes.instanceOf(FormStore).isRequired,
+    label: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.element,
+      React.PropTypes.bool]),
   };
 
   static defaultProps = {
@@ -97,6 +101,10 @@ class WebformElement extends React.Component {
   componentDidMount() {
     if(this.getFormElementComponent()) {
       this.props.formStore.createField(this, this.key, this.props.field['#default_value']);
+
+      if(this.props.field['#required']) {
+        this.props.formStore.formProperties.hasRequiredFields = true;
+      }
     }
   }
 
@@ -287,6 +295,7 @@ class WebformElement extends React.Component {
           styleName={this.getLabelClass()}
         >
           {this.props.field['#title']}
+          {this.props.field['#required'] ? (<small>*</small>) : null}
         </Wrapper>
 
         { this.renderTextContent('#field_prefix') }
@@ -297,9 +306,8 @@ class WebformElement extends React.Component {
 
         { this.renderTextContent('#description', 'after') }
 
-        <ul>
-          {this.state.errors}
-        </ul>
+        { this.state.errors.length > 0 ? (<ul role="alert"> {this.state.errors} </ul>) : null }
+
       </Wrapper>
     );
   }
