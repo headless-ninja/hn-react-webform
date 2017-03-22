@@ -12,6 +12,7 @@ class TextArea extends React.Component {
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
         styleName='textarea'
+        aria-required={this.props.validations.includes('required') ? 'true' : 'false'}
       />
     );
   }

@@ -15,6 +15,7 @@ class Input extends React.Component {
         placeholder={this.props.field['#placeholder']}
         styleName='input'
         className={this.props.className ? this.props.className : ''}
+        aria-required={this.props.validations.includes('required') ? 'true' : 'false'}
       />
     );
   }
