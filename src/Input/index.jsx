@@ -5,6 +5,10 @@ import styles from './styles.pcss';
 @CSSModules(styles, { allowMultiple: true })
 class Input extends React.Component {
   render() {
+    var attrs = {};
+    this.props.webformElement.state.errors.length > 0 ? attrs['aria-invalid'] = 'true' : null;
+    this.props.validations.includes('required') ? attrs['aria-required'] = 'true' : null;
+
     return (
       <input
         type={this.props.type}
@@ -15,7 +19,7 @@ class Input extends React.Component {
         placeholder={this.props.field['#placeholder']}
         styleName='input'
         className={this.props.className ? this.props.className : ''}
-        aria-required={this.props.validations.includes('required') ? 'true' : 'false'}
+        {...attrs}
       />
     );
   }

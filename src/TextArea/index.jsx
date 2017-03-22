@@ -5,6 +5,10 @@ import React from 'react';
 @CSSModules(styles)
 class TextArea extends React.Component {
   render() {
+    var attrs = {};
+    this.props.webformElement.state.errors.length > 0 ? attrs['aria-invalid'] = 'true' : null;
+    this.props.validations.includes('required') ? attrs['aria-required'] = 'true' : null;
+
     return (
       <textarea
         onChange={this.props.onChange}
@@ -12,7 +16,7 @@ class TextArea extends React.Component {
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
         styleName='textarea'
-        aria-required={this.props.validations.includes('required') ? 'true' : 'false'}
+        {...attrs}
       />
     );
   }
