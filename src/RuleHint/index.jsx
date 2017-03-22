@@ -30,7 +30,7 @@ class RuleHint extends React.Component {
     const hint = this.getHint();
     return (
       <li styleName='error'>
-        <span>
+        <span role="alert">
           {hint}
         </span>
       </li>
