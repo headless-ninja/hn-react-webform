@@ -5,8 +5,8 @@ import styles from './styles.pcss';
 @CSSModules(styles, { allowMultiple: true })
 class RadioField extends React.Component {
   static meta = {
-    wrapper: 'fieldset',
-    label: 'legend',
+    wrapper: <fieldset role='radiogroup' data-extendClassName={styles['radio-group']} />,
+    label: <legend />,
   };
 
   render() {

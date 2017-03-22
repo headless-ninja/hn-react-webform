@@ -277,13 +277,13 @@ class WebformElement extends React.Component {
     if(!element) {
       return null;
     }
+
     return (
-      <Wrapper component={getNested(() => element.class.meta.wrapper, 'div')} styleName='formrow'>
+      <Wrapper component={getNested(() => element.class.meta.wrapper, <div />)} styleName='formrow'>
         { this.renderTextContent('#description', 'before') }
 
         <Wrapper
-          component={getNested(() => element.class.meta.label, 'label')}
-          htmlFor={this.key}
+          component={getNested(() => element.class.meta.label, <label htmlFor={this.key} />)}
           styleName={this.getLabelClass()}
         >
           {this.props.field['#title']}
