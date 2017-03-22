@@ -111,13 +111,12 @@ class Webform extends React.Component {
         form_id: this.props.form.form_id,
       }, values)),
     })
-      .then(response => response.text()) // TODO fix that Drupal returns JSON ALWAYS!
+      .then(response => response.json())
       .then((response) => {
-        if(response.length === 0) {
-          this.setState({ status: Webform.formStates.SENT });
+        if(response.errors) {
+          this.setState({ status: Webform.formStates.ERROR, errors: response.json });
         } else {
-          const json = JSON.parse(response);
-          this.setState({ status: Webform.formStates.ERROR, errors: json });
+          this.setState({ status: Webform.formStates.SENT });
         }
       })
       .catch(console.error);
