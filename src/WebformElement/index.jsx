@@ -276,12 +276,6 @@ class WebformElement extends React.Component {
     return (<span styleName={styles[cssClass] ? cssClass : ''}>{value}</span>);
   }
 
-  renderErrorHtml() {
-    if(this.state.errors.length > 0) {
-      return (<ul role="alert"> {this.state.errors} </ul> );
-    }
-  }
-
   render() {
     const element = this.getFormElement();
     if(!element) {
@@ -297,7 +291,7 @@ class WebformElement extends React.Component {
           htmlFor={this.key}
           styleName={this.getLabelClass()}
         >
-          {this.props.label || this.props.field['#title']}
+          { this.props.label || this.props.field['#title'] }
         </Wrapper>
 
         { this.renderTextContent('#field_prefix') }
@@ -308,7 +302,7 @@ class WebformElement extends React.Component {
 
         { this.renderTextContent('#description', 'after') }
 
-        { this.renderErrorHtml() }
+        { this.state.errors.length > 0 ? (<ul role="alert"> {this.state.errors} </ul>) : null }
 
       </Wrapper>
     );
