@@ -6,20 +6,31 @@
     margin-bottom: var(--spacingUnit);
 }
 
+fieldset.formrow {
+    /* only formrow overrides for fieldset */
+    border: none;
+}
+
+/* TODO: move fieldset css to fieldset component */
 fieldset {
+    margin: 0;
+    padding: 0;
+}
+
+/*.fieldset {
+    margin-bottom: var(--spacingUnit);
     border: 1px solid var(--borderColor);
 
-    .formrow:last-of-type {
+    & .formrow:last-of-type {
         margin-bottom: 0;
     }
-}
+}*/
 
 /* Field Label */
 legend {
     float: left;
+    width: 100%;
     margin-bottom: calc(var(--spacingUnit) / 2);
-
-    & + div { clear: left; }
 }
 
 label {
@@ -32,7 +43,6 @@ label {
         width: 50%;
         padding-right: calc(var(--spacingUnit) / 2);
     }
-
 }
 
 .display-invisible { display: none; }
