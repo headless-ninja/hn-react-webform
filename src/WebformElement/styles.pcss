@@ -27,28 +27,33 @@ fieldset {
 }*/
 
 /* Field Label */
-legend {
+/*legend {
     float: left;
     width: 100%;
     margin-bottom: calc(var(--spacingUnit) / 2);
-}
+}*/
 
-label {
-    display: inline-block;
-    width: 100%;
-    margin-bottom: calc(var(--spacingUnit) / 2);
-    vertical-align: top;
+.formrow {
+    & > label, & > legend {
+        display: inline-block;
+        width: 100%;
+        margin-bottom: calc(var(--spacingUnit) / 2);
+        vertical-align: top;
 
-    @media (min-width: 768px) {
-        width: 50%;
-        padding-right: calc(var(--spacingUnit) / 2);
+        @media (min-width: 768px) {
+            width: 50%;
+            padding-right: calc(var(--spacingUnit) / 2);
+        }
+
+        &.display-invisible { display: none; }
+        &.display-before { display: block; float: none; width: 100%; }
+        &.display-inline { display: inline-block; }
+    }
+
+    & > legend {
+        float: left;
     }
 }
-
-.display-invisible { display: none; }
-.display-before { display: block; }
-.display-inline { display: inline-block; }
-
 
 /* Field Description */
 
