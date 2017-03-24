@@ -23,7 +23,16 @@ class SelectField extends React.Component {
     this.props.onChange(value, false);
   }
 
+  getLabelPositionClass() {
+      const labelClass = `display-${this.props.field['#title_display']}`;
+      if(styles[labelClass]) {
+          return labelClass;
+      }
+      return '';
+  }
+
   render() {
+    var cssClassesWrapper = 'select-wrapper ' + this.getLabelPositionClass();
     const options = [];
     for(const [optionKey, optionValue] of entries(getNested(() => this.props.field['#options'], {}))) {
       options.push({
@@ -32,14 +41,16 @@ class SelectField extends React.Component {
       });
     }
     return (
-      <Select
-        name={this.props.field['#webform_key']}
-        id={this.props.field['#webform_key']}
-        value={this.props.value}
-        multi={this.props.field['#multiple']}
-        options={options}
-        onChange={this.handleChange}
-      />
+      <div styleName={cssClassesWrapper}>
+        <Select
+          name={this.props.field['#webform_key']}
+          id={this.props.field['#webform_key']}
+          value={this.props.value}
+          multi={this.props.field['#multiple']}
+          options={options}
+          onChange={this.handleChange}
+        />
+      </div>
     );
   }
 }

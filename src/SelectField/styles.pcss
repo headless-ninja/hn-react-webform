@@ -1,1 +1,67 @@
 @import '../styles/_variables.pcss';
+
+.select-wrapper {
+  &.display-inline {
+    display: inline-block;
+    width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
+  }
+}
+
+:global .Select-control {
+  color: inherit;
+  border: 1px solid var(--borderColor);
+  background-color: var(--inputColor);
+  border-radius: var(--borderRadius);
+  height: auto;
+
+  overflow: visible;
+}
+
+:global .is-open > .Select-control {
+  color: inherit;
+  background-color: var(--inputColor);
+  border: 1px solid var(--borderColor);
+}
+
+:global .Select-placeholder,
+:global .Select--single > .Select-control .Select-value {
+  padding: calc(var(--spacingUnit) / 4) calc(var(--spacingUnit) / 2);
+  line-height: inherit;
+  font-size: .9em;
+}
+
+:global .Select-input {
+  height: inherit;
+  position: absolute;
+}
+
+:global .Select-input > input {
+  padding: 0;
+}
+
+:global .Select-placeholder, :global .Select--single > .Select-control .Select-value {
+  position: static;
+}
+
+:global .Select-menu-outer {
+  border-bottom-right-radius: var(--borderRadius);
+  border-bottom-left-radius: var(--borderRadius);
+}
+
+:global .Select-option {
+  padding: calc(var(--spacingUnit) / 4) calc(var(--spacingUnit) / 2);
+  background-color: var(--inputColor);
+  color: inherit;
+  font-size: .9em;
+}
+
+:global .Select-option.is-focused {
+  color: inherit;
+  /*background-color: color(var(--inputColor) blackness(+5));*/
+  background-color: rgba(0,0,0,0.1)
+}
+
+:global .Select-option:last-child {
+  border-bottom-right-radius: var(--borderRadius);
+  border-bottom-left-radius: var(--borderRadius);
+}
