@@ -10,22 +10,32 @@ class RadioField extends React.Component {
   };
 
   getLabelPositionClass() {
-      const labelClass = `display-${this.props.field['#title_display']}`;
-      if(styles[labelClass]) {
-          return labelClass;
-      }
-      return '';
+    const labelClass = `display-${this.props.field['#title_display']}`;
+    if(styles[labelClass]) {
+      return labelClass;
+    }
+    return '';
+  }
+
+  getOptionPositionClass() {
+    const optionClass = `radio-display-${this.props.field['#options_display']}`;
+    console.log(this.props.field['#webform_key'], optionClass);
+    if(styles[optionClass]) {
+        return optionClass;
+    }
+    return '';
   }
 
   render() {
-    var cssClasses = 'input-wrapper ' + this.getLabelPositionClass();
+    var cssClassesWrapper = 'input-wrapper ' + this.getLabelPositionClass();
+    var cssClassesRadio = 'radio-label ' + this.getOptionPositionClass();
 
     return (
-      <div styleName={cssClasses}>
+      <div styleName={cssClassesWrapper}>
         {
           /* TODO: radio-options-sidebyside should be loaded from json option #options_display */
           this.props.field && Object.keys(this.props.field['#options']).map(option =>
-            <label key={option} styleName='radio-options-side_by_side'>
+            <label key={option} styleName={cssClassesRadio}>
               <input
                 type='radio'
                 onChange={this.props.onChange}

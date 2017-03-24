@@ -26,6 +26,7 @@ class WebformElement extends React.Component {
       '#states': React.PropTypes.object,
       '#options': React.PropTypes.object,
       '#title_display': React.PropTypes.string,
+      '#options_display': React.PropTypes.string,
     }).isRequired,
     formStore: React.PropTypes.instanceOf(FormStore).isRequired,
   };
