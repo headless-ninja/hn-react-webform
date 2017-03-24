@@ -3,6 +3,7 @@ import getNested from 'get-nested';
 import fetch from 'fetch-everywhere';
 import { observer } from 'mobx-react';
 import CSSModules from 'react-css-modules';
+import ReactGA from 'react-ga';
 import FormStore from './FormStore';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
@@ -17,6 +18,15 @@ class Webform extends React.Component {
     SENT: 'SENT',
     ERROR: 'ERROR',
     PENDING: 'PENDING',
+  };
+
+  static analyticsEventsCategories = {
+    SUCCESSFUL: 'Successful submission',
+    ERROR: 'Error during submission'
+  };
+
+  static analyticsEventsActions = {
+    FORM_SUBMISSION: 'Form Submission'
   };
 
   static propTypes = {
@@ -50,6 +60,10 @@ class Webform extends React.Component {
     onAfterSubmit: false,
   };
 
+  static fireAnalyticsEvent(event) {
+    ReactGA.event(event);
+  }
+
   constructor(props) {
     super(props);
 
@@ -62,6 +76,8 @@ class Webform extends React.Component {
     this.formStore = new FormStore(this.key);
 
     this.onSubmit = this.onSubmit.bind(this);
+
+    ReactGA.initialize(props.form.settings.analytics_id);
   }
 
   componentWillMount() {
@@ -112,8 +128,16 @@ class Webform extends React.Component {
 
     if(response.status === 200) {
       this.setState({ status: Webform.formStates.SENT });
+      Webform.fireAnalyticsEvent({
+        category: Webform.analyticsEventsCategories.SUCCESSFUL,
+        action: Webform.analyticsEventsActions.FORM_SUBMISSION,
+      });
     } else {
       this.setState({ status: Webform.formStates.ERROR, errors: response.errors || [] });
+      Webform.fireAnalyticsEvent({
+        category: Webform.analyticsEventsCategories.ERROR,
+        action: Webform.analyticsEventsActions.FORM_SUBMISSION,
+      });
     }
 
     if(this.props.onAfterSubmit) {

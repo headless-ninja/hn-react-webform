@@ -21,6 +21,7 @@
     "react-addons-test-utils": "^15.3.0",
     "react-css-modules": "^4.1.0",
     "react-dom": "^15.3.0",
+    "react-ga": "^2.1.2",
     "react-input-mask": "^0.7.7",
     "react-router": "^2.6.1",
     "react-select": "^1.0.0-rc.3",
