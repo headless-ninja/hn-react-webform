@@ -80,11 +80,11 @@ class FetchForm extends React.Component {
             postUrl: `${this.props.baseUrl}/form?_format=json`,
           }}
           onSubmit={() => {
-            const block = true;
+            const block = false;
             console.info('submithook, block:', block);
             return Promise.resolve({
               submit: !block,
-              errors: ['blabla'],
+              errors: ['Custom error, override submit'],
             });
           }}
           onAfterSubmit={() => console.info('afterhook')}
