@@ -1,5 +1,5 @@
 import { observable } from 'mobx';
-import remotedev from 'mobx-remotedev';
+import { formatConditionals } from './conditionals';
 
 class Field {
   key = null;
@@ -7,20 +7,30 @@ class Field {
 
   @observable valid = true;
   @observable value = null;
+  conditionals = false;
 
-  constructor(component, key, value, valid = false) {
+  constructor(component, key, props = {}, valid = false) {
+    if(!component) {
+      throw new Error('Element instance reference is required');
+    }
+
+    if(!key) {
+      throw new Error('Element key is required');
+    }
+
     this.component = component;
     this.key = key;
     this.valid = valid;
-    this.value = value;
+    this.value = props['#default_value'] || '';
+    this.props = props;
+    this.conditionals = formatConditionals(props['#states']);
   }
 }
 
-@remotedev
 class FormStore {
   @observable fields = [];
   @observable formProperties = {
-    hasRequiredFields: false
+    hasRequiredFields: false,
   };
   key = null;
 
@@ -28,8 +38,8 @@ class FormStore {
     this.key = formId;
   }
 
-  createField(component, key, value = '', valid) {
-    const field = new Field(component, key, value, valid);
+  createField(component, key, props, valid) {
+    const field = new Field(component, key, props, valid);
     this.fields.push(field);
   }
 

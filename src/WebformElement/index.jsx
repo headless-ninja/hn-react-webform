@@ -96,7 +96,7 @@ class WebformElement extends React.Component {
 
   componentDidMount() {
     if(this.getFormElementComponent()) {
-      this.props.formStore.createField(this, this.key, this.props.field['#default_value']);
+      this.props.formStore.createField(this, this.key, this.props.field);
 
       if(this.props.field['#required']) {
         this.props.formStore.formProperties.hasRequiredFields = true;
