@@ -14,7 +14,8 @@ class EmailField extends React.Component {
     Object.assign(rules, {
       email: {
         rule: value => validator.isEmail(value),
-        hint: value => <RuleHint key={`email_${this.key}`} hint={props.field['#validationError'] || '":value" isn\'t an Email.'} tokens={{ value }} />,
+        hint: value =>
+          <RuleHint key={`email_${this.key}`} hint={props.field['#validationError'] || '":value" isn\'t an Email.'} tokens={{ value }} />,
       },
     });
   }

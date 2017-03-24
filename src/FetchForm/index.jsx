@@ -45,7 +45,7 @@ class FetchForm extends React.Component {
       return;
     }
 
-    console.info('Loading..');
+    // console.info('Loading..');
     this.setState({ loadState: LOAD_STATES.LOADING });
 
     this.fetch = fetch(`${this.props.baseUrl}/url?url=/node/${this.props.node}&_format=json`)
@@ -54,7 +54,7 @@ class FetchForm extends React.Component {
         if(typeof json.content !== 'object' || (!this.props.field && !json.content.form_id) || (this.props.field && !json.content[this.props.field].form_id)) {
           throw Error('Combination of url && field didn\'t work');
         }
-        console.info('JSON!', json.content[this.props.field]);
+        // console.info('JSON!', json.content[this.props.field]);
         this.setState({
           form: this.props.field ? json.content[this.props.field] : json.content,
           loadState: LOAD_STATES.SUCCESS,

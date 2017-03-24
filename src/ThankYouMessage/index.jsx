@@ -1,6 +1,6 @@
+import React from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
-import React from 'react';
 
 @CSSModules(styles)
 class ThankYouMessage extends React.Component {

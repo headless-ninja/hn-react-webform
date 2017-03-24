@@ -1,9 +1,9 @@
 import React from 'react';
-import Validation from 'react-validation';
 import validator from 'validator';
 import InputMask from 'react-input-mask';
+import rules from '../Webform/rules';
 
-Validation.rules = Object.assign(Validation.rules, {
+Object.assign(rules, {
   phone: {
     // Example usage with external 'validator'
     rule: value => validator.isMobilePhone(value),

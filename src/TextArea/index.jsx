@@ -1,13 +1,15 @@
+import React from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
-import React from 'react';
 
 @CSSModules(styles)
 class TextArea extends React.Component {
   render() {
-    var attrs = {};
-    this.props.webformElement.state.errors.length > 0 ? attrs['aria-invalid'] = 'true' : null;
-    this.props.field['#required'] ? attrs['aria-required'] = 'true' : null;
+    const attrs = {
+      'aria-invalid': this.props.webformElement.isValid() ? null : true,
+      'aria-required': this.props.field['#required'] ? true : null,
+    };
+
 
     return (
       <textarea

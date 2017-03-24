@@ -22,11 +22,11 @@ class Webform extends React.Component {
 
   static analyticsEventsCategories = {
     SUCCESSFUL: 'Successful submission',
-    ERROR: 'Error during submission'
+    ERROR: 'Error during submission',
   };
 
   static analyticsEventsActions = {
-    FORM_SUBMISSION: 'Form Submission'
+    FORM_SUBMISSION: 'Form Submission',
   };
 
   static propTypes = {

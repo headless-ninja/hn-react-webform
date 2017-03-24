@@ -5,9 +5,10 @@ import styles from './styles.pcss';
 @CSSModules(styles, { allowMultiple: true })
 class Input extends React.Component {
   render() {
-    var attrs = {};
-    this.props.webformElement.state.errors.length > 0 ? attrs['aria-invalid'] = 'true' : null;
-    this.props.field['#required'] ? attrs['aria-required'] = 'true' : null;
+    const attrs = {
+      'aria-invalid': this.props.webformElement.isValid() ? null : true,
+      'aria-required': this.props.field['#required'] ? true : null,
+    };
 
     return (
       <input

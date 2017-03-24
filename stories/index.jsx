@@ -4,7 +4,7 @@ import Markdown from 'react-remarkable';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/default.css';
 import Readme from '../README.md';
-import Webform  from '../src';
+import Webform from '../src';
 import RemoteForm from './RemoteForm';
 
 storiesOf('RDW - Documentation', module)
@@ -119,6 +119,55 @@ storiesOf('Examples', module)
             '#webform_composite': false,
             '#title': null,
             '#admin_title': null,
+            '#states': {
+              visible: [
+                {
+                  ':input[name="name"]': {
+                    empty: true,
+                  },
+                },
+                {
+                  ':input[name="name"]': {
+                    filled: true,
+                  },
+                },
+              ],
+              invisible: {
+                ':input[name="name"]': {
+                  value: '1',
+                },
+              },
+              enabled: {
+                ':input[name="checkbox_with_dependency"]': {
+                  checked: true,
+                },
+              },
+              disabled: {
+                ':input[name="message"]': {
+                  filled: true,
+                },
+              },
+              required: {
+                ':input[name="phone_number"]': {
+                  filled: true,
+                },
+              },
+              optional: {
+                ':input[name="phone_number"]': {
+                  unchecked: true,
+                },
+              },
+              checked: {
+                ':input[name="conditional_input_always_required"]': {
+                  empty: true,
+                },
+              },
+              unchecked: {
+                ':input[name="message"]': {
+                  collapsed: true,
+                },
+              },
+            },
           },
           {
             '#type': 'select',
