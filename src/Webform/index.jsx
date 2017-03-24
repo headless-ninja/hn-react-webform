@@ -35,6 +35,19 @@ class Webform extends React.Component {
       })).isRequired,
       token: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.bool]),
     }).isRequired,
+    onSubmit: React.PropTypes.oneOfType([
+      React.PropTypes.func,
+      React.PropTypes.bool,
+    ]),
+    onAfterSubmit: React.PropTypes.oneOfType([
+      React.PropTypes.func,
+      React.PropTypes.bool,
+    ]),
+  };
+
+  static defaultProps = {
+    onSubmit: false,
+    onAfterSubmit: false,
   };
 
   constructor(props) {
@@ -90,10 +103,26 @@ class Webform extends React.Component {
     }, true);
   }
 
-  updateSubmission() {
-    if(!this.props.settings.postUrl) {
-      // return console.info('Simulate form sending...');
+  async updateSubmission() {
+    let response = await (this.props.onSubmit ? this.props.onSubmit(this) : Promise.resolve()); // Trigger onSubmit hook and store response.
+
+    if(response.submit !== false) { // If onSubmit hook response is false, don't trigger default submit.
+      response = await this.submit();
     }
+
+    if(response.status === 200) {
+      this.setState({ status: Webform.formStates.SENT });
+    } else {
+      this.setState({ status: Webform.formStates.ERROR, errors: response.errors || [] });
+    }
+
+    if(this.props.onAfterSubmit) {
+      this.props.onAfterSubmit(this); // Trigger onAfterSubmit hook if existing.
+    }
+  }
+
+  async submit() {
+    console.info('submit');
     const headers = new Headers({
       'Content-Type': 'application/json',
       'X-CSRF-Token': this.props.form.token,
@@ -112,13 +141,10 @@ class Webform extends React.Component {
       }, values)),
     })
       .then(response => response.json())
-      .then((response) => {
-        if(response.errors) {
-          this.setState({ status: Webform.formStates.ERROR, errors: response.json });
-        } else {
-          this.setState({ status: Webform.formStates.SENT });
-        }
-      })
+      .then(response => ({
+        status: response.status || 400,
+        errors: response || false,
+      }))
       .catch(console.error);
   }
 
@@ -127,13 +153,13 @@ class Webform extends React.Component {
     return (
       <div styleName='webform'>
         <h1 styleName='formtitle'>{getNested(() => this.props.settings.title)}</h1>
-        { this.formStore.formProperties.hasRequiredFields ? (<span>Required fields are marked with <small>*</small></span>) : null }
         { this.state.status === Webform.formStates.ERROR && Object.keys(this.state.errors).map(error =>
           <span key={error} styleName='element error'>{ this.state.errors[error] }</span>,
         )}
         { this.state.status !== Webform.formStates.SENT ?
-          <form method='POST' onSubmit={this.onSubmit}>{formElements}
-
+          <form method='POST' onSubmit={this.onSubmit}>
+            { this.formStore.formProperties.hasRequiredFields ? (<span>Required fields are marked with <small>*</small></span>) : null }
+            {formElements}
             <SubmitButton
               form={this.props.form} status={this.state.status}
             />

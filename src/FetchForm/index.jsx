@@ -79,6 +79,15 @@ class FetchForm extends React.Component {
             title: 'Routeboekje form',
             postUrl: `${this.props.baseUrl}/form?_format=json`,
           }}
+          onSubmit={() => {
+            const block = true;
+            console.info('submithook, block:', block);
+            return Promise.resolve({
+              submit: !block,
+              errors: ['blabla'],
+            });
+          }}
+          onAfterSubmit={() => console.info('afterhook')}
         />);
       default:
         return null;
