@@ -1,8 +1,20 @@
 @import '../styles/_variables.pcss';
 
+/* // Example for how to extend wrapper classes: data-extendClassName={styles['radio-group']}
 .radio-group {
-  padding: 8px; /* Example for how to extend wrapper classes */
+  padding: 8px;
+}*/
+
+.input-wrapper {
+    display: inline-block;
+    float: left;
+    width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
 }
+
+.display-before {
+    float: none;
+    width: 100%;
+ }
 
 .radio-options-side_by_side, .radio-options-two_columns, .radio-options-three_columns {
     display: inline-block;

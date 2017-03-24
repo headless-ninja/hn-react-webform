@@ -5,13 +5,23 @@ import styles from './styles.pcss';
 @CSSModules(styles, { allowMultiple: true })
 class RadioField extends React.Component {
   static meta = {
-    wrapper: <fieldset role='radiogroup' data-extendClassName={styles['radio-group']} />,
+    wrapper: <fieldset role='radiogroup' />,
     label: <legend />,
   };
 
+  getLabelPositionClass() {
+      const labelClass = `display-${this.props.field['#title_display']}`;
+      if(styles[labelClass]) {
+          return labelClass;
+      }
+      return '';
+  }
+
   render() {
+    var cssClasses = 'input-wrapper ' + this.getLabelPositionClass();
+
     return (
-      <div>
+      <div styleName={cssClasses}>
         {
           /* TODO: radio-options-sidebyside should be loaded from json option #options_display */
           this.props.field && Object.keys(this.props.field['#options']).map(option =>
