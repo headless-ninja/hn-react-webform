@@ -15,6 +15,12 @@ fieldset {
 }
 
 /* Field Label */
+legend {
+    float: left;
+    margin-bottom: calc(var(--spacingUnit) / 2);
+
+    & + div { clear: left; }
+}
 
 label {
     display: inline-block;
