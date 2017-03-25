@@ -168,8 +168,8 @@ class WebformElement extends React.Component {
     const errors = fails.map(rule => rule.hint(this.getValue()));
     const valid = errors.length === 0;
 
-     // const log = valid ? console.info : console.warn;
-     // log(this.key, '=> is', valid ? 'valid' : 'invalid');
+    // const log = valid ? console.info : console.warn;
+    // log(this.key, '=> is', valid ? 'valid' : 'invalid');
 
     this.getField().setStorage({ valid });
     this.setState({ errors });
@@ -198,7 +198,10 @@ class WebformElement extends React.Component {
     }
 
     return (
-      <Wrapper component={getNested(() => element.class.meta.wrapper, <div />)} styleName={`formrow ${!this.state.visible ? 'hidden' : ''}`}>
+      <Wrapper
+        component={getNested(() => element.class.meta.wrapper, <div />)}
+        styleName={`formrow ${!this.state.visible ? 'hidden' : ''}`}
+      >
         { this.renderTextContent('#description', 'before') }
 
         <Wrapper

@@ -35,18 +35,20 @@ class RadioField extends React.Component {
           /* TODO: radio-options-sidebyside should be loaded from json option #options_display */
           this.props.field && Object.keys(this.props.field['#options']).map((option, index) => {
             const labelKey = `${this.props.field['#webform_key']}_${index}`;
-            return <label key={option} styleName={cssClassesRadio} htmlFor={labelKey}>
-              <input
-                type='radio'
-                onChange={this.props.onChange}
-                value={option}
-                name={this.props.field['#webform_key']}
-                styleName='radio'
-                id={labelKey}
-              />
-              <div styleName='indicator' />
-              { this.props.field['#options'][option]}
-            </label>;
+            return (
+              <label key={option} styleName={cssClassesRadio} htmlFor={labelKey}>
+                <input
+                  type='radio'
+                  onChange={this.props.onChange}
+                  value={option}
+                  name={this.props.field['#webform_key']}
+                  styleName='radio'
+                  id={labelKey}
+                />
+                <div styleName='indicator' />
+                { this.props.field['#options'][option]}
+              </label>
+            );
           })
         }
       </div>
