@@ -33,20 +33,21 @@ class RadioField extends React.Component {
       <div styleName={cssClassesWrapper}>
         {
           /* TODO: radio-options-sidebyside should be loaded from json option #options_display */
-          this.props.field && Object.keys(this.props.field['#options']).map(option =>
-            <label key={option} styleName={cssClassesRadio} htmlFor={this.props.field['#webform_key']}>
+          this.props.field && Object.keys(this.props.field['#options']).map((option, index) => {
+            const labelKey = `${this.props.field['#webform_key']}_${index}`;
+            return <label key={option} styleName={cssClassesRadio} htmlFor={labelKey}>
               <input
                 type='radio'
                 onChange={this.props.onChange}
                 value={option}
                 name={this.props.field['#webform_key']}
                 styleName='radio'
-                id={this.props.field['#webform_key']}
+                id={labelKey}
               />
               <div styleName='indicator' />
               { this.props.field['#options'][option]}
-            </label>,
-          )
+            </label>;
+          })
         }
       </div>
     );
