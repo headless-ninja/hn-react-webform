@@ -32,7 +32,7 @@ class SelectField extends React.Component {
   render() {
     const cssClassesWrapper = `select-wrapper ${this.getLabelPositionClass()}`;
     const options = this.props.field['#options'] || {};
-    const mappedOptions = Object.key(options).map(optionKey => {
+    const mappedOptions = Object.keys(options).map(optionKey => {
       const option = options[optionKey];
       return {
         label: option,
