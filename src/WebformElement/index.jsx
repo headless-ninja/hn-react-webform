@@ -7,6 +7,7 @@ import rules from '../Webform/rules';
 import styles from './styles.pcss';
 import RuleHint from '../RuleHint';
 import Wrapper from '../Wrapper';
+import { checkConditionals, supportedStates } from '../Webform/conditionals';
 
 @CSSModules(styles, { allowMultiple: true })
 class WebformElement extends React.Component {
@@ -35,31 +36,6 @@ class WebformElement extends React.Component {
     label: false,
   };
 
-  // static checkConditionType(condition, state, states) {
-  //  switch(state) {
-  //    case 'visible':
-  //      states.visible = condition;
-  //      break;
-  //    case 'invisible':
-  //      states.visible = !condition;
-  //      break;
-  //    case 'enabled':
-  //      states.enabled = condition;
-  //      break;
-  //    case 'disabled':
-  //      states.enabled = !condition;
-  //      break;
-  //    case 'required':
-  //      states.required = condition;
-  //      break;
-  //    case 'optional':
-  //      states.required = !condition;
-  //      break;
-  //    default:
-  //      break;
-  //  }
-  // }
-
   constructor(props) {
     super(props);
 
@@ -87,9 +63,9 @@ class WebformElement extends React.Component {
     }
 
     this.state = {
-      visible: true,
-      required: props.field['#required'] || false,
-      enabled: true,
+      [supportedStates.visible]: true,
+      [supportedStates.required]: props.field['#required'] || false,
+      [supportedStates.enabled]: true,
       errors: [],
       validations: this.getValidations(),
     };
@@ -99,21 +75,21 @@ class WebformElement extends React.Component {
     if(this.getFormElementComponent()) {
       this.props.formStore.createField(this, this.key, this.props.field);
 
-      if(this.props.field['#required']) {
+      if(this.state.required) {
         this.props.formStore.formProperties.hasRequiredFields = true;
       }
     }
   }
 
-  componentWillReceiveProps() {
-    // this.checkConditionals();
-  }
-
   onChange(e) {
     // update store value for field
     const value = e.target ? e.target.value : e; // Check if 'e' is event, or direct value
-    this.props.formStore.setFieldStorage({ value }, this.key);
+    this.getField().setStorage({ value });
     this.validate();
+  }
+
+  getField(key = this.key) {
+    return this.props.formStore.getField(key);
   }
 
   getFormElementComponent() {
@@ -142,7 +118,7 @@ class WebformElement extends React.Component {
 
   getValidations() {
     const validations = [
-      getNested(() => this.props.field['#required']) ? 'required' : null,
+      getNested(() => this.state.required) ? 'required' : null,
       getNested(() => this.props.field['#pattern']) ? `pattern_${this.key}` : null,
     ];
 
@@ -154,7 +130,11 @@ class WebformElement extends React.Component {
   }
 
   getValue(key = this.key) {
-    return this.props.formStore.getFieldStorage('value', key) || '';
+    const field = this.getField(key);
+    if(!field) {
+      return false;
+    }
+    return field.getValue();
   }
 
   getLabelClass() {
@@ -165,88 +145,19 @@ class WebformElement extends React.Component {
     return '';
   }
 
-  // checkConditionals() {
-  // const states = {
-  //  visible: this.state.visible,
-  //  enabled: this.state.enabled,
-  //  required: this.state.required,
-  // };
-  //
-  // const fieldStates = getNested(() => this.props.field['#states']);
-
-  // EXAMPLE
-  /*
-   "#states": {
-   "visible": {
-   ":input[name=\"checkbox\"]": {
-   "checked": true
-   }
-   },
-   "required": {
-   ":input[name=\"checkbox\"]": {
-   "checked": true
-   }
-   }
-   }
-   Above states that the field with this #states prop:
-   - is visible when the checkbox 'checkbox' is checked
-   - is required when the checkbox 'checkbox' is checked
-   */
-
-  // if(fieldStates) {
-  //  // loop through #states.
-  //  for(const [fieldStateKey /* e.g. 'visible' */, fieldState] of entries(fieldStates)) {
-  //    // fieldState is an object when there is a single condition, otherwise an array. Make sure that it is always an array.
-  //    const conditions = Array.isArray(fieldState) ? fieldState : [fieldState];
-  //    // loop through conditions.
-  //    conditions.forEach((condition) => {
-  //      for(const [dependencyKey /* e.g. ':input[name="checkbox"]' */, dependency] of entries(condition)) {
-  //        const dependencyValueSelector = getNested(() => dependencyKey.match(/name="((\S)*)"/)[1]); // Get key part from name, so ':input[name="checkbox"]' becomes 'checkbox'.
-  //        // Get current value of dependency 'checkbox'
-  //        const dependencyValue = getNested(() => this.getValue(dependencyValueSelector));
-  //
-  //        // See what the action of the condition should be.
-  //        switch(Object.keys(dependency)[0]) {
-  //          case 'filled':
-  //            WebformElement.checkConditionType(dependencyValue.toString().trim() !== '', fieldStateKey, states);
-  //            break;
-  //          case 'empty':
-  //            WebformElement.checkConditionType(dependencyValue.toString().trim() === '', fieldStateKey, states);
-  //            break;
-  //          case 'checked':
-  //            // When dependencyValue is true, then it is checked.
-  //            WebformElement.checkConditionType(dependencyValue === true, fieldStateKey, states);
-  //            break;
-  //          case 'unchecked':
-  //            // When dependencyValue is true, then it is checked.
-  //            WebformElement.checkConditionType(dependencyValue !== true, fieldStateKey, states);
-  //            break;
-  //          case 'expanded': // TODO
-  //            break;
-  //          case 'collapsed': // TODO
-  //            break;
-  //          case 'value':
-  //            // Check if value matches condition
-  //            WebformElement.checkConditionType(dependencyValue === dependency.value, fieldStateKey, states);
-  //            break;
-  //          default:
-  //            break;
-  //        }
-  //      }
-  //    });
-  //  }
-  //
-  //  // doesn't work if there are multiple checks!
-  //  this.setState({
-  //    visible: states.visible,
-  //    enabled: states.enabled,
-  //    required: states.required,
-  //  });
-  // }
-  // }
+  checkConditionals() {
+    const newState = checkConditionals(this.props.formStore, this.key, this.state);
+    if(newState) {
+      this.setState(newState);
+    }
+  }
 
   isValid(key = this.key) {
-    return this.props.formStore.getFieldStorage('valid', key);
+    const field = this.getField(key);
+    if(!field) {
+      return false;
+    }
+    return field.getStorage('valid');
   }
 
   validate() {
@@ -257,11 +168,13 @@ class WebformElement extends React.Component {
     const errors = fails.map(rule => rule.hint(this.getValue()));
     const valid = errors.length === 0;
 
-    // const log = valid ? console.info : console.warn;
-    // log(this.key, '=> is', valid ? 'valid' : 'invalid');
+     // const log = valid ? console.info : console.warn;
+     // log(this.key, '=> is', valid ? 'valid' : 'invalid');
 
-    this.props.formStore.setFieldStorage({ valid }, this.key);
+    this.getField().setStorage({ valid });
     this.setState({ errors });
+
+    this.props.formStore.checkConditionals();
 
     return valid;
   }
@@ -274,6 +187,7 @@ class WebformElement extends React.Component {
     if(!value || (!!checkValue && checkValue !== displayValue)) {
       return false;
     }
+
     return (<span styleName={styles[cssClass] ? cssClass : ''}>{value}</span>);
   }
 
@@ -284,7 +198,7 @@ class WebformElement extends React.Component {
     }
 
     return (
-      <Wrapper component={getNested(() => element.class.meta.wrapper, <div />)} styleName='formrow'>
+      <Wrapper component={getNested(() => element.class.meta.wrapper, <div />)} styleName={`formrow ${!this.state.visible ? 'hidden' : ''}`}>
         { this.renderTextContent('#description', 'before') }
 
         <Wrapper
@@ -292,7 +206,7 @@ class WebformElement extends React.Component {
           styleName={this.getLabelClass()}
         >
           {this.props.field['#title']}
-          {this.props.field['#required'] ? (<small>*</small>) : null}
+          {this.state.required ? (<small>*</small>) : null}
         </Wrapper>
 
         { this.renderTextContent('#field_prefix') }

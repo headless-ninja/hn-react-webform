@@ -16,8 +16,8 @@ export const supportedConditions = {
 };
 
 export const supportedLogic = {
-  AND: 'and',
-  OR: 'or',
+  and: 'and',
+  or: 'or',
 };
 
 export const support = {
@@ -74,15 +74,15 @@ export function formatConditionals(states = false) {
 
   const mappedStates = Object.keys(states).map((stateKey) => { // stateKey, e.g. visible.
     const conditions = Array.isArray(states[stateKey]) ? states[stateKey] : [states[stateKey]]; // If singular conditional, make into array.
-    let conditionLogic = supportedLogic.AND; // Default conditional logic is AND.
+    let conditionLogic = supportedLogic.and; // Default conditional logic is and.
 
     if(!supportedStates[stateKey]) {
       return false; // Don't format conditional if state isn't supported.
     }
 
     const mappedConditions = conditions.map((conditionObject) => { // One state object.
-      if(conditionObject === supportedLogic.OR) {
-        conditionLogic = supportedLogic.OR; // If conditional logic is set to OR, save that...
+      if(conditionObject === supportedLogic.or) {
+        conditionLogic = supportedLogic.or; // If conditional logic is set to or, save that...
         return false; // ...and don't format it.
       }
 
@@ -118,4 +118,96 @@ export function formatConditionals(states = false) {
   const filteredStates = mappedStates.filter(s => s); // Filter out all 'false' values.
 
   return filteredStates.length ? filteredStates : false; // Return false when there are no valid states found.
+}
+
+function checkActionType(condition, action, states) {
+  switch(action) {
+    case supportedStates.visible:
+    case supportedStates.enabled:
+    case supportedStates.required:
+      states[action] = condition;
+      break;
+    case supportedStates.invisible:
+      states.visible = !condition;
+      break;
+    case supportedStates.disabled:
+      states.enabled = !condition;
+      break;
+    case supportedStates.optional:
+      states.required = !condition;
+      break;
+    default:
+      break;
+  }
+}
+
+export function checkConditionals(formStore, fieldKey = false, currentState = {}) {
+  if(!fieldKey) {
+    return false;
+  }
+
+  const field = formStore.getField(fieldKey);
+
+  if(!field || !field.conditionals) {
+    return false;
+  }
+
+  const states = {
+    visible: currentState.visible,
+    enabled: currentState.enabled,
+    required: currentState.required,
+  };
+
+  /**
+   * conditional example:
+   *  {
+   *    action: 'visible',
+   *    logic: 'and',
+   *    conditions: [condition, condition]
+   *  }
+   */
+  // Go through conditionals.
+  field.conditionals.forEach((conditional) => {
+    /**
+     * condition example:
+     *  {
+     *    key: 'name',
+     *    condition: 'empty',
+     *    value: true
+     *  }
+     */
+    // Go through conditions per conditional.
+    conditional.conditions.forEach((condition) => {
+      // console.log(condition)
+      const dependencyValue = formStore.getField(condition.key).getValue();
+
+      // See what the action of the condition should be.
+      switch(condition.condition) {
+        case supportedConditions.empty:
+        case supportedConditions.filled: {
+          const isEmpty = dependencyValue.toString().trim() === '';
+          const check = condition.condition === supportedConditions.empty ? isEmpty : !isEmpty;
+          checkActionType(check, conditional.action, states);
+          break;
+        }
+        case supportedConditions.checked:
+        case supportedConditions.unchecked: {
+          // When dependencyValue is true, then it is checked.
+          const check = condition.condition === supportedConditions.checked;
+          checkActionType(dependencyValue === check, conditional.action, states);
+          break;
+        }
+        case supportedConditions.value: {
+          // Check if value matches condition.
+          checkActionType(dependencyValue === condition.value, conditional.action, states);
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+    });
+  });
+
+  return states;
 }

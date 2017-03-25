@@ -20,6 +20,7 @@ class Input extends React.Component {
         placeholder={this.props.field['#placeholder']}
         styleName='input'
         className={this.props.className ? this.props.className : ''}
+        disabled={!this.props.webformElement.state.enabled}
         {...attrs}
       />
     );

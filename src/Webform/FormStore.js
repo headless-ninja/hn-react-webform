@@ -25,6 +25,27 @@ class Field {
     this.props = props;
     this.conditionals = formatConditionals(props['#states']);
   }
+
+  getStorage(fields = false) {
+    if(Array.isArray(fields)) {
+      const data = {};
+      fields.forEach(f => data[f] = this[f]); // Add property from field storage for each field key in fields array.
+      return data;
+    } else if(typeof fields === 'string') {
+      return this[fields];
+    }
+    return this;
+  }
+
+  getValue() {
+    return this.value;
+  }
+
+  setStorage(patch) {
+    Object.keys(patch).forEach((patchKey) => {
+      this[patchKey] = patch[patchKey];
+    });
+  }
 }
 
 class FormStore {
@@ -38,6 +59,10 @@ class FormStore {
     this.key = formId;
   }
 
+  checkConditionals() {
+    this.fields.forEach(field => field.component.checkConditionals());
+  }
+
   createField(component, key, props, valid) {
     const field = new Field(component, key, props, valid);
     this.fields.push(field);
@@ -49,32 +74,6 @@ class FormStore {
 
   getFieldIndex(key) {
     return this.fields.findIndex(field => field.key === key);
-  }
-
-  getFieldStorage(fields = false, key = this.key) {
-    const field = this.getField(key);
-
-    if(field) {
-      if(Array.isArray(fields)) {
-        const data = {};
-        fields.forEach(f => data[f] = field[f]); // Add property from field storage for each field key in fields array.
-        return data;
-      } else if(typeof fields === 'string') {
-        return field[fields];
-      }
-      return field;
-    }
-
-    return false;
-  }
-
-  setFieldStorage(patch, key) {
-    const index = this.getFieldIndex(key);
-    if(index !== false) {
-      const fields = this.fields;
-      const field = fields[index];
-      fields[index] = Object.assign({}, field, patch);
-    }
   }
 }
 
