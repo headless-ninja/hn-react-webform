@@ -67,8 +67,9 @@ class WebformElement extends React.Component {
       [supportedStates.required]: props.field['#required'] || false,
       [supportedStates.enabled]: true,
       errors: [],
-      validations: this.getValidations(),
     };
+
+    this.state.validations = this.getValidations();
   }
 
   componentDidMount() {
@@ -148,7 +149,7 @@ class WebformElement extends React.Component {
   checkConditionals() {
     const newState = checkConditionals(this.props.formStore, this.key, this.state);
     if(newState) {
-      this.setState(newState);
+      this.setState(newState, () => this.setState({ validations: this.getValidations() }));
     }
   }
 
