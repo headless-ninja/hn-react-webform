@@ -126,7 +126,8 @@ class Webform extends React.Component {
     // console.log('Validating...');
     return this.formStore.fields.reduce((prev, field) => {
       const component = field.component;
-      return prev && component.validate();
+      const isValid = component.validate();
+      return prev && isValid;
     }, true);
   }
 
