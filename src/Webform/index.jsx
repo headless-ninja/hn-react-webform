@@ -196,7 +196,8 @@ class Webform extends React.Component {
             { this.formStore.formProperties.hasRequiredFields ? (<span>Required fields are marked with <small>*</small></span>) : null }
             {formElements}
             <SubmitButton
-              form={this.props.form} status={this.state.status}
+              form={this.props.form}
+              status={this.state.status}
             />
           </form> : <ThankYouMessage message={this.props.form.settings.confirmation_message} />
         }

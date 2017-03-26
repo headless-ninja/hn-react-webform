@@ -44,6 +44,7 @@ class RadioField extends React.Component {
                   name={this.props.field['#webform_key']}
                   styleName='radio'
                   id={labelKey}
+                  disabled={!this.props.webformElement.state.enabled}
                 />
                 <div styleName='indicator' />
                 { this.props.field['#options'][option]}

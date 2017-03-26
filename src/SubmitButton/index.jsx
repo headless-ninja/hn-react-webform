@@ -11,7 +11,13 @@ class SubmitButton extends React.Component {
 
     return (
       <div>
-        <button styleName='button' disabled={disabled} {...settings.form_submit_attributes}>{settings.form_submit_label}</button>
+        <button
+          styleName='button'
+          disabled={disabled}
+          {...settings.form_submit_attributes}
+        >
+          {settings.form_submit_label}
+        </button>
       </div>
     );
   }

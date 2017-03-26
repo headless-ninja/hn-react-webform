@@ -16,7 +16,7 @@ class Input extends React.Component {
         onChange={this.props.onChange}
         value={this.props.value}
         name={this.props.field['#webform_key']}
-        id={this.props.field['#webform_key']}
+        id={this.props.id || this.props.field['#webform_key']}
         placeholder={this.props.field['#placeholder']}
         styleName='input'
         className={this.props.className ? this.props.className : ''}

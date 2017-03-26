@@ -18,6 +18,7 @@ class TextArea extends React.Component {
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
         styleName='textarea'
+        disabled={!this.props.webformElement.state.enabled}
         {...attrs}
       />
     );

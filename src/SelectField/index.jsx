@@ -48,6 +48,7 @@ class SelectField extends React.Component {
           multi={this.props.field['#multiple']}
           options={mappedOptions}
           onChange={this.handleChange}
+          disabled={!this.props.webformElement.state.enabled}
         />
       </div>
     );
