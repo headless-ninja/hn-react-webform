@@ -1,36 +1,36 @@
 @import '../styles/_variables.pcss';
 
 .input-wrapper {
-    display: inline-block;
+  display: inline-block;
 }
 
 .display-inline {
-    float: left;
-    width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
+  float: left;
+  width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
 }
 
 .checkbox-label {
-    width: auto;
+  width: auto;
 }
 
 .checkbox {
-    display: none;
+  display: none;
 
-    &:checked {
-        & + .indicator {
-          background: var(--iconCheckbox) no-repeat center center var(--inputColor);
-          background-size: calc(var(--spacingUnit) * .8) auto;
-        }
+  &:checked {
+    & + .indicator {
+      background: var(--iconCheckbox) no-repeat center center var(--inputColor);
+      background-size: calc(var(--spacingUnit) * .8) auto;
     }
+  }
 }
 
 .indicator {
-    content: '';
-    display: inline-block;
-    width: var(--spacingUnit);
-    height: var(--spacingUnit);
-    margin-right: calc(var(--spacingUnit) / 2);
-    background-color: var(--inputColor);
-    border: 1px solid var(--borderColor);
-    border-radius: var(--borderRadius);
+  content: '';
+  display: inline-block;
+  width: var(--spacingUnit);
+  height: var(--spacingUnit);
+  margin-right: calc(var(--spacingUnit) / 2);
+  background-color: var(--inputColor);
+  border: 1px solid var(--borderColor);
+  border-radius: var(--borderRadius);
 }

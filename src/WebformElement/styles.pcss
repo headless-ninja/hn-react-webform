@@ -3,18 +3,22 @@
 /* Field Wrapper */
 
 .formrow {
-    margin-bottom: var(--spacingUnit);
+  margin-bottom: var(--spacingUnit);
+
+  &.hidden {
+    display: none;
+  }
 }
 
 fieldset.formrow {
-    /* only formrow overrides for fieldset */
-    border: none;
+  /* only formrow overrides for fieldset */
+  border: none;
 }
 
 /* TODO: move fieldset css to fieldset component */
 fieldset {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 /*.fieldset {
@@ -34,58 +38,58 @@ fieldset {
 }*/
 
 .formrow {
-    & > label, & > legend {
-        display: inline-block;
-        width: 100%;
-        margin-bottom: calc(var(--spacingUnit) / 2);
-        vertical-align: top;
+  & > label, & > legend {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: calc(var(--spacingUnit) / 2);
+    vertical-align: top;
 
-        @media (min-width: 768px) {
-            width: 50%;
-            padding-right: calc(var(--spacingUnit) / 2);
-        }
+    @media (min-width: 768px) {
+      width: 50%;
+      padding-right: calc(var(--spacingUnit) / 2);
+    }
 
         &.label-display-invisible { display: none; }
         &.label-display-before { display: block; float: none; width: 100%; }
         &.label-display-inline { display: inline-block; }
-    }
+  }
 
-    & > legend {
-        float: left;
-    }
+  & > legend {
+    float: left;
+  }
 }
 
 /* Field Description */
 
 .description-before, .description-after {
-    display: block;
+  display: block;
 }
 
 .description-before {
-    margin-bottom: calc(var(--spacingUnit) / 2);
+  margin-bottom: calc(var(--spacingUnit) / 2);
 }
 
 .description-after {
-    font-size: .8em;
-    margin-top: calc(var(--spacingUnit) / 3);
-}
+  font-size: .8em;
+  margin-top: calc(var(--spacingUnit) / 3);
 
-    .label-display-inline.description-after {
-        @media (min-width: 768px) {
-            margin-left: 50%;
-            padding-left: calc(var(--spacingUnit) / 2);
-        }
+  &.label-display-inline {
+    @media (min-width: 768px) {
+      margin-left: 50%;
+      padding-left: calc(var(--spacingUnit) / 2);
     }
+  }
+}
 
 /* Prefix & Suffix */
 .field-prefix, .field-suffix {
-    display: inline-block;
+  display: inline-block;
 }
 
 .field-prefix {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .field-suffix {
-    margin-left: 5px;
+  margin-left: 5px;
 }

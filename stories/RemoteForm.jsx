@@ -77,7 +77,12 @@ class RemoteForm extends React.Component {
           style={Object.assign({}, style.expand, !this.state.visible ? {} : style.expanded)}
           onClick={() => this.setState({ visible: !this.state.visible })}
         >&#8659;</span>
-        <FetchForm ref={component => this.form = component} baseUrl={this.state.baseUrl} node={this.state.node} field={this.state.field} />
+        <FetchForm
+          ref={component => this.form = component}
+          baseUrl={this.state.baseUrl}
+          node={this.state.node}
+          field={this.state.field}
+        />
       </div>
     );
   }

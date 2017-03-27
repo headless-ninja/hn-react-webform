@@ -24,15 +24,15 @@ class CheckboxField extends React.Component {
   }
 
   getLabelPositionClass() {
-      const labelClass = `display-${this.props.field['#title_display']}`;
-      if(styles[labelClass]) {
-          return labelClass;
-      }
-      return '';
+    const labelClass = `display-${this.props.field['#title_display']}`;
+    if(styles[labelClass]) {
+      return labelClass;
+    }
+    return '';
   }
 
   render() {
-    var cssClasses = 'input-wrapper ' + this.getLabelPositionClass();
+    const cssClasses = `input-wrapper ${this.getLabelPositionClass()}`;
 
     var attrs = {};
     this.props.webformElement.state.errors.length > 0 ? attrs['aria-invalid'] = 'true' : null;

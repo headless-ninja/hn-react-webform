@@ -6,55 +6,55 @@
 }*/
 
 .input-wrapper {
-    display: inline-block;
-    float: left;
-    width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
+  display: inline-block;
+  float: left;
+  width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
 }
 
 .display-before {
-    float: none;
-    width: 100%;
- }
+  float: none;
+  width: 100%;
+}
 
 .radio-label {
-    display: block;
-    margin-bottom: calc(var(--spacingUnit) / 3);
+  display: block;
+  margin-bottom: calc(var(--spacingUnit) / 3);
 }
 
 .radio-display-side_by_side, .radio-display-two_columns, .radio-display-three_columns {
-    margin-right: calc(var(--spacingUnit) / 2);
-    display: inline-block;
-    width: auto;
+  margin-right: calc(var(--spacingUnit) / 2);
+  display: inline-block;
+  width: auto;
 }
 
 .radio {
-    display: none;
+  display: none;
 
-    &:checked {
-        & + .indicator {
-            position: relative;
+  &:checked {
+    & + .indicator {
+      position: relative;
 
-            &:before {
-                content: '';
-                position: absolute;
-                top: 25%;
-                left: 25%;
-                width: 50%;
-                height: 50%;
-                background-color: var(--checkedColor);
-                border-radius: 50%;
-            }
-        }
+      &:before {
+        content: '';
+        position: absolute;
+        top: 25%;
+        left: 25%;
+        width: 50%;
+        height: 50%;
+        background-color: var(--checkedColor);
+        border-radius: 50%;
+      }
     }
+  }
 }
 
 .indicator {
-    content: '';
-    display: inline-block;
-    width: var(--spacingUnit);
-    height: var(--spacingUnit);
-    margin-right: calc(var(--spacingUnit) / 2);
-    background-color: var(--inputColor);
-    border: 1px solid var(--borderColor);
-    border-radius: 50%;
+  content: '';
+  display: inline-block;
+  width: var(--spacingUnit);
+  height: var(--spacingUnit);
+  margin-right: calc(var(--spacingUnit) / 2);
+  background-color: var(--inputColor);
+  border: 1px solid var(--borderColor);
+  border-radius: 50%;
 }

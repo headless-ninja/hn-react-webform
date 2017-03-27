@@ -22,11 +22,11 @@ class Webform extends React.Component {
 
   static analyticsEventsCategories = {
     SUCCESSFUL: 'Successful submission',
-    ERROR: 'Error during submission'
+    ERROR: 'Error during submission',
   };
 
   static analyticsEventsActions = {
-    FORM_SUBMISSION: 'Form Submission'
+    FORM_SUBMISSION: 'Form Submission',
   };
 
   static propTypes = {
@@ -36,6 +36,10 @@ class Webform extends React.Component {
         React.PropTypes.string,
         React.PropTypes.bool,
       ]).isRequired,
+      analyticsId: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.bool,
+      ]),
     }).isRequired,
     form: React.PropTypes.shape({
       form_id: React.PropTypes.string.isRequired,
@@ -58,6 +62,7 @@ class Webform extends React.Component {
   static defaultProps = {
     onSubmit: false,
     onAfterSubmit: false,
+    analyticsId: false,
   };
 
   static fireAnalyticsEvent(event) {
@@ -77,11 +82,17 @@ class Webform extends React.Component {
 
     this.onSubmit = this.onSubmit.bind(this);
 
-    ReactGA.initialize(props.form.settings.analytics_id);
+    if(props.form.settings.analyticsId) {
+      ReactGA.initialize(props.form.settings.analyticsId);
+    }
   }
 
   componentWillMount() {
     this.formStore.fields = [];
+  }
+
+  componentDidMount() {
+    this.formStore.checkConditionals();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -115,7 +126,8 @@ class Webform extends React.Component {
     // console.log('Validating...');
     return this.formStore.fields.reduce((prev, field) => {
       const component = field.component;
-      return prev && component.validate();
+      const isValid = component.validate();
+      return prev && isValid;
     }, true);
   }
 
@@ -185,7 +197,8 @@ class Webform extends React.Component {
             { this.formStore.formProperties.hasRequiredFields ? (<span>Required fields are marked with <small>*</small></span>) : null }
             {formElements}
             <SubmitButton
-              form={this.props.form} status={this.state.status}
+              form={this.props.form}
+              status={this.state.status}
             />
           </form> : <ThankYouMessage message={this.props.form.settings.confirmation_message} />
         }

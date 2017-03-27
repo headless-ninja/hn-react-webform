@@ -20,14 +20,14 @@ class RadioField extends React.Component {
   getOptionPositionClass() {
     const optionClass = `radio-display-${this.props.field['#options_display']}`;
     if(styles[optionClass]) {
-        return optionClass;
+      return optionClass;
     }
     return '';
   }
 
   render() {
-    var cssClassesWrapper = 'input-wrapper ' + this.getLabelPositionClass();
-    var cssClassesRadio = 'radio-label ' + this.getOptionPositionClass();
+    const cssClassesWrapper = `input-wrapper ${this.getLabelPositionClass()}`;
+    const cssClassesRadio = `radio-label ${this.getOptionPositionClass()}`;
 
     var attrs = {};
     this.props.webformElement.state.errors.length > 0 ? attrs['aria-invalid'] = 'true' : null;
@@ -37,20 +37,26 @@ class RadioField extends React.Component {
       <div styleName={cssClassesWrapper}>
         {
           /* TODO: radio-options-sidebyside should be loaded from json option #options_display */
-          this.props.field && Object.keys(this.props.field['#options']).map(option =>
-            <label key={option} styleName={cssClassesRadio}>
-              <input
-                type='radio'
-                onChange={this.props.onChange}
-                value={option}
-                name={this.props.field['#webform_key']}
-                styleName='radio'
-                {...attrs}
-              />
-              <div styleName='indicator' />
-              { this.props.field['#options'][option]}
-            </label>,
-          )
+
+          this.props.field && Object.keys(this.props.field['#options']).map((option, index) => {
+            const labelKey = `${this.props.field['#webform_key']}_${index}`;
+            return (
+              <label key={option} styleName={cssClassesRadio} htmlFor={labelKey}>
+                <input
+                  type='radio'
+                  onChange={this.props.onChange}
+                  value={option}
+                  name={this.props.field['#webform_key']}
+                  styleName='radio'
+                  id={labelKey}
+                  disabled={!this.props.webformElement.state.enabled}
+                  {...attrs}
+                />
+                <div styleName='indicator' />
+                { this.props.field['#options'][option]}
+              </label>
+            );
+          })
         }
       </div>
     );
