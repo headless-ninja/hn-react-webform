@@ -45,9 +45,9 @@ fieldset {
             padding-right: calc(var(--spacingUnit) / 2);
         }
 
-        &.display-invisible { display: none; }
-        &.display-before { display: block; float: none; width: 100%; }
-        &.display-inline { display: inline-block; }
+        &.label-display-invisible { display: none; }
+        &.label-display-before { display: block; float: none; width: 100%; }
+        &.label-display-inline { display: inline-block; }
     }
 
     & > legend {
@@ -68,12 +68,9 @@ fieldset {
 .description-after {
     font-size: .8em;
     margin-top: calc(var(--spacingUnit) / 3);
-
 }
-    label + input + .description-after,
-    label + input + .suffix + .description-after,
-    label + textarea + .description-after {
-        // TODO: exception for display-before labels;
+
+    .label-display-inline.description-after {
         @media (min-width: 768px) {
             margin-left: 50%;
             padding-left: calc(var(--spacingUnit) / 2);

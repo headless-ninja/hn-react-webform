@@ -158,9 +158,11 @@ class WebformElement extends React.Component {
   }
 
   getLabelClass() {
-    const labelClass = `display-${this.props.field['#title_display']}`;
+    const labelClass = `label-display-${this.props.field['#title_display']}`;
     if(styles[labelClass]) {
       return labelClass;
+    } else if(styles['label-display-inline']) {
+      return 'label-display-inline';
     }
     return '';
   }
@@ -266,19 +268,21 @@ class WebformElement extends React.Component {
     return valid;
   }
 
-  renderTextContent(selector, checkValue = false) {
+  renderTextContent(selector, checkValue = false, addClass = '') {
     const value = this.props.field[getNested(() => this.getFormElement().class.meta.field_display[selector], selector)]; // Value in #description field
     const displayValue = this.props.field[`${selector}_display`];
     var cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
 
     if(!value || (!!checkValue && checkValue !== displayValue)) {
-        if(!displayValue && checkValue === 'isUndefined') {
-            cssClass = 'description-after';
-        } else {
-            return false;
+        if(false === (!displayValue && checkValue === 'isUndefined')) {
+          return false;
         }
     }
-    return (<span styleName={styles[cssClass] ? cssClass : ''}>{value}</span>);
+
+    cssClass = styles[cssClass] ? cssClass : '';
+    addClass += ' ' + cssClass;
+
+    return (<span styleName={addClass}>{value}</span>);
   }
 
   render() {
@@ -305,8 +309,8 @@ class WebformElement extends React.Component {
 
         { this.renderTextContent('#field_suffix') }
 
-        { this.renderTextContent('#description', 'after') }
-        { this.renderTextContent('#description', 'isUndefined') }
+        { this.renderTextContent('#description', 'after', this.getLabelClass()) }
+        { this.renderTextContent('#description', 'isUndefined', (this.getLabelClass() + ' description-after')) }
 
         { this.state.errors.length > 0 ? (<ul role='alert'> {this.state.errors} </ul>) : null }
 
