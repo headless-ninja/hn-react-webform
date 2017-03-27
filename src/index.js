@@ -2,6 +2,7 @@ import Webform from './Webform';
 import TextArea from './TextArea';
 import CheckboxField from './CheckboxField';
 import EmailField from './EmailField';
+import PhoneField from './PhoneField';
 import ParagraphField from './ParagraphField';
 import SelectField from './SelectField';
 import Input from './Input';
@@ -13,7 +14,7 @@ const components = {
   textarea: TextArea,
   checkbox: CheckboxField,
   email: EmailField,
-  tel: Input,
+  tel: PhoneField,
   webform_message: ParagraphField,
   select: SelectField,
   radios: RadioField,
