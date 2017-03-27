@@ -269,10 +269,14 @@ class WebformElement extends React.Component {
   renderTextContent(selector, checkValue = false) {
     const value = this.props.field[getNested(() => this.getFormElement().class.meta.field_display[selector], selector)]; // Value in #description field
     const displayValue = this.props.field[`${selector}_display`];
-    const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
+    var cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
 
     if(!value || (!!checkValue && checkValue !== displayValue)) {
-      return false;
+        if(!displayValue && checkValue === 'isUndefined') {
+            cssClass = 'description-after';
+        } else {
+            return false;
+        }
     }
     return (<span styleName={styles[cssClass] ? cssClass : ''}>{value}</span>);
   }
@@ -302,6 +306,7 @@ class WebformElement extends React.Component {
         { this.renderTextContent('#field_suffix') }
 
         { this.renderTextContent('#description', 'after') }
+        { this.renderTextContent('#description', 'isUndefined') }
 
         { this.state.errors.length > 0 ? (<ul role='alert'> {this.state.errors} </ul>) : null }
 
