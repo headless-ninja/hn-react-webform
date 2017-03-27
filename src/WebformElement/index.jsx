@@ -185,7 +185,7 @@ class WebformElement extends React.Component {
   renderTextContent(selector, checkValue = false, addClass = '') {
     const value = this.props.field[getNested(() => this.getFormElement().class.meta.field_display[selector], selector)]; // Value in #description field
     const displayValue = this.props.field[`${selector}_display`];
-    var cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
+    const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
 
     if(!value || (!!checkValue && checkValue !== displayValue)) {
         if(false === (!displayValue && checkValue === 'isUndefined')) {
@@ -193,8 +193,7 @@ class WebformElement extends React.Component {
         }
     }
 
-    cssClass = styles[cssClass] ? cssClass : '';
-    addClass += ' ' + cssClass;
+    addClass = `${addClass} ${styles[cssClass] ? cssClass : ''}`;
 
     return (<span styleName={addClass}>{value}</span>);
   }
@@ -227,7 +226,7 @@ class WebformElement extends React.Component {
         { this.renderTextContent('#field_suffix') }
 
         { this.renderTextContent('#description', 'after', this.getLabelClass()) }
-        { this.renderTextContent('#description', 'isUndefined', (this.getLabelClass() + ' description-after')) }
+        { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-after`)) }
 
         { this.state.errors.length > 0 ? (<ul role='alert'> {this.state.errors} </ul>) : null }
 
