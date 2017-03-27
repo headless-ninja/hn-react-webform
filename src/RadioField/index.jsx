@@ -36,8 +36,6 @@ class RadioField extends React.Component {
     return (
       <div styleName={cssClassesWrapper}>
         {
-          /* TODO: radio-options-sidebyside should be loaded from json option #options_display */
-
           this.props.field && Object.keys(this.props.field['#options']).map((option, index) => {
             const labelKey = `${this.props.field['#webform_key']}_${index}`;
             return (
