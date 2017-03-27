@@ -34,6 +34,10 @@ class CheckboxField extends React.Component {
   render() {
     var cssClasses = 'input-wrapper ' + this.getLabelPositionClass();
 
+    var attrs = {};
+    this.props.webformElement.state.errors.length > 0 ? attrs['aria-invalid'] = 'true' : null;
+    this.props.field['#required'] ? attrs['aria-required'] = 'true' : null;
+
     return (
       <div styleName={cssClasses}>
         <label htmlFor={this.key} styleName='checkbox-label'>
@@ -42,6 +46,7 @@ class CheckboxField extends React.Component {
             onChange={this.onChange}
             type='checkbox'
             styleName='checkbox'
+            {...attrs}
           />
           <div styleName='indicator' />
           {this.props.field['#description']}
