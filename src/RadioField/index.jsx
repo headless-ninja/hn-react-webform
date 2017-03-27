@@ -19,7 +19,6 @@ class RadioField extends React.Component {
 
   getOptionPositionClass() {
     const optionClass = `radio-display-${this.props.field['#options_display']}`;
-    console.log(this.props.field['#webform_key'], optionClass);
     if(styles[optionClass]) {
         return optionClass;
     }
