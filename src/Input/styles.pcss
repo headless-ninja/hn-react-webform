@@ -11,4 +11,14 @@
   background-color: var(--inputColor);
   border-radius: var(--borderRadius);
   padding: calc(var(--spacingUnit) / 4) calc(var(--spacingUnit) / 2);
+
+  &.validate-error {
+    border-color: var(--errorColor);
+    background-color: var(--errorBgColor);
+  }
+
+  &.validate-success {
+    /* TODO: add success styling */
+    &:after { content: ''; }
+  }
 }

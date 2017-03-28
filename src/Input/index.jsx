@@ -19,7 +19,7 @@ class Input extends React.Component {
         name={this.props.field['#webform_key']}
         id={this.props.id || this.props.field['#webform_key']}
         placeholder={this.props.field['#placeholder']}
-        styleName='input'
+        styleName={`input ${this.props.webformElement.isValid() ? 'validate-success' : 'validate-error'}`}
         className={this.props.className ? this.props.className : ''}
         disabled={!this.props.webformElement.state.enabled}
         {...attrs}

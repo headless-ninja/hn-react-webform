@@ -30,7 +30,7 @@ class SelectField extends React.Component {
   }
 
   render() {
-    const cssClassesWrapper = `select-wrapper ${this.getLabelPositionClass()}`;
+    const cssClassesWrapper = `select-wrapper ${this.getLabelPositionClass()} ${this.props.webformElement.isValid() ? 'validate-success' : 'validate-error'}`;
     const options = this.props.field['#options'] || {};
     const mappedOptions = Object.keys(options).map((optionKey) => {
       const option = options[optionKey];
