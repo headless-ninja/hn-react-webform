@@ -12,9 +12,17 @@
   border-radius: var(--borderRadius);
   padding: calc(var(--spacingUnit) / 4) calc(var(--spacingUnit) / 2);
 
+  &::placeholder {
+    color: var(--placeholderColor);
+  }
+
   &.validate-error {
     border-color: var(--errorColor);
     background-color: var(--errorBgColor);
+
+    &::placeholder {
+      color: var(--errorColor);
+    }
   }
 
   &.validate-success {
