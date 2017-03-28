@@ -5,7 +5,7 @@ import styles from './styles.pcss';
 @CSSModules(styles, { allowMultiple: true })
 class RadioField extends React.Component {
   static meta = {
-    wrapper: <fieldset role='radiogroup' />,
+    wrapper: <fieldset />,
     label: <legend />,
   };
 
@@ -49,7 +49,7 @@ class RadioField extends React.Component {
                   id={labelKey}
                   disabled={!this.props.webformElement.state.enabled}
                 />
-                <div styleName='indicator' />
+                <span styleName='indicator' />
                 { this.props.field['#options'][option]}
               </label>
             );

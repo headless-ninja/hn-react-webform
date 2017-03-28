@@ -43,7 +43,7 @@ class CheckboxField extends React.Component {
             type='checkbox'
             styleName='checkbox'
           />
-          <div styleName='indicator' />
+          <span styleName='indicator' />
           {this.props.field['#description']}
         </label>
       </div>

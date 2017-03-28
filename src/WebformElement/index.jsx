@@ -198,6 +198,24 @@ class WebformElement extends React.Component {
     return (<span styleName={addClass}>{value}</span>);
   }
 
+  renderFieldLabel(element, show = true) {
+    /* if the label is a legend, it is supposed to be the first child of the fieldset wrapper.*/
+
+    if(this.props.field['#title'] && show) {
+      return (
+        <Wrapper
+          component={getNested(() => element.class.meta.label, <label htmlFor={this.key}/>)}
+          styleName={this.getLabelClass()}
+        >
+          {this.props.field['#title']}
+          {this.state.required ? (<small>*</small>) : null}
+        </Wrapper>
+      );
+    }
+
+    return '';
+  }
+
   render() {
     const element = this.getFormElement();
     if(!element) {
@@ -209,17 +227,11 @@ class WebformElement extends React.Component {
         component={getNested(() => element.class.meta.wrapper, <div />)}
         styleName={`formrow ${!this.state.visible ? 'hidden' : ''}`}
       >
-        { getNested(() => element.class.meta.label.type) !== 'legend' ? this.renderTextContent('#description', 'before') : '' }
+        { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) === 'legend') }
 
-        <Wrapper
-          component={getNested(() => element.class.meta.label, <label htmlFor={this.key} />)}
-          styleName={this.getLabelClass()}
-        >
-          {this.props.field['#title']}
-          {this.state.required ? (<small>*</small>) : null}
-        </Wrapper>
+        { this.renderTextContent('#description', 'before')}
 
-        { getNested(() => element.class.meta.label.type) === 'legend' ? this.renderTextContent('#description', 'before') : '' }
+        { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) !== 'legend') }
 
         { this.renderTextContent('#field_prefix') }
 
