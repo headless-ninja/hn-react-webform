@@ -242,7 +242,7 @@ class WebformElement extends React.Component {
         { this.renderTextContent('#description', 'after', this.getLabelClass()) }
         { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-after`)) }
 
-        { this.state.errors.length > 0 ? (<ul role='alert'> {this.state.errors} </ul>) : null }
+        { this.state.errors.length > 0 ? (<ul role='alert' styleName={`${this.getLabelClass()} validation-message`}> {this.state.errors} </ul>) : null }
 
       </Wrapper>
     );

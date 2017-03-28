@@ -41,12 +41,18 @@ fieldset {
   & > label, & > legend {
     display: inline-block;
     width: 100%;
-    margin-bottom: calc(var(--spacingUnit) / 2);
-    vertical-align: top;
 
     @media (min-width: 768px) {
       float: left;
       width: 50%;
+    }
+  }
+
+  & > label, & > legend {
+    margin-bottom: calc(var(--spacingUnit) / 2);
+    vertical-align: top;
+
+    @media (min-width: 768px) {
       padding-right: calc(var(--spacingUnit) / 2);
     }
 
@@ -76,7 +82,7 @@ fieldset {
   margin-bottom: calc(var(--spacingUnit) / 2);
 }
 
-.description-after {
+.description-after, .validation-message {
   font-size: .8em;
   margin-top: calc(var(--spacingUnit) / 3);
 
@@ -99,4 +105,11 @@ fieldset {
 
 .field-suffix {
   margin-left: 5px;
+}
+
+/* Validation message */
+.validation-message {
+  padding: 0;
+  list-style-type: none;
+  color: var(--errorColor);
 }

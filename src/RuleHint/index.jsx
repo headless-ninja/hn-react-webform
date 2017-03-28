@@ -1,8 +1,5 @@
 import React from 'react';
-import CSSModules from 'react-css-modules';
-import styles from './styles.pcss';
 
-@CSSModules(styles)
 class RuleHint extends React.Component {
   static propTypes = {
     hint: React.PropTypes.oneOfType([
@@ -29,7 +26,7 @@ class RuleHint extends React.Component {
   render() {
     const hint = this.getHint();
     return (
-      <li styleName='error'>
+      <li>
         <span>
           {hint}
         </span>
