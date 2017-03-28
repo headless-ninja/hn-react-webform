@@ -209,7 +209,7 @@ class WebformElement extends React.Component {
         component={getNested(() => element.class.meta.wrapper, <div />)}
         styleName={`formrow ${!this.state.visible ? 'hidden' : ''}`}
       >
-        { this.renderTextContent('#description', 'before') }
+        { getNested(() => element.class.meta.label.type) !== 'legend' ? this.renderTextContent('#description', 'before') : '' }
 
         <Wrapper
           component={getNested(() => element.class.meta.label, <label htmlFor={this.key} />)}
@@ -218,6 +218,8 @@ class WebformElement extends React.Component {
           {this.props.field['#title']}
           {this.state.required ? (<small>*</small>) : null}
         </Wrapper>
+
+        { getNested(() => element.class.meta.label.type) === 'legend' ? this.renderTextContent('#description', 'before') : '' }
 
         { this.renderTextContent('#field_prefix') }
 
