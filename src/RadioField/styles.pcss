@@ -6,9 +6,11 @@
 }*/
 
 .input-wrapper {
-  display: inline-block;
-  float: left;
-  width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
+  @media (min-width: 768px) {
+    display: inline-block;
+    float: left;
+    width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
+  }
 }
 
 .display-before {
