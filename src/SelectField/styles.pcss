@@ -39,10 +39,9 @@
   overflow: visible;
 }
 
-:global .is-open > .Select-control {
-  /* color: inherit;
-   background-color: var(--inputColor);
-   border: 1px solid var(--borderColor);*/
+:global .is-focused:not(.is-open) > .Select-control {
+  outline: none;
+  box-shadow: 0 0 2px 3px var(--focusColor);
 }
 
 :global .Select-placeholder,
@@ -87,7 +86,7 @@
 :global .Select-option.is-focused {
   color: inherit;
   /*background-color: color(var(--inputColor) blackness(+5));*/
-  background-color: rgba(0, 0, 0, 0.1)
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 :global .Select-option:last-child {
