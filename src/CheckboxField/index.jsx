@@ -13,6 +13,14 @@ class CheckboxField extends React.Component {
     },
   };
 
+  static propTypes = {
+    field: React.PropTypes.shape({
+      '#title_display': React.PropTypes.string,
+      '#description': React.PropTypes.string,
+    }).isRequired,
+    onChange: React.PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 

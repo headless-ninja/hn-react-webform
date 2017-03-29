@@ -5,6 +5,10 @@ import Input from '../Input';
 
 @CSSModules(styles)
 class PhoneField extends React.Component {
+  static propTypes = {
+    onChange: React.PropTypes.func.isRequired,
+  };
+
   render() {
     return (
       <Input

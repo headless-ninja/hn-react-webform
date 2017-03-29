@@ -9,6 +9,15 @@ class RadioField extends React.Component {
     label: <legend />,
   };
 
+  static propTypes = {
+    field: React.PropTypes.shape({
+      '#required': React.PropTypes.bool,
+      '#options': React.PropTypes.object,
+      '#webform_key': React.PropTypes.string.isRequired,
+    }).isRequired,
+    onChange: React.PropTypes.func.isRequired,
+  };
+
   getLabelPositionClass() {
     const labelClass = `display-${this.props.field['#title_display']}`;
     if(styles[labelClass]) {

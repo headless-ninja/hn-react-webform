@@ -4,6 +4,14 @@ import styles from './styles.pcss';
 
 @CSSModules(styles)
 class TextArea extends React.Component {
+  static propTypes = {
+    field: React.PropTypes.shape({
+      '#webform_key': React.PropTypes.string.isRequired,
+      '#required': React.PropTypes.bool,
+    }).isRequired,
+    onChange: React.PropTypes.func.isRequired,
+  };
+
   render() {
     const attrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,

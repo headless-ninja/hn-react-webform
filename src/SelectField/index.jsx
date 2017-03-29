@@ -11,6 +11,16 @@ import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })
 class SelectField extends React.Component {
+  static propTypes = {
+    field: React.PropTypes.shape({
+      '#title_display': React.PropTypes.string.string,
+      '#options': React.PropTypes.object,
+      '#webform_key': React.PropTypes.string.isRequired,
+      '#multiple': React.PropTypes.bool,
+    }).isRequired,
+    onChange: React.PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
