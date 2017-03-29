@@ -31,7 +31,9 @@ class Field {
   getStorage(fields = false) {
     if(Array.isArray(fields)) {
       const data = {};
-      fields.forEach(f => data[f] = this[f]); // Add property from field storage for each field key in fields array.
+      fields.forEach((f) => {
+        data[f] = this[f];
+      }); // Add property from field storage for each field key in fields array.
       return data;
     } else if(typeof fields === 'string') {
       return this[fields];
