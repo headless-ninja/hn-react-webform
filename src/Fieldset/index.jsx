@@ -7,13 +7,13 @@ import styles from './styles.pcss';
 @CSSModules(styles, { allowMultiple: true })
 class Fieldset extends React.Component {
   static meta = {
-    wrapper: <fieldset data-extendClassName={styles.fieldset} />,
-    label: <legend />,
+    wrapper: <fieldset className={styles.fieldset} />,
+    label: <legend data-extendClassName={styles['fieldset-legend']} />,
   };
 
   static propTypes = {
     field: React.PropTypes.shape({
-      composite_elements: React.PropTypes.array.isRequired,
+      composite_elements: React.PropTypes.array,
       '#options': React.PropTypes.object,
       '#webform_key': React.PropTypes.string.isRequired,
     }).isRequired,
@@ -21,7 +21,7 @@ class Fieldset extends React.Component {
   };
 
   getFormElements() {
-    const formElements = this.props.field.composite_elements;
+    const formElements = this.props.field.composite_elements || [];
     return formElements.map(field =>
       <WebformElement
         key={field['#webform_key']}
@@ -34,7 +34,7 @@ class Fieldset extends React.Component {
   render() {
     const formElements = this.getFormElements();
     return (
-      <div role='group'>
+      <div styleName='fieldset-inner'>
         {formElements}
       </div>
     );

@@ -15,21 +15,6 @@ fieldset.formrow {
   border: none;
 }
 
-/* TODO: move fieldset css to fieldset component */
-fieldset {
-  margin: 0;
-  padding: 0;
-}
-
-/*.fieldset {
-    margin-bottom: var(--spacingUnit);
-    border: 1px solid var(--borderColor);
-
-    & .formrow:last-of-type {
-        margin-bottom: 0;
-    }
-}*/
-
 /* Field Label */
 /*legend {
     float: left;
@@ -38,7 +23,7 @@ fieldset {
 }*/
 
 .formrow {
-  & > label, & > legend {
+  /*& > label, & > legend {
     display: inline-block;
     width: 100%;
     @media (min-width: 768px) {
@@ -63,10 +48,37 @@ fieldset {
       float: none;
       width: 100%;
     }
+  }*/
+
+  /*& > legend {
+    padding-left: 0;
+  }*/
+}
+
+.label {
+  display: inline-block;
+  width: 100%;
+  padding-left: 0; /* legend */
+
+  @media (min-width: 768px) {
+    float: left;
+    width: 50%;
   }
 
-  & > legend {
-    padding-left: 0;
+  margin-bottom: calc(var(--spacingUnit) / 2);
+  vertical-align: top;
+  @media (min-width: 768px) {
+    padding-right: calc(var(--spacingUnit) / 2);
+  }
+
+  &.label-display-invisible {
+    display: none;
+  }
+
+  &.label-display-before {
+    display: block;
+    float: none;
+    width: 100%;
   }
 }
 

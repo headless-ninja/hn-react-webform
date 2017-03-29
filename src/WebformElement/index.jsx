@@ -239,7 +239,7 @@ class WebformElement extends React.Component {
       return (
         <Wrapper
           component={getNested(() => element.class.meta.label, <label htmlFor={this.key} />)}
-          styleName={this.getLabelClass()}
+          styleName={`label ${this.getLabelClass()}`}
         >
           {this.props.field['#title']}
           {this.state.required ? (<small>*</small>) : null}

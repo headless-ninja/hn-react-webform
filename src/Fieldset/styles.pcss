@@ -1,20 +1,25 @@
 @import '../styles/_variables.pcss';
 
-.input-wrapper {
-  @media (min-width: 768px) {
-    display: inline-block;
-    float: left;
-    width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
-  }
-}
-
-.display-before {
-  float: none;
-  width: 100%;
+fieldset {
+  margin: 0;
+  padding: 0;
 }
 
 .fieldset {
-  & > legend {
-    float: none;
+  margin-bottom: var(--spacingUnit);
+  border: 1px solid var(--borderColor);
+  padding: var(--spacingUnit) calc(var(--spacingUnit) / 2);
+}
+
+.fieldset-inner {
+  & > :last-child {
+    margin-bottom: 0;
   }
+}
+
+.fieldset-legend {
+  width: 100%;
+  float: left;
+  padding: 0;
+  margin-bottom: calc(var(--spacingUnit) / 2);
 }
