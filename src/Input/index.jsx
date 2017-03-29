@@ -16,7 +16,7 @@ class Input extends React.Component {
     value: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.number,
-      React.PropTypes.boolean,
+      React.PropTypes.bool,
     ]),
     type: React.PropTypes.string,
     id: React.PropTypes.number,

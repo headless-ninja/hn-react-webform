@@ -17,7 +17,6 @@ class EmailField extends React.Component {
       '#webform_key': React.PropTypes.string.isRequired,
       '#emailError': React.PropTypes.string,
     }).isRequired,
-    onChange: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -37,7 +36,6 @@ class EmailField extends React.Component {
     return (
       <Input
         {...this.props}
-        onChange={this.props.onChange}
         type='email'
         styleName='email'
       />
