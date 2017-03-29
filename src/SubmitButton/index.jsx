@@ -9,7 +9,7 @@ class SubmitButton extends React.Component {
     form: React.PropTypes.shape({
       settings: React.PropTypes.object.isRequired,
     }).isRequired,
-    status: Webform.formStates.isRequired,
+    status: React.PropTypes.string.isRequired,
   };
 
   render() {
