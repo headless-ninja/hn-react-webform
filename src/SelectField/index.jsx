@@ -10,7 +10,7 @@ import WebformElement from '../WebformElement';
  * @source https://github.com/JedWatson/react-select
  */
 
-@CSSModules(styles, { allowMultiple: true })
+@CSSModules(styles, {allowMultiple: true})
 class SelectField extends React.Component {
   static propTypes = {
     field: React.PropTypes.shape({
@@ -22,7 +22,7 @@ class SelectField extends React.Component {
     value: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.number,
-      React.PropTypes.boolean,
+      React.PropTypes.bool,
     ]),
     webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
@@ -40,7 +40,7 @@ class SelectField extends React.Component {
 
   getLabelPositionClass() {
     const labelClass = `display-${this.props.field['#title_display']}`;
-    if(styles[labelClass]) {
+    if (styles[labelClass]) {
       return labelClass;
     }
     return '';
