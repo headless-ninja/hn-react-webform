@@ -1,6 +1,7 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
+import WebformElement from '../WebformElement';
 
 @CSSModules(styles)
 class TextArea extends React.Component {
@@ -9,8 +10,17 @@ class TextArea extends React.Component {
       '#webform_key': React.PropTypes.string.isRequired,
       '#required': React.PropTypes.bool,
     }).isRequired,
-    webformElement: React.PropTypes.node.isRequired,
+    value: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+      React.PropTypes.boolean,
+    ]),
+    webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    value: null,
   };
 
   render() {

@@ -2,6 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
 import Input from '../Input';
+import WebformElement from '../WebformElement';
 
 @CSSModules(styles, { allowMultiple: true })
 class CheckboxField extends React.Component {
@@ -17,7 +18,9 @@ class CheckboxField extends React.Component {
     field: React.PropTypes.shape({
       '#title_display': React.PropTypes.string,
       '#description': React.PropTypes.string,
+      '#required': React.PropTypes.bool,
     }).isRequired,
+    webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
   };
 
@@ -41,6 +44,10 @@ class CheckboxField extends React.Component {
 
   render() {
     const cssClasses = `input-wrapper ${this.getLabelPositionClass()}`;
+    const attrs = {
+      'aria-invalid': this.props.webformElement.isValid() ? null : true,
+      'aria-required': this.props.field['#required'] ? true : null,
+    };
 
     return (
       <div styleName={cssClasses}>
@@ -50,6 +57,7 @@ class CheckboxField extends React.Component {
             onChange={this.onChange}
             type='checkbox'
             styleName='checkbox'
+            {...attrs}
           />
           <span styleName='indicator' />
           {this.props.field['#description']}

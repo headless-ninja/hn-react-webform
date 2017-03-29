@@ -1,6 +1,7 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
+import WebformElement from '../WebformElement';
 
 @CSSModules(styles, { allowMultiple: true })
 class RadioField extends React.Component {
@@ -14,10 +15,10 @@ class RadioField extends React.Component {
       '#required': React.PropTypes.bool,
       '#options': React.PropTypes.object,
       '#webform_key': React.PropTypes.string.isRequired,
-      '#title_display': React.PropTypes.string.isRequired,
-      '#options_display': React.PropTypes.string.isRequired,
+      '#title_display': React.PropTypes.string,
+      '#options_display': React.PropTypes.string,
     }).isRequired,
-    webformElement: React.PropTypes.node.isRequired,
+    webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
   };
 
@@ -41,9 +42,10 @@ class RadioField extends React.Component {
     const cssClassesWrapper = `input-wrapper ${this.getLabelPositionClass()}`;
     const cssClassesRadio = `radio-label ${this.getOptionPositionClass()}`;
 
-    var wrapperAttrs = {};
-    this.props.webformElement.state.errors.length > 0 ? wrapperAttrs['aria-invalid'] = 'true' : null;
-    this.props.field['#required'] ? wrapperAttrs['aria-required'] = 'true' : null;
+    const wrapperAttrs = {
+      'aria-invalid': this.props.webformElement.isValid() ? null : true,
+      'aria-required': this.props.field['#required'] ? true : null,
+    };
 
     return (
       <div styleName={cssClassesWrapper} role='radiogroup' {...wrapperAttrs}>

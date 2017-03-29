@@ -5,6 +5,13 @@ import Webform from '../Webform';
 
 @CSSModules(styles)
 class SubmitButton extends React.Component {
+  static propTypes = {
+    form: React.PropTypes.shape({
+      settings: React.PropTypes.object.isRequired,
+    }).isRequired,
+    status: Webform.formStates.isRequired,
+  };
+
   render() {
     const settings = this.props.form.settings;
     const disabled = this.props.status === Webform.formStates.PENDING;

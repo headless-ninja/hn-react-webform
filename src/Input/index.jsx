@@ -1,6 +1,7 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
+import WebformElement from '../WebformElement';
 
 @CSSModules(styles, { allowMultiple: true })
 class Input extends React.Component {
@@ -11,12 +12,23 @@ class Input extends React.Component {
       '#webform_key': React.PropTypes.string.isRequired,
       '#required': React.PropTypes.bool,
     }).isRequired,
-    className: React.PropTypes.string.isRequired,
-    value: React.PropTypes.string.isRequired,
-    type: React.PropTypes.string.isRequired,
-    id: React.PropTypes.number.isRequired,
-    webformElement: React.PropTypes.node.isRequired,
+    className: React.PropTypes.string,
+    value: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+      React.PropTypes.boolean,
+    ]),
+    type: React.PropTypes.string,
+    id: React.PropTypes.number,
+    webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    value: null,
+    type: null,
+    id: null,
+    className: null,
   };
 
   render() {

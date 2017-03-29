@@ -17,6 +17,23 @@ Object.assign(rules, {
  */
 
 class Phone extends React.Component {
+  static propTypes = {
+    field: React.PropTypes.shape({
+      '#webform_key': React.PropTypes.string.isRequired,
+      '#mask': React.PropTypes.bool,
+    }).isRequired,
+    value: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+      React.PropTypes.boolean,
+    ]),
+    onChange: React.PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    value: null,
+  };
+
   constructor(props) {
     super(props);
 
