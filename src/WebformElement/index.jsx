@@ -58,7 +58,7 @@ class WebformElement extends React.Component {
     if(pattern) {
       Object.assign(rules, {
         [`pattern_${this.key}`]: {
-          rule: (value = '') => new RegExp(pattern).test(value),
+          rule: (value = '') => new RegExp(pattern).test(value) || value.toString().trim() === '',
           hint: value =>
             <RuleHint key={`pattern_${this.key}`} hint={props.field['#patternError'] || 'The value :value doesn\'t match the right pattern'} tokens={{ value }} />,
           shouldValidate: field => field.isBlurred && field.getValue().toString().trim() !== '',
@@ -166,7 +166,11 @@ class WebformElement extends React.Component {
   checkConditionals() {
     const newState = checkConditionals(this.props.formStore, this.key, this.state);
     if(newState) {
-      this.setState(newState, () => this.setState({ validations: this.getValidations() }));
+      this.setState(newState, () => {
+        this.setState({ validations: this.getValidations() }, () => {
+          this.validate();
+        });
+      });
     }
   }
 
@@ -199,7 +203,11 @@ class WebformElement extends React.Component {
     // const log = valid ? console.info : console.warn;
     // log(this.key, '=> is', valid ? 'valid' : 'invalid');
 
-    field.setStorage({ valid });
+    field.setStorage({
+      valid,
+      isBlurred: !valid,
+    });
+
     this.setState({ errors });
 
     return valid;
