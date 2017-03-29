@@ -8,7 +8,7 @@ class Input extends React.Component {
     const attrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,
       'aria-required': this.props.field['#required'] ? true : null,
-      'type': this.props.type ? this.props.type : 'text',
+      type: this.props.type || 'text',
     };
 
     return (
