@@ -4,6 +4,21 @@ import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })
 class Input extends React.Component {
+  static propTypes = {
+    field: React.PropTypes.shape({
+      '#type': React.PropTypes.string.isRequired,
+      '#placeholder': React.PropTypes.string,
+      '#webform_key': React.PropTypes.string.isRequired,
+      '#required': React.PropTypes.bool,
+    }).isRequired,
+    className: React.PropTypes.string.isRequired,
+    value: React.PropTypes.string.isRequired,
+    type: React.PropTypes.string.isRequired,
+    id: React.PropTypes.number.isRequired,
+    webformElement: React.PropTypes.node.isRequired,
+    onChange: React.PropTypes.func.isRequired,
+  };
+
   render() {
     const attrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,

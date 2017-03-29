@@ -9,6 +9,7 @@ class TextArea extends React.Component {
       '#webform_key': React.PropTypes.string.isRequired,
       '#required': React.PropTypes.bool,
     }).isRequired,
+    webformElement: React.PropTypes.node.isRequired,
     onChange: React.PropTypes.func.isRequired,
   };
 

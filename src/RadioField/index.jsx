@@ -14,7 +14,10 @@ class RadioField extends React.Component {
       '#required': React.PropTypes.bool,
       '#options': React.PropTypes.object,
       '#webform_key': React.PropTypes.string.isRequired,
+      '#title_display': React.PropTypes.string.isRequired,
+      '#options_display': React.PropTypes.string.isRequired,
     }).isRequired,
+    webformElement: React.PropTypes.node.isRequired,
     onChange: React.PropTypes.func.isRequired,
   };
 
