@@ -8,24 +8,27 @@ import RuleHint from '../RuleHint';
 
 @CSSModules(styles)
 class EmailField extends React.Component {
+  static meta = {
+    validations: [el => rules[`email_${el.key}`]],
+  };
+
+  static propTypes = {
+    field: React.PropTypes.shape({
+      '#webform_key': React.PropTypes.string.isRequired,
+      '#emailError': React.PropTypes.string,
+    }).isRequired,
+    onChange: React.PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
     Object.assign(rules, {
-      email: {
+      [`email_${props.field['#webform_key']}`]: {
         rule: value => validator.isEmail(value),
         hint: value =>
-          <RuleHint key={`email_${this.key}`} hint={props.field['#validationError'] || '":value" isn\'t an Email.'} tokens={{ value }} />,
+          <RuleHint key={`email_${props.field['#webform_key']}`} hint={props.field['#emailError'] || '":value" isn\'t an Email.'} tokens={{ value }} />,
       },
-    });
-  }
-
-  componentDidMount() {
-    this.props.webformElement.setState({
-      validations: [
-        ...this.props.webformElement.state.validations,
-        rules.email,
-      ],
     });
   }
 
