@@ -61,7 +61,7 @@ class WebformElement extends React.Component {
           rule: (value = '') => new RegExp(pattern).test(value),
           hint: value =>
             <RuleHint key={`pattern_${this.key}`} hint={props.field['#patternError'] || 'The value :value doesn\'t match the right pattern'} tokens={{ value }} />,
-          shouldValidate: field => field.getValue().toString().trim() !== '',
+          shouldValidate: field => field.isBlurred && field.getValue().toString().trim() !== '',
         },
       });
     }
