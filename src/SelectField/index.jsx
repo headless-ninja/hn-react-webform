@@ -26,6 +26,7 @@ class SelectField extends React.Component {
     ]),
     webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
+    webformElement: React.PropTypes.node.isRequired,
   };
 
   static defaultProps = {

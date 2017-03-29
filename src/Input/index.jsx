@@ -42,6 +42,7 @@ class Input extends React.Component {
       <input
         type={this.props.type}
         onChange={this.props.onChange}
+        onBlur={this.props.onBlur}
         value={this.props.value}
         name={this.props.field['#webform_key']}
         id={this.props.id || this.props.field['#webform_key']}

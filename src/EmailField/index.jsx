@@ -28,6 +28,7 @@ class EmailField extends React.Component {
         rule: value => validator.isEmail(value),
         hint: value =>
           <RuleHint key={`email_${props.field['#webform_key']}`} hint={props.field['#emailError'] || '":value" isn\'t an Email.'} tokens={{ value }} />,
+        shouldValidate: field => field.isBlurred && field.getValue().toString().trim() !== '',
       },
     });
   }

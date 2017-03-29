@@ -1,5 +1,6 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
+import WebformElement from '../WebformElement';
 import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
 
@@ -20,20 +21,26 @@ class RadioField extends React.Component {
     }).isRequired,
     webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
+    onBlur: React.PropTypes.func.isRequired,
   };
 
-  getLabelPositionClass() {
-    const labelClass = `display-${this.props.field['#title_display']}`;
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-    return '';
+  onChange(e) {
+    this.props.onChange(e);
+    this.props.onBlur(e);
   }
 
   getOptionPositionClass() {
     const optionClass = `radio-display-${this.props.field['#options_display']}`;
     if(styles[optionClass]) {
       return optionClass;
+    }
+    return '';
+  }
+
+  getLabelPositionClass() {
+    const labelClass = `display-${this.props.field['#title_display']}`;
+    if(styles[labelClass]) {
+      return labelClass;
     }
     return '';
   }
@@ -56,7 +63,7 @@ class RadioField extends React.Component {
               <label key={option} styleName={cssClassesRadio} htmlFor={labelKey}>
                 <input
                   type='radio'
-                  onChange={this.props.onChange}
+                  onChange={this.onChange.bind(this)}
                   value={option}
                   name={this.props.field['#webform_key']}
                   styleName='radio'
