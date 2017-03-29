@@ -2,17 +2,12 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
 
-@CSSModules(styles)
-class ThankYouMessage extends React.Component {
-  static propTypes = {
-    message: React.PropTypes.string.isRequired,
-  };
+const ThankYouMessage = ({ message }) => (
+  <h1 styleName='thankyou'>{message}</h1>
+);
 
-  render() {
-    return (
-      <h1 styleName='thankyou'>{this.props.message}</h1>
-    );
-  }
-}
+ThankYouMessage.propTypes = {
+  message: React.PropTypes.string.isRequired,
+};
 
-export default ThankYouMessage;
+export default CSSModules(ThankYouMessage, styles);
