@@ -162,7 +162,7 @@ class Webform extends React.Component {
     // eslint-disable-next-line no-undef
     const headers = new Headers({
       'Content-Type': 'application/json',
-      'X-CSRF-Token': this.props.form.token,
+      'X-CSRF-Token': this.props.form.token
     });
 
     const values = {};
