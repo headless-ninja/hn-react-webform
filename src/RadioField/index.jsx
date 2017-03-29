@@ -34,11 +34,16 @@ class RadioField extends React.Component {
     return '';
   }
 
+  onChange(e) {
+    this.props.onChange(e);
+    this.props.onBlur(e);
+  }
+
   render() {
     const cssClassesWrapper = `input-wrapper ${this.getLabelPositionClass()}`;
     const cssClassesRadio = `radio-label ${this.getOptionPositionClass()}`;
 
-    var wrapperAttrs = {};
+    const wrapperAttrs = {};
     this.props.webformElement.state.errors.length > 0 ? wrapperAttrs['aria-invalid'] = 'true' : null;
     this.props.field['#required'] ? wrapperAttrs['aria-required'] = 'true' : null;
 
@@ -51,7 +56,7 @@ class RadioField extends React.Component {
               <label key={option} styleName={cssClassesRadio} htmlFor={labelKey}>
                 <input
                   type='radio'
-                  onChange={this.props.onChange}
+                  onChange={this.onChange.bind(this)}
                   value={option}
                   name={this.props.field['#webform_key']}
                   styleName='radio'

@@ -19,6 +19,7 @@ class SelectField extends React.Component {
       '#multiple': React.PropTypes.bool,
     }).isRequired,
     onChange: React.PropTypes.func.isRequired,
+    webformElement: React.PropTypes.node.isRequired,
   };
 
   constructor(props) {

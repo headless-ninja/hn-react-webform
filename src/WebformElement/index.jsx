@@ -43,12 +43,14 @@ class WebformElement extends React.Component {
     this.key = props.field['#webform_key'];
 
     this.onChange = this.onChange.bind(this);
+    this.onBlur = this.onBlur.bind(this);
 
     Object.assign(rules, {
       [`required_${this.key}`]: {
         rule: value => value.toString().trim() !== '',
         hint: value =>
           <RuleHint key={`req_${this.key}`} hint={props.field['#requiredError'] || 'This field is required'} tokens={{ value }} />,
+        shouldValidate: field => field.isBlurred,
       },
     });
 
@@ -59,6 +61,7 @@ class WebformElement extends React.Component {
           rule: (value = '') => new RegExp(pattern).test(value),
           hint: value =>
             <RuleHint key={`pattern_${this.key}`} hint={props.field['#patternError'] || 'The value :value doesn\'t match the right pattern'} tokens={{ value }} />,
+          shouldValidate: field => field.getValue().toString().trim() !== '',
         },
       });
     }
@@ -88,6 +91,12 @@ class WebformElement extends React.Component {
     const value = e.target ? e.target.value : e; // Check if 'e' is event, or direct value
     this.getField().setStorage({ value });
     this.validate();
+    this.props.formStore.checkConditionals();
+  }
+
+  onBlur() {
+    this.getField().setStorage({ isBlurred: true });
+    this.validate();
   }
 
   getField(key = this.key) {
@@ -108,6 +117,7 @@ class WebformElement extends React.Component {
           value={this.getValue()}
           name={this.key}
           onChange={this.onChange}
+          onBlur={this.onBlur}
           field={this.props.field}
           store={this.formStore}
           validations={this.state.validations}
@@ -169,13 +179,19 @@ class WebformElement extends React.Component {
   }
 
   validate(force = false) {
-    if(!this.shouldValidate(force)) {
+    const validations = this.state.validations;
+    const field = this.getField();
+
+    if(!field) {
       return true;
     }
 
-    const validations = this.state.validations;
-
-    const fails = validations.filter(validation => !validation.rule(this.getValue()));
+    const fails = validations.filter((validation) => {
+      if(force || !validation.shouldValidate || validation.shouldValidate(field)) {
+        return !validation.rule(this.getValue());
+      }
+      return false;
+    });
 
     const errors = fails.map(rule => rule.hint(this.getValue()));
     const valid = errors.length === 0;
@@ -183,10 +199,8 @@ class WebformElement extends React.Component {
     // const log = valid ? console.info : console.warn;
     // log(this.key, '=> is', valid ? 'valid' : 'invalid');
 
-    this.getField().setStorage({ valid });
+    field.setStorage({ valid });
     this.setState({ errors });
-
-    this.props.formStore.checkConditionals();
 
     return valid;
   }

@@ -29,6 +29,7 @@ class CheckboxField extends React.Component {
 
   onChange(e) {
     this.props.onChange(e.target.checked);
+    this.props.onBlur(e);
   }
 
   getLabelPositionClass() {
