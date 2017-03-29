@@ -2,7 +2,6 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import WebformElement from '../WebformElement';
 import styles from './styles.pcss';
-import WebformElement from '../WebformElement';
 
 @CSSModules(styles, { allowMultiple: true })
 class RadioField extends React.Component {
