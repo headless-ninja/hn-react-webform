@@ -16,6 +16,10 @@
     box-shadow: 0 0 2px 3px var(--focusColor);
   }
 
+  &:disabled {
+    background-color: color(var(--inputColor) blackness(50%));
+  }
+
   &::placeholder {
     color: var(--placeholderColor);
   }
