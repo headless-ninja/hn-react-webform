@@ -16,15 +16,8 @@ class RadioField extends React.Component {
       '#webform_key': React.PropTypes.string.isRequired,
     }).isRequired,
     onChange: React.PropTypes.func.isRequired,
+    onBlur: React.PropTypes.func.isRequired,
   };
-
-  getLabelPositionClass() {
-    const labelClass = `display-${this.props.field['#title_display']}`;
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-    return '';
-  }
 
   getOptionPositionClass() {
     const optionClass = `radio-display-${this.props.field['#options_display']}`;
@@ -37,6 +30,14 @@ class RadioField extends React.Component {
   onChange(e) {
     this.props.onChange(e);
     this.props.onBlur(e);
+  }
+
+  getLabelPositionClass() {
+    const labelClass = `display-${this.props.field['#title_display']}`;
+    if(styles[labelClass]) {
+      return labelClass;
+    }
+    return '';
   }
 
   render() {
