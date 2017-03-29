@@ -8,6 +8,7 @@ import SelectField from './SelectField';
 import Input from './Input';
 import RadioField from './RadioField';
 import FetchForm from './FetchForm';
+import Fieldset from './Fieldset';
 
 const components = {
   textfield: Input,
@@ -18,6 +19,7 @@ const components = {
   webform_message: ParagraphField,
   select: SelectField,
   radios: RadioField,
+  fieldset: Fieldset,
 };
 
 export default Webform;

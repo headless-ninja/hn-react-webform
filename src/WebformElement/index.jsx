@@ -119,7 +119,7 @@ class WebformElement extends React.Component {
           onChange={this.onChange}
           onBlur={this.onBlur}
           field={this.props.field}
-          store={this.formStore}
+          formStore={this.props.formStore}
           validations={this.state.validations}
           webformElement={this}
         />,
