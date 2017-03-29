@@ -1,4 +1,5 @@
 stages:
+  - test
   - build
   - deploy
 
@@ -6,6 +7,12 @@ cache:
   paths:
   - node_modules/
 
+test:
+  stage: test
+  image: node:7
+  script:
+    - npm install
+    - npm run lint
 build:
   stage: build
   image: node:7
