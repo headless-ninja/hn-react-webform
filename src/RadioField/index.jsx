@@ -1,5 +1,6 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
+import WebformElement from '../WebformElement';
 import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })
@@ -17,7 +18,13 @@ class RadioField extends React.Component {
     }).isRequired,
     onChange: React.PropTypes.func.isRequired,
     onBlur: React.PropTypes.func.isRequired,
+    webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
   };
+
+  onChange(e) {
+    this.props.onChange(e);
+    this.props.onBlur(e);
+  }
 
   getOptionPositionClass() {
     const optionClass = `radio-display-${this.props.field['#options_display']}`;
@@ -25,11 +32,6 @@ class RadioField extends React.Component {
       return optionClass;
     }
     return '';
-  }
-
-  onChange(e) {
-    this.props.onChange(e);
-    this.props.onBlur(e);
   }
 
   getLabelPositionClass() {
