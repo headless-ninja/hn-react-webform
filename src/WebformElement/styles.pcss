@@ -41,7 +41,6 @@ fieldset {
   & > label, & > legend {
     display: inline-block;
     width: 100%;
-
     @media (min-width: 768px) {
       float: left;
       width: 50%;
@@ -51,20 +50,19 @@ fieldset {
   & > label, & > legend {
     margin-bottom: calc(var(--spacingUnit) / 2);
     vertical-align: top;
-
     @media (min-width: 768px) {
       padding-right: calc(var(--spacingUnit) / 2);
     }
 
-        &.label-display-invisible {
-          display: none;
-        }
+    &.label-display-invisible {
+      display: none;
+    }
 
-        &.label-display-before {
-          display: block;
-          float: none;
-          width: 100%;
-        }
+    &.label-display-before {
+      display: block;
+      float: none;
+      width: 100%;
+    }
   }
 
   & > legend {
