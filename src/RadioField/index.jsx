@@ -62,7 +62,7 @@ class RadioField extends React.Component {
               <label key={option} styleName={cssClassesRadio} htmlFor={labelKey}>
                 <input
                   type='radio'
-                  onChange={this.onChange.bind(this)}
+                  onChange={e => this.onChange(e)}
                   value={option}
                   name={this.props.field['#webform_key']}
                   styleName='radio'

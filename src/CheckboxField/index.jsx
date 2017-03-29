@@ -22,6 +22,7 @@ class CheckboxField extends React.Component {
     }).isRequired,
     webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
+    onBlur: React.PropTypes.func.isRequired,
   };
 
   constructor(props) {

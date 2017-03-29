@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+// eslint-disable-next-line import/no-unresolved,import/no-webpack-loader-syntax
 import '!style!css!postcss!react-select/dist/react-select.css';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
@@ -10,7 +11,7 @@ import WebformElement from '../WebformElement';
  * @source https://github.com/JedWatson/react-select
  */
 
-@CSSModules(styles, {allowMultiple: true})
+@CSSModules(styles, { allowMultiple: true })
 class SelectField extends React.Component {
   static propTypes = {
     field: React.PropTypes.shape({
@@ -40,7 +41,7 @@ class SelectField extends React.Component {
 
   getLabelPositionClass() {
     const labelClass = `display-${this.props.field['#title_display']}`;
-    if (styles[labelClass]) {
+    if(styles[labelClass]) {
       return labelClass;
     }
     return '';
