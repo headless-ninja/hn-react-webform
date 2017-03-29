@@ -22,20 +22,20 @@ class Input extends React.Component {
     id: React.PropTypes.number,
     webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
+    onBlur: React.PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     value: null,
-    type: null,
     id: null,
     className: null,
+    type: 'text',
   };
 
   render() {
     const attrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,
       'aria-required': this.props.field['#required'] ? true : null,
-      type: this.props.type || 'text',
     };
 
     return (
