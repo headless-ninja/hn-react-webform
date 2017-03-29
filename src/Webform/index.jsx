@@ -159,6 +159,7 @@ class Webform extends React.Component {
 
   async submit() {
     console.info('submit');
+    // eslint-disable-next-line no-undef
     const headers = new Headers({
       'Content-Type': 'application/json',
       'X-CSRF-Token': this.props.form.token,
