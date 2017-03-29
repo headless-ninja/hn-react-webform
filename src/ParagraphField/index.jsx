@@ -7,9 +7,13 @@ class ParagraphField extends React.Component {
     }).isRequired,
   };
 
+  getFormattedMarkup() {
+    return this.props.field['#message_message'];
+  }
+
   render() {
     return (
-      <p>{this.props.field['#message_message']}</p>
+      <p>{this.getFormattedMarkup()}</p>
     );
   }
 }
