@@ -8,6 +8,8 @@ class Field {
   @observable valid = true;
   @observable value = null;
   conditionals = false;
+  hasChanged = false;
+  isBlurred = false;
 
   constructor(component, key, props = {}, valid = false) {
     if(!component) {

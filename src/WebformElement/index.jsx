@@ -21,8 +21,9 @@ class WebformElement extends React.Component {
         React.PropTypes.string,
         React.PropTypes.instanceOf(RegExp),
       ]),
-      '#required_error': React.PropTypes.string,
+      '#requiredError': React.PropTypes.string,
       '#patternError': React.PropTypes.string,
+      '#emailError': React.PropTypes.string,
       '#title': React.PropTypes.string,
       '#states': React.PropTypes.object,
       '#options': React.PropTypes.object,
@@ -44,10 +45,10 @@ class WebformElement extends React.Component {
     this.onChange = this.onChange.bind(this);
 
     Object.assign(rules, {
-      required: {
+      [`required_${this.key}`]: {
         rule: value => value.toString().trim() !== '',
         hint: value =>
-          <RuleHint key={`req_${this.key}`} hint={props.field['#required_error'] || 'This field is required'} tokens={{ value }} />,
+          <RuleHint key={`req_${this.key}`} hint={props.field['#requiredError'] || 'This field is required'} tokens={{ value }} />,
       },
     });
 
@@ -68,17 +69,17 @@ class WebformElement extends React.Component {
       [supportedStates.enabled]: true,
       errors: [],
     };
-
-    this.state.validations = this.getValidations();
   }
 
   componentDidMount() {
     if(this.getFormElementComponent()) {
-      this.props.formStore.createField(this, this.key, this.props.field);
+      this.props.formStore.createField(this, this.key, this.props.field, this.validate());
 
       if(this.state.required) {
         this.props.formStore.formProperties.hasRequiredFields = true;
       }
+
+      this.setState({ validations: this.getValidations() });
     }
   }
 
@@ -118,16 +119,20 @@ class WebformElement extends React.Component {
   }
 
   getValidations() {
+    const element = this.getFormElement();
+
     const validations = [
-      getNested(() => this.state.required) ? 'required' : null,
+      getNested(() => this.state.required) ? `required_${this.key}` : null,
       getNested(() => this.props.field['#pattern']) ? `pattern_${this.key}` : null,
     ];
 
-    const populatedValidations = validations
-      .map(validation => rules[validation] || null)
-      .filter(v => v !== null);
+    const populatedValidations = validations.map(validation => rules[validation] || null);
 
-    return populatedValidations;
+    populatedValidations.push(...getNested(() => element.class.meta.validations.map(validation => validation(this) || null), []));
+
+    const filteredValidations = populatedValidations.filter(v => v !== null);
+
+    return filteredValidations;
   }
 
   getValue(key = this.key) {
@@ -163,7 +168,11 @@ class WebformElement extends React.Component {
     return field.getStorage('valid');
   }
 
-  validate() {
+  validate(force = false) {
+    if(!this.shouldValidate(force)) {
+      return true;
+    }
+
     const validations = this.state.validations;
 
     const fails = validations.filter(validation => !validation.rule(this.getValue()));
@@ -182,20 +191,31 @@ class WebformElement extends React.Component {
     return valid;
   }
 
+  shouldValidate(force = false) {
+    if(force) {
+      return true;
+    }
+    const field = this.getField();
+    if(!field) {
+      return false;
+    }
+    return field.isBlurred;
+  }
+
   renderTextContent(selector, checkValue = false, addClass = '') {
     const value = this.props.field[getNested(() => this.getFormElement().class.meta.field_display[selector], selector)]; // Value in #description field
     const displayValue = this.props.field[`${selector}_display`];
     const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
 
     if(!value || (!!checkValue && checkValue !== displayValue)) {
-        if(false === (!displayValue && checkValue === 'isUndefined')) {
-          return false;
-        }
+      if(!(!displayValue && checkValue === 'isUndefined')) {
+        return false;
+      }
     }
 
-    addClass = `${addClass} ${styles[cssClass] ? cssClass : ''}`;
+    const className = `${addClass} ${styles[cssClass] ? cssClass : ''}`;
 
-    return (<span styleName={addClass}>{value}</span>);
+    return (<span styleName={className}>{value}</span>);
   }
 
   renderFieldLabel(element, show = true) {
@@ -204,7 +224,7 @@ class WebformElement extends React.Component {
     if(this.props.field['#title'] && show) {
       return (
         <Wrapper
-          component={getNested(() => element.class.meta.label, <label htmlFor={this.key}/>)}
+          component={getNested(() => element.class.meta.label, <label htmlFor={this.key} />)}
           styleName={this.getLabelClass()}
         >
           {this.props.field['#title']}
@@ -225,7 +245,8 @@ class WebformElement extends React.Component {
     return (
       <Wrapper
         component={getNested(() => element.class.meta.wrapper, <div />)}
-        styleName={`formrow ${!this.state.visible ? 'hidden' : ''}`}
+        styleName='formrow'
+        {...!this.state.visible ? { hidden: true } : {}}
       >
         { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) === 'legend') }
 
@@ -242,7 +263,8 @@ class WebformElement extends React.Component {
         { this.renderTextContent('#description', 'after', this.getLabelClass()) }
         { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-after`)) }
 
-        { this.state.errors.length > 0 ? (<ul role='alert' styleName={`${this.getLabelClass()} validation-message`}> {this.state.errors} </ul>) : null }
+        { this.state.errors.length > 0 ? (
+          <ul role='alert' styleName={`${this.getLabelClass()} validation-message`}> {this.state.errors} </ul>) : null }
 
       </Wrapper>
     );

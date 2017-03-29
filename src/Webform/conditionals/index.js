@@ -179,7 +179,11 @@ export function checkConditionals(formStore, fieldKey = false, currentState = {}
     // Go through conditions per conditional.
     conditional.conditions.forEach((condition) => {
       // console.log(condition)
-      const dependencyValue = formStore.getField(condition.key).getValue();
+      const dependency = formStore.getField(condition.key);
+      if(!dependency) {
+        return;
+      }
+      const dependencyValue = dependency.getValue();
 
       // See what the action of the condition should be.
       switch(condition.condition) {
