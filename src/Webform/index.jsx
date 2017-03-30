@@ -180,7 +180,7 @@ class Webform extends React.Component {
       .then(response => response.json())
       .then(response => ({
         status: response.status || 400,
-        errors: response || false,
+        errors: response.message || false,
       }))
       .catch(console.error);
   }
