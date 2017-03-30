@@ -3,6 +3,7 @@ import TextArea from './TextArea';
 import CheckboxField from './CheckboxField';
 import EmailField from './EmailField';
 import PhoneField from './PhoneField';
+import DateField from './DateField';
 import ParagraphField from './ParagraphField';
 import SelectField from './SelectField';
 import Input from './Input';
@@ -16,6 +17,7 @@ const components = {
   checkbox: CheckboxField,
   email: EmailField,
   tel: PhoneField,
+  date: DateField,
   webform_message: ParagraphField,
   select: SelectField,
   radios: RadioField,
