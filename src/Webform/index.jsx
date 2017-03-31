@@ -36,11 +36,17 @@ class Webform extends React.Component {
         React.PropTypes.string,
         React.PropTypes.bool,
       ]).isRequired,
-      nm_gtm_id: React.PropTypes.string,
+      gtm_id: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.bool,
+      ]),
     }).isRequired,
     form: React.PropTypes.shape({
       form_id: React.PropTypes.string.isRequired,
-      settings: React.PropTypes.object,
+      settings: React.PropTypes.shape({
+        nm_gtm_id: React.PropTypes.string,
+        nm_required_hint: React.PropTypes.string,
+      }),
       elements: React.PropTypes.arrayOf(React.PropTypes.shape({
         '#type': React.PropTypes.string.isRequired,
       })).isRequired,
@@ -60,6 +66,7 @@ class Webform extends React.Component {
     onSubmit: false,
     onAfterSubmit: false,
     nm_gtm_id: false,
+    gtm_id: false,
   };
 
   static fireAnalyticsEvent(event) {
@@ -186,17 +193,27 @@ class Webform extends React.Component {
 
   render() {
     const formElements = this.getFormElements();
+
+    let requiredHint = null;
+    if(
+      this.formStore.formProperties.hasRequiredFields &&
+      this.props.form.settings.nm_required_hint
+    ) {
+      requiredHint = <span>{ this.props.form.settings.nm_required_hint }</span>;
+    }
+
     const errors = Object.keys(this.state.errors).map(error =>
       <li key={error}><span styleName='element error'>{ this.state.errors[error] }</span></li>,
     );
+
     return (
       <div styleName='webform'>
         <h1 styleName='formtitle'>{this.props.settings.title}</h1>
         { this.state.status === Webform.formStates.ERROR && errors}
         { this.state.status !== Webform.formStates.SENT &&
           <form method='POST' onSubmit={this.onSubmit}>
-            { this.formStore.formProperties.hasRequiredFields ? (<span>Required fields are marked with <small>*</small></span>) : null }
-            {formElements}
+            { requiredHint }
+            { formElements }
             <SubmitButton
               form={this.props.form}
               status={this.state.status}
