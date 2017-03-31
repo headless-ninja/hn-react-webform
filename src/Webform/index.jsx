@@ -46,6 +46,7 @@ class Webform extends React.Component {
       settings: React.PropTypes.shape({
         nm_gtm_id: React.PropTypes.string,
         nm_required_hint: React.PropTypes.string,
+        confirmation_message: React.PropTypes.string,
       }),
       elements: React.PropTypes.arrayOf(React.PropTypes.shape({
         '#type': React.PropTypes.string.isRequired,
@@ -81,7 +82,7 @@ class Webform extends React.Component {
       errors: {},
     };
 
-    this.key = props.form.settings.form_id;
+    this.key = props.form.form_id;
     this.formStore = new FormStore(this.key);
 
     this.onSubmit = this.onSubmit.bind(this);
