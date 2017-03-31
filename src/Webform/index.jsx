@@ -36,10 +36,7 @@ class Webform extends React.Component {
         React.PropTypes.string,
         React.PropTypes.bool,
       ]).isRequired,
-      analyticsId: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.bool,
-      ]),
+      nm_gtm_id: React.PropTypes.string,
     }).isRequired,
     form: React.PropTypes.shape({
       form_id: React.PropTypes.string.isRequired,
@@ -62,7 +59,7 @@ class Webform extends React.Component {
   static defaultProps = {
     onSubmit: false,
     onAfterSubmit: false,
-    analyticsId: false,
+    nm_gtm_id: false,
   };
 
   static fireAnalyticsEvent(event) {
@@ -90,8 +87,8 @@ class Webform extends React.Component {
   componentDidMount() {
     this.formStore.checkConditionals();
 
-    if(this.props.form.settings.analyticsId) {
-      ReactGA.initialize(this.props.form.settings.analyticsId);
+    if(this.props.form.settings.nm_gtm_id) {
+      ReactGA.initialize(this.props.form.settings.nm_gtm_id);
     }
   }
 
