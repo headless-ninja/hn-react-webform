@@ -94,8 +94,8 @@ class Webform extends React.Component {
   componentDidMount() {
     this.formStore.checkConditionals();
 
-    if(this.props.form.settings.nm_gtm_id) {
-      ReactGA.initialize(this.props.form.settings.nm_gtm_id);
+    if(this.props.settings.gtm_id || this.props.form.settings.nm_gtm_id) {
+      ReactGA.initialize(this.props.settings.gtm_id || this.props.form.settings.nm_gtm_id);
     }
   }
 
