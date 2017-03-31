@@ -187,7 +187,7 @@ class Webform extends React.Component {
   render() {
     const formElements = this.getFormElements();
     const errors = Object.keys(this.state.errors).map(error =>
-      <li key={error}><span  styleName='element error'>{ this.state.errors[error] }</span></li>,
+      <li key={error}><span styleName='element error'>{ this.state.errors[error] }</span></li>,
     );
     return (
       <div styleName='webform'>
