@@ -24,13 +24,9 @@ class SelectField extends React.Component {
       React.PropTypes.string,
       React.PropTypes.number,
       React.PropTypes.bool,
-    ]),
+    ]).isRequired,
     webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    value: null,
   };
 
   constructor(props) {
@@ -48,7 +44,11 @@ class SelectField extends React.Component {
   }
 
   handleChange(value) {
-    this.props.onChange(value, false);
+    const newValue = value || '';
+    if(newValue && newValue.value) {
+      return this.props.onChange(newValue.value, false);
+    }
+    return this.props.onChange(newValue, false);
   }
 
   render() {

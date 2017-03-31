@@ -81,10 +81,6 @@ class Webform extends React.Component {
     this.formStore = new FormStore(this.key);
 
     this.onSubmit = this.onSubmit.bind(this);
-
-    if(props.form.settings.analyticsId) {
-      ReactGA.initialize(props.form.settings.analyticsId);
-    }
   }
 
   componentWillMount() {
@@ -93,6 +89,10 @@ class Webform extends React.Component {
 
   componentDidMount() {
     this.formStore.checkConditionals();
+
+    if(this.props.form.settings.analyticsId) {
+      ReactGA.initialize(this.props.form.settings.analyticsId);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -189,13 +189,14 @@ class Webform extends React.Component {
 
   render() {
     const formElements = this.getFormElements();
+    const errors = Object.keys(this.state.errors).map(error =>
+      <li key={error}><span  styleName='element error'>{ this.state.errors[error] }</span></li>,
+    );
     return (
       <div styleName='webform'>
-        <h1 styleName='formtitle'>{getNested(() => this.props.settings.title)}</h1>
-        { this.state.status === Webform.formStates.ERROR && Object.keys(this.state.errors).map(error =>
-          <span key={error} styleName='element error'>{ this.state.errors[error] }</span>,
-        )}
-        { this.state.status !== Webform.formStates.SENT ?
+        <h1 styleName='formtitle'>{this.props.settings.title}</h1>
+        { this.state.status === Webform.formStates.ERROR && errors}
+        { this.state.status !== Webform.formStates.SENT &&
           <form method='POST' onSubmit={this.onSubmit}>
             { this.formStore.formProperties.hasRequiredFields ? (<span>Required fields are marked with <small>*</small></span>) : null }
             {formElements}
@@ -203,7 +204,9 @@ class Webform extends React.Component {
               form={this.props.form}
               status={this.state.status}
             />
-          </form> : <ThankYouMessage message={this.props.form.settings.confirmation_message} />
+          </form>}
+        { this.state.status === Webform.formStates.SENT &&
+          <ThankYouMessage message={this.props.form.settings.confirmation_message} />
         }
       </div>
     );

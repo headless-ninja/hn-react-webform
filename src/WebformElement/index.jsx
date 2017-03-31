@@ -157,10 +157,8 @@ class WebformElement extends React.Component {
     const labelClass = `label-display-${this.props.field['#title_display']}`;
     if(styles[labelClass]) {
       return labelClass;
-    } else if(styles['label-display-inline']) {
-      return 'label-display-inline';
     }
-    return '';
+    return 'label-display-inline';
   }
 
   checkConditionals() {
@@ -264,6 +262,10 @@ class WebformElement extends React.Component {
       return null;
     }
 
+    const errors = this.state.errors.length > 0 ? (
+      <ul role='alert' styleName={`${this.getLabelClass()} validation-message`}> {this.state.errors} </ul>)
+      : null;
+
     return (
       <Wrapper
         component={getNested(() => element.class.meta.wrapper, <div />)}
@@ -272,7 +274,7 @@ class WebformElement extends React.Component {
       >
         { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) === 'legend') }
 
-        { this.renderTextContent('#description', 'before')}
+        { this.renderTextContent('#description', 'before') }
 
         { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) !== 'legend') }
 
@@ -282,12 +284,10 @@ class WebformElement extends React.Component {
 
         { this.renderTextContent('#field_suffix') }
 
-        { this.renderTextContent('#description', 'after', this.getLabelClass()) }
-        { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-after`)) }
+        { this.renderTextContent('#description', 'after') }
+        { this.renderTextContent('#description', 'isUndefined', 'description-after') }
 
-        { this.state.errors.length > 0 ? (
-          <ul role='alert' styleName={`${this.getLabelClass()} validation-message`}> {this.state.errors} </ul>) : null }
-
+        { errors }
       </Wrapper>
     );
   }
