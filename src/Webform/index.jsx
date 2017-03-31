@@ -167,7 +167,9 @@ class Webform extends React.Component {
 
     const values = {};
     this.formStore.fields.forEach((field) => {
-      values[field.key] = field.value;
+      if(field.value.toString().trim() !== '') {
+        values[field.key] = field.value;
+      }
     });
     this.setState({ status: Webform.formStates.PENDING });
     return fetch(this.props.settings.postUrl, {
