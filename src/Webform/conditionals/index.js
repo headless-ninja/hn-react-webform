@@ -1,9 +1,15 @@
-export const supportedStates = {
+export const supportedActions = {
   visible: 'visible',
-  invisible: 'invisible',
   enabled: 'enabled',
-  disabled: 'disabled',
   required: 'required',
+};
+
+export const supportedStates = {
+  [supportedActions.visible]: supportedActions.visible,
+  invisible: 'invisible',
+  [supportedActions.enabled]: supportedActions.enabled,
+  disabled: 'disabled',
+  [supportedActions.required]: supportedActions.required,
   optional: 'optional',
 };
 
@@ -21,10 +27,19 @@ export const supportedLogic = {
 };
 
 export const support = {
+  actions: supportedActions,
   states: supportedStates,
   conditions: supportedConditions,
   logic: supportedLogic,
 };
+
+export function defaultStates(field) {
+  return {
+    [supportedActions.visible]: true,
+    [supportedActions.required]: field['#required'] || false,
+    [supportedActions.enabled]: true,
+  };
+}
 
 /**
  * Method to format a states object from Drupal, into a more JavaScript friendly format.
@@ -56,13 +71,13 @@ export const support = {
  *        {
  *          key: 'name',
  *          condition: 'empty',
- *         value: true
- *       },
- *       {
- *         key: 'name',
- *         condition: 'visible',
- *         value: true
- *       }
+ *          value: true
+ *        },
+ *        {
+ *          key: 'name',
+ *          condition: 'visible',
+ *          value: true
+ *        }
  *     ]
  *    }
  *   ]
@@ -73,23 +88,27 @@ export function formatConditionals(states = false) {
   }
 
   const mappedStates = Object.keys(states).map((stateKey) => { // stateKey, e.g. visible.
-    const conditions = Array.isArray(states[stateKey]) ? states[stateKey] : [states[stateKey]]; // If singular conditional, make into array.
-    let conditionLogic = supportedLogic.and; // Default conditional logic is and.
-
-    if(!supportedStates[stateKey]) {
+    if(!supportedStates[stateKey] || Array.isArray(states[stateKey])) { // TODO: support OR logic.
       return false; // Don't format conditional if state isn't supported.
     }
 
-    const mappedConditions = conditions.map((conditionObject) => { // One state object.
-      if(conditionObject === supportedLogic.or) {
-        conditionLogic = supportedLogic.or; // If conditional logic is set to or, save that...
-        return false; // ...and don't format it.
+    const conditionalKeys = Object.keys(states[stateKey]);
+    const conditionLogic = conditionalKeys[1] === supportedLogic.or ? supportedLogic.or : supportedLogic.and; // Default conditional logic is and.
+
+    const mappedConditions = conditionalKeys.map((conditionalKey) => { // e.g. ':input[name="name"]'.
+      let conditionObject = states[stateKey][conditionalKey];
+
+      if(conditionLogic === supportedLogic.or) { // If conditional logic is set to 'or'.
+        if(conditionObject === supportedLogic.or) {
+          return false; // Don't format the 'or' item.
+        }
+
+        conditionObject = Object.keys(conditionObject)[0]; // Remove one level of nesting when logic is set to 'or'.
       }
 
-      const dependencyKey = Object.keys(conditionObject)[0]; // e.g. ':input[name="name"]'.
-      const formattedDependencyKey = dependencyKey.match(/name="(\S+)"/)[1]; // Field key of dependency, e.g. 'name' in above example.
-      const condition = Object.keys(conditionObject[dependencyKey])[0]; // e.g. empty.
-      const conditionValue = conditionObject[dependencyKey][condition]; // e.g. true.
+      const formattedDependencyKey = conditionalKey.match(/name="(\S+)"/)[1]; // Field key of dependency, e.g. 'name' in above example.
+      const condition = Object.keys(conditionObject)[0]; // e.g. empty.
+      const conditionValue = conditionObject[condition]; // e.g. true.
 
       if(!supportedConditions[condition]) {
         return false; // Don't format conditional if condition isn't supported.
@@ -120,28 +139,35 @@ export function formatConditionals(states = false) {
   return filteredStates.length ? filteredStates : false; // Return false when there are no valid states found.
 }
 
-function checkActionType(condition, action, states) {
-  switch(action) {
-    case supportedStates.visible:
-    case supportedStates.enabled:
-    case supportedStates.required:
-      states[action] = condition;
-      break;
-    case supportedStates.invisible:
-      states.visible = !condition;
-      break;
-    case supportedStates.disabled:
-      states.enabled = !condition;
-      break;
-    case supportedStates.optional:
-      states.required = !condition;
-      break;
-    default:
-      break;
-  }
+function formatNewStates(newStates) {
+  const formattedStates = {};
+
+  Object.keys(newStates).forEach((stateKey) => {
+    const condition = newStates[stateKey];
+    switch(stateKey) {
+      case supportedStates.visible:
+      case supportedStates.enabled:
+      case supportedStates.required:
+        formattedStates[stateKey] = condition;
+        break;
+      case supportedStates.invisible:
+        formattedStates[supportedActions.visible] = !condition;
+        break;
+      case supportedStates.disabled:
+        formattedStates[supportedActions.enabled] = !condition;
+        break;
+      case supportedStates.optional:
+        formattedStates[supportedActions.required] = !condition;
+        break;
+      default:
+        break;
+    }
+  });
+
+  return formattedStates;
 }
 
-export function checkConditionals(formStore, fieldKey = false, currentState = {}) {
+export function checkConditionals(formStore, fieldKey = false) {
   if(!fieldKey) {
     return false;
   }
@@ -152,11 +178,7 @@ export function checkConditionals(formStore, fieldKey = false, currentState = {}
     return false;
   }
 
-  const states = {
-    visible: currentState.visible,
-    enabled: currentState.enabled,
-    required: currentState.required,
-  };
+  const newStates = {};
 
   /**
    * conditional example:
@@ -166,22 +188,23 @@ export function checkConditionals(formStore, fieldKey = false, currentState = {}
    *    conditions: [condition, condition]
    *  }
    */
-  // Go through conditionals.
+  // Reduce conditionals to true or false value, based on conditionals and logic.
   field.conditionals.forEach((conditional) => {
     /**
      * condition example:
      *  {
-     *    key: 'name',
-     *    condition: 'empty',
-     *    value: true
-     *  }
+       *    key: 'name',
+       *    condition: 'empty',
+       *    value: true
+       *  }
      */
     // Go through conditions per conditional.
-    conditional.conditions.forEach((condition) => {
-      // console.log(condition)
+    newStates[conditional.action] = conditional.conditions.reduce((prevOutcome, condition) => {
+      let conditionalOutcome = false;
+
       const dependency = formStore.getField(condition.key);
       if(!dependency) {
-        return;
+        return false;
       }
       const dependencyValue = dependency.getValue();
 
@@ -191,27 +214,34 @@ export function checkConditionals(formStore, fieldKey = false, currentState = {}
         case supportedConditions.filled: {
           const isEmpty = dependencyValue.toString().trim() === '';
           const check = condition.condition === supportedConditions.empty ? isEmpty : !isEmpty;
-          checkActionType(check, conditional.action, states);
+          conditionalOutcome = check;
           break;
         }
         case supportedConditions.checked:
         case supportedConditions.unchecked: {
           // When dependencyValue is true, then it is checked.
           const check = condition.condition === supportedConditions.checked;
-          checkActionType(dependencyValue === check, conditional.action, states);
+          conditionalOutcome = dependencyValue === check;
           break;
         }
         case supportedConditions.value: {
           // Check if value matches condition.
-          checkActionType(dependencyValue === condition.value, conditional.action, states);
+          conditionalOutcome = dependencyValue === condition.value;
           break;
         }
         default: {
           break;
         }
       }
-    });
+
+      if(conditional.logic === supportedLogic.and) {
+        return prevOutcome && conditionalOutcome;
+      } else if(conditional.logic === supportedLogic.or) {
+        return prevOutcome || conditionalOutcome;
+      }
+      return true;
+    }, true);
   });
 
-  return states;
+  return formatNewStates(newStates);
 }

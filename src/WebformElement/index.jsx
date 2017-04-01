@@ -7,7 +7,7 @@ import rules from '../Webform/rules';
 import styles from './styles.pcss';
 import RuleHint from '../RuleHint';
 import Wrapper from '../Wrapper';
-import { checkConditionals, supportedStates } from '../Webform/conditionals';
+import { checkConditionals, supportedActions, defaultStates } from '../Webform/conditionals';
 
 @CSSModules(styles, { allowMultiple: true })
 class WebformElement extends React.Component {
@@ -46,7 +46,7 @@ class WebformElement extends React.Component {
     this.onBlur = this.onBlur.bind(this);
 
     Object.assign(rules, {
-      [`required_${this.key}`]: {
+      [`${supportedActions.required}_${this.key}`]: {
         rule: value => value.toString().trim() !== '',
         hint: value =>
           <RuleHint key={`req_${this.key}`} hint={props.field['#requiredError'] || 'This field is required'} tokens={{ value }} />,
@@ -67,18 +67,17 @@ class WebformElement extends React.Component {
     }
 
     this.state = {
-      [supportedStates.visible]: true,
-      [supportedStates.required]: props.field['#required'] || false,
-      [supportedStates.enabled]: true,
       errors: [],
     };
+
+    Object.assign(this.state, defaultStates(props.field));
   }
 
   componentDidMount() {
     if(this.getFormElementComponent()) {
       this.props.formStore.createField(this, this.key, this.props.field, this.validate());
 
-      if(this.state.required) {
+      if(this.state[supportedActions.required]) {
         this.props.formStore.formProperties.hasRequiredFields = true;
       }
 
@@ -132,7 +131,7 @@ class WebformElement extends React.Component {
     const element = this.getFormElement();
 
     const validations = [
-      getNested(() => this.state.required) ? `required_${this.key}` : null,
+      getNested(() => this.state[supportedActions.required]) ? `${supportedActions.required}_${this.key}` : null,
       getNested(() => this.props.field['#pattern']) ? `pattern_${this.key}` : null,
     ];
 
@@ -248,7 +247,7 @@ class WebformElement extends React.Component {
           styleName={`label ${this.getLabelClass()}`}
         >
           {this.props.field['#title']}
-          {this.state.required ? (<small>*</small>) : null}
+          {this.state[supportedActions.required] ? (<small>*</small>) : null}
         </Wrapper>
       );
     }
@@ -270,7 +269,7 @@ class WebformElement extends React.Component {
       <Wrapper
         component={getNested(() => element.class.meta.wrapper, <div />)}
         styleName='formrow'
-        {...!this.state.visible ? { hidden: true } : {}}
+        {...!this.state[supportedActions.visible] ? { hidden: true } : {}}
       >
         { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) === 'legend') }
 
