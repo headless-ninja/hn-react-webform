@@ -11,13 +11,13 @@ test:
   stage: test
   image: node:7
   script:
-    - npm install
+    - npm install --silent
     - npm run test
 build:
   stage: build
   image: node:7
   script:
-    - npm install
+    - npm install --silent
     - npm run build
   artifacts:
     paths:
