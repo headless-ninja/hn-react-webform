@@ -88,14 +88,15 @@ export function formatConditionals(states = false) {
   }
 
   const mappedStates = Object.keys(states).map((stateKey) => { // stateKey, e.g. visible.
-    if(!supportedStates[stateKey] || Array.isArray(states[stateKey])) { // TODO: support OR logic.
+    if(!supportedStates[stateKey]) {
       return false; // Don't format conditional if state isn't supported.
     }
 
     const conditionalKeys = Object.keys(states[stateKey]);
-    const conditionLogic = conditionalKeys[1] === supportedLogic.or ? supportedLogic.or : supportedLogic.and; // Default conditional logic is and.
+    const conditionLogic = states[stateKey][conditionalKeys[1]] === supportedLogic.or ? supportedLogic.or : supportedLogic.and; // Default conditional logic is and.
 
-    const mappedConditions = conditionalKeys.map((conditionalKey) => { // e.g. ':input[name="name"]'.
+    const mappedConditions = conditionalKeys.map((conditionalKey2) => { // e.g. ':input[name="name"]'.
+      let conditionalKey = conditionalKey2;
       let conditionObject = states[stateKey][conditionalKey];
 
       if(conditionLogic === supportedLogic.or) { // If conditional logic is set to 'or'.
@@ -103,7 +104,8 @@ export function formatConditionals(states = false) {
           return false; // Don't format the 'or' item.
         }
 
-        conditionObject = Object.keys(conditionObject)[0]; // Remove one level of nesting when logic is set to 'or'.
+        conditionalKey = Object.keys(conditionObject)[0];
+        conditionObject = conditionObject[Object.keys(conditionObject)[0]]; // Remove one level of nesting when logic is set to 'or'.
       }
 
       const formattedDependencyKey = conditionalKey.match(/name="(\S+)"/)[1]; // Field key of dependency, e.g. 'name' in above example.
@@ -240,7 +242,7 @@ export function checkConditionals(formStore, fieldKey = false) {
         return prevOutcome || conditionalOutcome;
       }
       return true;
-    }, true);
+    }, conditional.logic === supportedLogic.and);
   });
 
   return formatNewStates(newStates);
