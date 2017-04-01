@@ -3,7 +3,7 @@
 .input {
   box-sizing: border-box;
   margin: 0;
-  font-size: .9em;
+  font-size: 0.9em;
   line-height: inherit;
   font-family: inherit;
   border: 1px solid var(--borderColor);
@@ -35,6 +35,6 @@
 
   &.validate-success {
     /* TODO: add success styling */
-    &:after { content: ''; }
+    &::after { content: ''; }
   }
 }

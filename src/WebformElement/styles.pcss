@@ -16,14 +16,15 @@ fieldset.formrow {
 }
 
 /* Field Label */
-/*legend {
+
+/* legend {
     float: left;
     width: 100%;
     margin-bottom: calc(var(--spacingUnit) / 2);
-}*/
+} */
 
 .formrow {
-  /*& > label, & > legend {
+  /* & > label, & > legend {
     display: inline-block;
     width: 100%;
     @media (min-width: 768px) {
@@ -48,26 +49,22 @@ fieldset.formrow {
       float: none;
       width: 100%;
     }
-  }*/
-
-  /*& > legend {
+  }
+  & > legend {
     padding-left: 0;
-  }*/
+  } */
 }
 
 .label {
   display: inline-block;
   width: 100%;
   padding-left: 0; /* legend */
+  margin-bottom: calc(var(--spacingUnit) / 2);
+  vertical-align: top;
 
   @media (min-width: 768px) {
     float: left;
     width: 50%;
-  }
-
-  margin-bottom: calc(var(--spacingUnit) / 2);
-  vertical-align: top;
-  @media (min-width: 768px) {
     padding-right: calc(var(--spacingUnit) / 2);
   }
 
@@ -84,7 +81,8 @@ fieldset.formrow {
 
 /* Field Description */
 
-.description-before, .description-after {
+.description-before,
+.description-after {
   display: block;
 }
 
@@ -92,8 +90,9 @@ fieldset.formrow {
   margin-bottom: calc(var(--spacingUnit) / 2);
 }
 
-.description-after, .validation-message {
-  font-size: .8em;
+.description-after,
+.validation-message {
+  font-size: 0.8em;
   margin-top: calc(var(--spacingUnit) / 3);
 
   &.label-display-inline {
@@ -105,7 +104,8 @@ fieldset.formrow {
 }
 
 /* Prefix & Suffix */
-.field-prefix, .field-suffix {
+.field-prefix,
+.field-suffix {
   display: inline-block;
 }
 

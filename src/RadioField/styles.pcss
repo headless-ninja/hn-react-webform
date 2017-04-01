@@ -3,7 +3,7 @@
 /* // Example for how to extend wrapper classes: data-extendClassName={styles['radio-group']}
 .radio-group {
   padding: 8px;
-}*/
+} */
 
 .input-wrapper {
   @media (min-width: 768px) {
@@ -23,7 +23,9 @@
   margin-bottom: calc(var(--spacingUnit) / 3);
 }
 
-.radio-display-side_by_side, .radio-display-two_columns, .radio-display-three_columns {
+.radio-display-side_by_side,
+.radio-display-two_columns,
+.radio-display-three_columns {
   margin-right: calc(var(--spacingUnit) / 2);
   display: inline-block;
   width: auto;
@@ -49,7 +51,7 @@
     & + .indicator {
       position: relative;
 
-      &:before {
+      &::before {
         content: '';
         position: absolute;
         top: 25%;

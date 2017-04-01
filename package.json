@@ -2,13 +2,29 @@
   "name": "react-drupal-webform",
   "version": "0.1.0-alpha",
   "main": "lib/index.js",
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "rules": {
+      "selector-pseudo-class-no-unknown": [
+        true,
+        {
+          "ignorePseudoClasses": ["global"]
+        }
+      ]
+    }
+  },
   "scripts": {
     "start": "npm run build -- --watch",
     "build": "rimraf lib && babel src --out-dir lib --copy-files",
-    "lint": "eslint --ext .jsx,.js src",
-    "lint-watch": "node node_modules/eslint-watch/bin/esw -w --fix --ext .jsx,.js src",
+    "lint": "npm run lint-js && npm run lint-style",
+    "lint-js": "eslint --ext .jsx,.js src",
+    "lint-js-fix": "npm run lint -- --fix",
+    "lint-js-watch": "node node_modules/eslint-watch/bin/esw -w --fix --ext .jsx,.js src",
+    "lint-style": "stylelint \"src/**/*.pcss\"",
+    "lint-style-fix": "stylelint \"src/**/*.pcss\" --fix",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "test": "npm run lint"
   },
   "dependencies": {
     "classnames": "^2.2.5",
@@ -53,6 +69,8 @@
     "rimraf": "^2.6.1",
     "storybook-readme": "^2.0.2",
     "style-loader": "^0.16.1",
+    "stylelint": "^7.9.0",
+    "stylelint-config-standard": "^16.0.0",
     "webpack": "^2.2.1"
   }
 }

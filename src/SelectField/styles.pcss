@@ -25,7 +25,7 @@
 
   &.validate-success {
     /* TODO: add success styling */
-    &:after { content: ''; }
+    &::after { content: ''; }
   }
 }
 
@@ -47,7 +47,7 @@
 :global .Select--single > .Select-control .Select-value {
   padding: calc(var(--spacingUnit) / 4) calc(var(--spacingUnit) / 2);
   line-height: inherit;
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 :global .Select-input {
@@ -59,7 +59,8 @@
   padding: 0;
 }
 
-:global .Select-placeholder, :global .Select--single > .Select-control .Select-value {
+:global .Select-placeholder,
+:global .Select--single > .Select-control .Select-value {
   position: static;
 }
 
@@ -79,13 +80,14 @@
   padding: calc(var(--spacingUnit) / 4) calc(var(--spacingUnit) / 2);
   background-color: var(--inputColor);
   color: inherit;
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 :global .Select-option.is-focused {
   color: inherit;
-  /*background-color: color(var(--inputColor) blackness(+5));*/
   background-color: rgba(0, 0, 0, 0.2);
+
+  /* background-color: color(var(--inputColor) blackness(+5%)); */
 }
 
 :global .Select-option:last-child {
