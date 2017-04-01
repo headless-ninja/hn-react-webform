@@ -1,7 +1,6 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
-import Input from '../Input';
 import WebformElement from '../WebformElement';
 
 @CSSModules(styles, { allowMultiple: true })
@@ -16,13 +15,24 @@ class CheckboxField extends React.Component {
 
   static propTypes = {
     field: React.PropTypes.shape({
+      '#webform_key': React.PropTypes.string.isRequired,
       '#title_display': React.PropTypes.string,
       '#description': React.PropTypes.string,
       '#required': React.PropTypes.bool,
     }).isRequired,
+    value: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+      React.PropTypes.bool,
+    ]).isRequired,
+    id: React.PropTypes.number,
     webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
     onBlur: React.PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    id: 0,
   };
 
   constructor(props) {
@@ -44,22 +54,25 @@ class CheckboxField extends React.Component {
     return '';
   }
 
+  getValue() {
+    return this.props.value === '1' || this.props.value === true ? 'checked' : false;
+  }
+
   render() {
     const cssClasses = `input-wrapper ${this.getLabelPositionClass()}`;
-    const attrs = {
-      'aria-invalid': this.props.webformElement.isValid() ? null : true,
-      'aria-required': this.props.field['#required'] ? true : null,
-    };
-
+    const value = this.getValue();
     return (
       <div styleName={cssClasses}>
         <label htmlFor={this.key} styleName='checkbox-label'>
-          <Input
-            {...this.props}
-            onChange={this.onChange}
+          <input
             type='checkbox'
             styleName='checkbox'
-            {...attrs}
+            onChange={this.onChange}
+            value={value}
+            checked={value}
+            name={this.props.field['#webform_key']}
+            id={this.props.id || this.props.field['#webform_key']}
+            disabled={!this.props.webformElement.state.enabled}
           />
           <span styleName='indicator' />
           {this.props.field['#description']}

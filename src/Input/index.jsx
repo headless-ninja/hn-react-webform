@@ -17,7 +17,7 @@ class Input extends React.Component {
       React.PropTypes.string,
       React.PropTypes.number,
       React.PropTypes.bool,
-    ]),
+    ]).isRequired,
     type: React.PropTypes.string,
     id: React.PropTypes.number,
     webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
@@ -26,8 +26,7 @@ class Input extends React.Component {
   };
 
   static defaultProps = {
-    value: null,
-    id: null,
+    id: 0,
     className: null,
     type: 'text',
   };

@@ -221,7 +221,7 @@ export function checkConditionals(formStore, fieldKey = false) {
         case supportedConditions.unchecked: {
           // When dependencyValue is true, then it is checked.
           const check = condition.condition === supportedConditions.checked;
-          conditionalOutcome = dependencyValue === check;
+          conditionalOutcome = check === (dependencyValue === true || dependencyValue === '1' || dependencyValue === 'true');
           break;
         }
         case supportedConditions.value: {

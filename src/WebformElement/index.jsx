@@ -88,9 +88,14 @@ class WebformElement extends React.Component {
   onChange(e) {
     // update store value for field
     const value = e.target ? e.target.value : e; // Check if 'e' is event, or direct value
-    this.getField().setStorage({ value });
+    const field = this.getField();
+    if(!field) {
+      return false;
+    }
+    field.setStorage({ value });
     this.validate();
     this.props.formStore.checkConditionals();
+    return true;
   }
 
   onBlur() {
