@@ -18,6 +18,11 @@ class RadioField extends React.Component {
       '#title_display': React.PropTypes.string,
       '#options_display': React.PropTypes.string,
     }).isRequired,
+    value: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+      React.PropTypes.bool,
+    ]).isRequired,
     webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
     onChange: React.PropTypes.func.isRequired,
     onBlur: React.PropTypes.func.isRequired,
@@ -68,6 +73,7 @@ class RadioField extends React.Component {
                   styleName='radio'
                   id={labelKey}
                   disabled={!this.props.webformElement.state.enabled}
+                  checked={this.props.value === option}
                 />
                 <span styleName='indicator' />
                 { this.props.field['#options'][option]}
