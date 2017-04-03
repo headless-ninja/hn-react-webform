@@ -108,7 +108,11 @@ export function formatConditionals(states = false) {
         conditionObject = conditionObject[Object.keys(conditionObject)[0]]; // Remove one level of nesting when logic is set to 'or'.
       }
 
-      const formattedDependencyKey = conditionalKey.match(/name="(\S+)"/)[1]; // Field key of dependency, e.g. 'name' in above example.
+      const dependencyKeyRegex = conditionalKey.match(/name="(\S+)"/);
+      if(!dependencyKeyRegex) {
+        return false;
+      }
+      const formattedDependencyKey = dependencyKeyRegex[1]; // Field key of dependency, e.g. 'name' in above example.
       const condition = Object.keys(conditionObject)[0]; // e.g. empty.
       const conditionValue = conditionObject[condition]; // e.g. true.
 
