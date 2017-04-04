@@ -18,6 +18,7 @@ class Fieldset extends React.Component {
       '#webform_key': React.PropTypes.string.isRequired,
     }).isRequired,
     formStore: React.PropTypes.instanceOf(FormStore).isRequired,
+    webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
   };
 
   getFormElements() {
@@ -27,7 +28,7 @@ class Fieldset extends React.Component {
         key={field['#webform_key']}
         field={field}
         formStore={this.props.formStore}
-        webform={this}
+        parent={this.props.webformElement}
       />);
   }
 

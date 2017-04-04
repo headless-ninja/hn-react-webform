@@ -76,7 +76,7 @@ class FetchForm extends React.Component {
         return (<Webform
           form={this.state.form}
           settings={{
-            title: 'Routeboekje form',
+            title: 'Form',
             postUrl: `${this.props.baseUrl}/form?_format=json`,
           }}
           onSubmit={() => {

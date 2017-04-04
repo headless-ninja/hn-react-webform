@@ -31,10 +31,15 @@ class WebformElement extends React.Component {
       '#options_display': React.PropTypes.string,
     }).isRequired,
     formStore: React.PropTypes.instanceOf(FormStore).isRequired,
+    parent: React.PropTypes.oneOfType([
+      React.PropTypes.bool,
+      React.PropTypes.object,
+    ]),
   };
 
   static defaultProps = {
     label: false,
+    parent: false,
   };
 
   constructor(props) {
@@ -184,11 +189,16 @@ class WebformElement extends React.Component {
     return field.getStorage('valid');
   }
 
+  isVisible() {
+    return this.state[supportedActions.visible] && getNested(() => this.props.parent.isVisible(), true);
+  }
+
   validate(force = false) {
     const validations = this.state.validations;
     const field = this.getField();
 
-    if(!field) {
+    // Field is always valid, if there is none, OR the field is invisible, OR a parent is invisible.
+    if(!field || !this.isVisible()) {
       return true;
     }
 
@@ -202,8 +212,10 @@ class WebformElement extends React.Component {
     const errors = fails.map(rule => rule.hint(this.getValue()));
     const valid = errors.length === 0;
 
-    // const log = valid ? console.info : console.warn;
-    // log(this.key, '=> is', valid ? 'valid' : 'invalid');
+    // if(!valid) {
+    //   const log = valid ? console.info : console.warn;
+    //   log(this.key, '=> is', valid ? 'valid' : 'invalid');
+    // }
 
     field.setStorage({
       valid,
