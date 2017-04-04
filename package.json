@@ -8,7 +8,9 @@
       "selector-pseudo-class-no-unknown": [
         true,
         {
-          "ignorePseudoClasses": ["global"]
+          "ignorePseudoClasses": [
+            "global"
+          ]
         }
       ]
     }
@@ -36,6 +38,7 @@
     "react-css-modules": "^4.1.0",
     "react-ga": "^2.1.2",
     "react-input-mask": "^0.7.9",
+    "react-load-script": "0.0.2",
     "react-select": "^1.0.0-rc.3",
     "validator": "^7.0.0"
   },

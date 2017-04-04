@@ -536,6 +536,6 @@ storiesOf('Examples', module)
       }}
     />
   ))
-  .add('Remote form', () => (
+  .add('Remote-form', () => (
     <RemoteForm />
   ));

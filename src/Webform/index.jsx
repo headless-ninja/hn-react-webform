@@ -4,6 +4,7 @@ import fetch from 'fetch-everywhere';
 import { observer } from 'mobx-react';
 import CSSModules from 'react-css-modules';
 import ReactGA from 'react-ga';
+import Script from 'react-load-script';
 import FormStore from './FormStore';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
@@ -36,8 +37,13 @@ class Webform extends React.Component {
         React.PropTypes.string,
         React.PropTypes.bool,
       ]).isRequired,
-      gtm_id: React.PropTypes.oneOfType([
-        React.PropTypes.string,
+      tracking: React.PropTypes.oneOfType([
+        React.PropTypes.shape({
+          gtm_id: React.PropTypes.oneOfType([
+            React.PropTypes.string,
+            React.PropTypes.bool,
+          ]),
+        }),
         React.PropTypes.bool,
       ]),
     }).isRequired,
@@ -67,7 +73,9 @@ class Webform extends React.Component {
     onSubmit: false,
     onAfterSubmit: false,
     nm_gtm_id: false,
-    gtm_id: false,
+    settings: {
+      tracking: false,
+    },
   };
 
   static fireAnalyticsEvent(event) {
@@ -95,8 +103,8 @@ class Webform extends React.Component {
   componentDidMount() {
     this.formStore.checkConditionals();
 
-    if(this.props.settings.gtm_id || this.props.form.settings.nm_gtm_id) {
-      ReactGA.initialize(this.props.settings.gtm_id || this.props.form.settings.nm_gtm_id);
+    if(getNested(() => this.props.settings.tracking.gtm_id) || this.props.form.settings.nm_gtm_id) {
+      ReactGA.initialize(this.props.settings.tracking.gtm_id || this.props.form.settings.nm_gtm_id);
     }
   }
 
@@ -128,7 +136,6 @@ class Webform extends React.Component {
   }
 
   isValid() {
-    // console.log('Validating...');
     return this.formStore.fields.reduce((prev, field) => {
       const component = field.component;
       const isValid = component.validate(true);
@@ -212,7 +219,7 @@ class Webform extends React.Component {
         <h1 styleName='formtitle'>{this.props.settings.title}</h1>
         { this.state.status === Webform.formStates.ERROR && errors}
         { this.state.status !== Webform.formStates.SENT &&
-          <form method='POST' onSubmit={this.onSubmit}>
+          <form method='POST' onSubmit={this.onSubmit} name={this.props.form.form_id} id={this.props.form.form_id}>
             { requiredHint }
             { formElements }
             <SubmitButton
@@ -222,6 +229,20 @@ class Webform extends React.Component {
           </form>}
         { this.state.status === Webform.formStates.SENT &&
           <ThankYouMessage message={this.props.form.settings.confirmation_message} />
+        }
+        {this.props.settings.tracking !== false &&
+          <div>
+            <Script
+              url='//cdn-static.formisimo.com/tracking/js/tracking.js'
+              onLoad={() => {}}
+              onError={() => {}}
+            />
+            <Script
+              url='//cdn-static.formisimo.com/tracking/js/conversion.js'
+              onLoad={() => {}}
+              onError={() => {}}
+            />
+          </div>
         }
       </div>
     );
