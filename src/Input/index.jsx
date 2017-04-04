@@ -55,8 +55,6 @@ class Input extends React.Component {
       attrs.alwaysShowMask = this.props.field['#alwaysShowMask'] || true;
     }
 
-    console.log(attrs)
-
     return (<InputComponent
       type={this.props.type}
       onChange={this.props.onChange}
