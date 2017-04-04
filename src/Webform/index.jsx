@@ -103,8 +103,10 @@ class Webform extends React.Component {
   componentDidMount() {
     this.formStore.checkConditionals();
 
-    if(getNested(() => this.props.settings.tracking.gtm_id) || this.props.form.settings.nm_gtm_id) {
-      ReactGA.initialize(this.props.settings.tracking.gtm_id || this.props.form.settings.nm_gtm_id);
+    const GA = getNested(() => this.props.settings.tracking.gtm_id) || this.props.form.settings.nm_gtm_id;
+
+    if(GA) {
+      ReactGA.initialize(GA);
     }
   }
 
