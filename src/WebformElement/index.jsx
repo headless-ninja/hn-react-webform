@@ -184,7 +184,7 @@ class WebformElement extends React.Component {
   isValid(key = this.key) {
     const field = this.getField(key);
     if(!field) {
-      return false;
+      return true;
     }
     return field.getStorage('valid');
   }
