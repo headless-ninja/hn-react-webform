@@ -10,6 +10,7 @@ import Input from './Input';
 import RadioField from './RadioField';
 import FetchForm from './FetchForm';
 import Fieldset from './Fieldset';
+import DateOfBirthField from './DateOfBirthField';
 
 const components = {
   textfield: Input,
@@ -22,6 +23,7 @@ const components = {
   select: SelectField,
   radios: RadioField,
   fieldset: Fieldset,
+  webform_dateofbirth: DateOfBirthField,
 };
 
 export default Webform;
