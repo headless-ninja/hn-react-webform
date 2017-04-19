@@ -73,7 +73,7 @@ class Input extends Component {
         max={this.props.field['#max']}
         {...attrs}
       />
-      <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : '' }`} />
+      <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
     </div>);
   }
 }

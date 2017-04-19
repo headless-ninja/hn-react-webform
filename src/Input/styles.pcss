@@ -42,11 +42,20 @@
 /* Validation icon */
 
 .validation-icon {
-  display: block;
-  width: 10px;
-  height: 10px;
-  background-color: grey;
+  display: inline-block;
+  width: calc(var(--spacingUnit) / 1.5);
+  height: calc(var(--spacingUnit) / 1.5);
+  margin-left: calc(var(--spacingUnit) / 1.5);
+
   &.validate-success {
-    background-color: green;
+    &::after {
+      content: '';
+      display: block;
+      width: 60%;
+      height: 100%;
+      border-bottom: 2px solid var(--successColor);
+      border-right: 2px solid var(--successColor);
+      transform: rotate(45deg) translateY(-4px);
+    }
   }
 }

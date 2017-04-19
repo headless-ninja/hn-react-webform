@@ -223,7 +223,6 @@ class WebformElement extends Component {
 
     field.setStorage({
       valid,
-      isBlurred: !valid,
     });
 
     this.setState({ errors });
@@ -243,11 +242,6 @@ class WebformElement extends Component {
   }
 
   isSuccess() {
-    console.log('-------------');
-    console.log(this.key);
-    console.log('should: ', this.shouldValidate());
-    console.log('isvalid: ', this.isValid());
-
     return this.shouldValidate() && this.isValid();
   }
 
