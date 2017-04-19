@@ -38,6 +38,7 @@ class EmailField extends Component {
         {...this.props}
         type='email'
         styleName='email'
+        autoComplete='email'
       />
     );
   }

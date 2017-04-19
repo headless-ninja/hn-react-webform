@@ -8,6 +8,7 @@ const PhoneField = props => (
     {...props}
     type='tel'
     styleName='phone'
+    autoComplete='tel'
   />
 );
 

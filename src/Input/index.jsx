@@ -30,6 +30,7 @@ class Input extends Component {
       PropTypes.bool,
     ]).isRequired,
     type: PropTypes.string,
+    autoComplete: PropTypes.string,
     id: PropTypes.number,
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
     onChange: PropTypes.func.isRequired,
@@ -40,12 +41,14 @@ class Input extends Component {
     id: 0,
     className: null,
     type: 'text',
+    autoComplete: '',
   };
 
   render() {
     const attrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,
       'aria-required': this.props.field['#required'] ? true : null,
+      autoComplete: this.props.autoComplete !== '' ? this.props.autoComplete : null,
     };
 
     let InputComponent = 'input'; // Input HTML element is 'input' by default
