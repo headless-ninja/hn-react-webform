@@ -242,6 +242,15 @@ class WebformElement extends Component {
     return field.isBlurred;
   }
 
+  isSuccess() {
+    console.log('-------------');
+    console.log(this.key);
+    console.log('should: ', this.shouldValidate());
+    console.log('isvalid: ', this.isValid());
+
+    return this.shouldValidate() && this.isValid();
+  }
+
   renderTextContent(selector, checkValue = false, addClass = '') {
     const value = this.props.field[getNested(() => this.getFormElement().class.meta.field_display[selector], selector)]; // Value in #description field
     const displayValue = this.props.field[`${selector}_display`];

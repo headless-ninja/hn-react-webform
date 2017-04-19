@@ -57,21 +57,24 @@ class Input extends Component {
       attrs.alwaysShowMask = this.props.field['#alwaysShowMask'] || true;
     }
 
-    return (<InputComponent
-      type={this.props.type}
-      onChange={this.props.onChange}
-      onBlur={this.props.onBlur}
-      value={this.props.value}
-      name={this.props.field['#webform_key']}
-      id={this.props.id || this.props.field['#webform_key']}
-      placeholder={this.props.field['#placeholder']}
-      styleName={`input ${this.props.webformElement.isValid() ? 'validate-success' : 'validate-error'}`}
-      className={this.props.className ? this.props.className : ''}
-      disabled={!this.props.webformElement.state.enabled}
-      min={this.props.field['#min']}
-      max={this.props.field['#max']}
-      {...attrs}
-    />);
+    return (<div>
+      <InputComponent
+        type={this.props.type}
+        onChange={this.props.onChange}
+        onBlur={this.props.onBlur}
+        value={this.props.value}
+        name={this.props.field['#webform_key']}
+        id={this.props.id || this.props.field['#webform_key']}
+        placeholder={this.props.field['#placeholder']}
+        styleName={`input ${this.props.webformElement.isValid() ? '' : 'validate-error'}`}
+        className={this.props.className ? this.props.className : ''}
+        disabled={!this.props.webformElement.state.enabled}
+        min={this.props.field['#min']}
+        max={this.props.field['#max']}
+        {...attrs}
+      />
+      <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : '' }`} />
+    </div>);
   }
 }
 
