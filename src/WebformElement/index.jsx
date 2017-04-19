@@ -307,8 +307,8 @@ class WebformElement extends Component {
 
         { this.renderTextContent('#field_suffix') }
 
-        { this.renderTextContent('#description', 'after') }
-        { this.renderTextContent('#description', 'isUndefined', 'description-after') }
+        { this.renderTextContent('#description', 'after', this.getLabelClass()) }
+        { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-after`)) }
 
         { errors }
       </Wrapper>
