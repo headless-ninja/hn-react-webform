@@ -9,22 +9,24 @@ class Date extends Component {
         PropTypes.array,
         PropTypes.object,
       ]),
-      '#min': PropTypes.string.isRequired,
       '#default_value': PropTypes.string,
-      '#max': PropTypes.string.isRequired,
+      '#min': PropTypes.string,
+      '#max': PropTypes.string,
+      '#mask': PropTypes.string,
     }).isRequired,
   };
 
-  //
-  // constructor(props) {
-  //   super(props);
-  //
-  //
-  // }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      showPicker: false,
+    };
+  }
 
   render() {
-    const props = Object.assign({}, this.props);
-    const field = props.field;
+    const field = this.props.field;
     field['#min'] = Fieldset.getValue(field, 'min');
     field['#max'] = Fieldset.getValue(field, 'max');
     field['#mask'] = Fieldset.getValue(field, 'mask');
@@ -32,6 +34,7 @@ class Date extends Component {
     return (
       <Input
         {...this.props}
+        field={field}
         parent={this}
       />
     );

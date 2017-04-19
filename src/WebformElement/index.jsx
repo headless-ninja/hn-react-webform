@@ -122,11 +122,11 @@ class WebformElement extends Component {
   }
 
   getFormElement() {
-    const Component = this.getFormElementComponent();
-    if(Component) {
+    const ElementComponent = this.getFormElementComponent();
+    if(ElementComponent) {
       return {
-        class: Component,
-        element: <Component
+        class: ElementComponent,
+        element: <ElementComponent
           value={this.getValue()}
           name={this.key}
           onChange={this.onChange}
