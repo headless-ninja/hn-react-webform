@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
 
 @CSSModules(styles, { allowMultiple: true })
-class CheckboxField extends React.Component {
+class CheckboxField extends Component {
   static meta = {
     wrapper: <fieldset />,
     label: <legend />,
@@ -14,21 +14,21 @@ class CheckboxField extends React.Component {
   };
 
   static propTypes = {
-    field: React.PropTypes.shape({
-      '#webform_key': React.PropTypes.string.isRequired,
-      '#title_display': React.PropTypes.string,
-      '#description': React.PropTypes.string,
-      '#required': React.PropTypes.bool,
+    field: PropTypes.shape({
+      '#webform_key': PropTypes.string.isRequired,
+      '#title_display': PropTypes.string,
+      '#description': PropTypes.string,
+      '#required': PropTypes.bool,
     }).isRequired,
-    value: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
-      React.PropTypes.bool,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.bool,
     ]).isRequired,
-    id: React.PropTypes.number,
-    webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
-    onChange: React.PropTypes.func.isRequired,
-    onBlur: React.PropTypes.func.isRequired,
+    id: PropTypes.number,
+    webformElement: PropTypes.instanceOf(WebformElement).isRequired,
+    onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired,
   };
 
   static defaultProps = {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
 // eslint-disable-next-line import/no-unresolved,import/no-webpack-loader-syntax
 import '!style!css!postcss!react-select/dist/react-select.css';
@@ -12,21 +12,21 @@ import WebformElement from '../WebformElement';
  */
 
 @CSSModules(styles, { allowMultiple: true })
-class SelectField extends React.Component {
+class SelectField extends Component {
   static propTypes = {
-    field: React.PropTypes.shape({
-      '#title_display': React.PropTypes.string.string,
-      '#options': React.PropTypes.object,
-      '#webform_key': React.PropTypes.string.isRequired,
-      '#multiple': React.PropTypes.bool,
+    field: PropTypes.shape({
+      '#title_display': PropTypes.string.string,
+      '#options': PropTypes.object,
+      '#webform_key': PropTypes.string.isRequired,
+      '#multiple': PropTypes.bool,
     }).isRequired,
-    value: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
-      React.PropTypes.bool,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.bool,
     ]).isRequired,
-    webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
-    onChange: React.PropTypes.func.isRequired,
+    webformElement: PropTypes.instanceOf(WebformElement).isRequired,
+    onChange: PropTypes.func.isRequired,
   };
 
   constructor(props) {

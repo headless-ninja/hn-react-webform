@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
 import Webform from '../Webform';
@@ -21,10 +21,10 @@ const SubmitButton = ({ form, status }) => {
 };
 
 SubmitButton.propTypes = {
-  form: React.PropTypes.shape({
-    settings: React.PropTypes.object.isRequired,
+  form: PropTypes.shape({
+    settings: PropTypes.object.isRequired,
   }).isRequired,
-  status: React.PropTypes.string.isRequired,
+  status: PropTypes.string.isRequired,
 };
 
 export default CSSModules(SubmitButton, styles);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
 import validator from 'validator';
 import styles from './styles.pcss';
@@ -7,15 +7,15 @@ import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
 
 @CSSModules(styles)
-class EmailField extends React.Component {
+class EmailField extends Component {
   static meta = {
     validations: [el => rules[`email_${el.key}`]],
   };
 
   static propTypes = {
-    field: React.PropTypes.shape({
-      '#webform_key': React.PropTypes.string.isRequired,
-      '#emailError': React.PropTypes.string,
+    field: PropTypes.shape({
+      '#webform_key': PropTypes.string.isRequired,
+      '#emailError': PropTypes.string,
     }).isRequired,
   };
 

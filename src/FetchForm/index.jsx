@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import fetch from 'fetch-everywhere';
 import Webform from '../Webform';
 
@@ -8,11 +8,11 @@ const LOAD_STATES = {
   ERROR: 2,
 };
 
-class FetchForm extends React.Component {
+class FetchForm extends Component {
   static propTypes = {
-    baseUrl: React.PropTypes.string.isRequired,
-    node: React.PropTypes.number.isRequired,
-    field: React.PropTypes.string,
+    baseUrl: PropTypes.string.isRequired,
+    node: PropTypes.number.isRequired,
+    field: PropTypes.string,
   }
 
   static defaultProps = {

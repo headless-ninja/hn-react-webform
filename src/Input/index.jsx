@@ -1,37 +1,39 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
 import InputMask from 'react-input-mask';
 import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
 
 @CSSModules(styles, { allowMultiple: true })
-class Input extends React.Component {
+class Input extends Component {
   static propTypes = {
-    field: React.PropTypes.shape({
-      '#type': React.PropTypes.string.isRequired,
-      '#placeholder': React.PropTypes.string,
-      '#webform_key': React.PropTypes.string.isRequired,
-      '#required': React.PropTypes.bool,
-      '#mask': React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.bool,
+    field: PropTypes.shape({
+      '#type': PropTypes.string.isRequired,
+      '#placeholder': PropTypes.string,
+      '#webform_key': PropTypes.string.isRequired,
+      '#required': PropTypes.bool,
+      '#mask': PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool,
       ]),
-      '#alwaysShowMask': React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.bool,
+      '#alwaysShowMask': PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool,
       ]),
+      '#min': PropTypes.string,
+      '#max': PropTypes.string,
     }).isRequired,
-    className: React.PropTypes.string,
-    value: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
-      React.PropTypes.bool,
+    className: PropTypes.string,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.bool,
     ]).isRequired,
-    type: React.PropTypes.string,
-    id: React.PropTypes.number,
-    webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
-    onChange: React.PropTypes.func.isRequired,
-    onBlur: React.PropTypes.func.isRequired,
+    type: PropTypes.string,
+    id: PropTypes.number,
+    webformElement: PropTypes.instanceOf(WebformElement).isRequired,
+    onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -66,6 +68,8 @@ class Input extends React.Component {
       styleName={`input ${this.props.webformElement.isValid() ? 'validate-success' : 'validate-error'}`}
       className={this.props.className ? this.props.className : ''}
       disabled={!this.props.webformElement.state.enabled}
+      min={this.props.field['#min']}
+      max={this.props.field['#max']}
       {...attrs}
     />);
   }

@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
-class RuleHint extends React.Component {
+class RuleHint extends Component {
   static propTypes = {
-    hint: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.element,
+    hint: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
     ]).isRequired,
-    tokens: React.PropTypes.objectOf(React.PropTypes.node),
+    tokens: PropTypes.objectOf(PropTypes.node),
   };
 
   static defaultProps = {

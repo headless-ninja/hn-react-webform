@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 const Wrapper = (p) => {
   const props = Object.assign({}, p, p.component.props); // Merge Wrapper props with Wrapper override props.
@@ -14,10 +14,10 @@ const Wrapper = (p) => {
 };
 
 Wrapper.propTypes = {
-  children: React.PropTypes.node,
-  component: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.element,
+  children: PropTypes.node,
+  component: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
   ]).isRequired,
 };
 

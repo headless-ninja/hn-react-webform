@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import getNested from 'get-nested';
 import CSSModules from 'react-css-modules';
 import { components } from '../index';
@@ -7,33 +7,37 @@ import rules from '../Webform/rules';
 import styles from './styles.pcss';
 import RuleHint from '../RuleHint';
 import Wrapper from '../Wrapper';
-import { checkConditionals, supportedActions, defaultStates } from '../Webform/conditionals';
+import { checkConditionals, defaultStates, supportedActions } from '../Webform/conditionals';
 
 @CSSModules(styles, { allowMultiple: true })
-class WebformElement extends React.Component {
+class WebformElement extends Component {
   static propTypes = {
-    field: React.PropTypes.shape({
-      '#type': React.PropTypes.string.isRequired,
-      '#default_value': React.PropTypes.string,
-      '#webform_key': React.PropTypes.string.isRequired,
-      '#required': React.PropTypes.bool,
-      '#pattern': React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.instanceOf(RegExp),
+    field: PropTypes.shape({
+      '#type': PropTypes.string.isRequired,
+      '#default_value': PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.objectOf(PropTypes.string),
       ]),
-      '#requiredError': React.PropTypes.string,
-      '#patternError': React.PropTypes.string,
-      '#emailError': React.PropTypes.string,
-      '#title': React.PropTypes.string,
-      '#states': React.PropTypes.object,
-      '#options': React.PropTypes.object,
-      '#title_display': React.PropTypes.string,
-      '#options_display': React.PropTypes.string,
+      '#webform_key': PropTypes.string.isRequired,
+      '#required': PropTypes.bool,
+      '#pattern': PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.instanceOf(RegExp),
+      ]),
+      '#requiredError': PropTypes.string,
+      '#patternError': PropTypes.string,
+      '#emailError': PropTypes.string,
+      '#title': PropTypes.string,
+      '#states': PropTypes.object,
+      '#options': PropTypes.object,
+      '#title_display': PropTypes.string,
+      '#options_display': PropTypes.string,
+      '#admin': PropTypes.bool,
     }).isRequired,
-    formStore: React.PropTypes.instanceOf(FormStore).isRequired,
-    parent: React.PropTypes.oneOfType([
-      React.PropTypes.bool,
-      React.PropTypes.object,
+    formStore: PropTypes.instanceOf(FormStore).isRequired,
+    parent: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.object,
     ]),
   };
 
@@ -79,7 +83,7 @@ class WebformElement extends React.Component {
   }
 
   componentDidMount() {
-    if(this.getFormElementComponent()) {
+    if(this.getFormElementComponent() && !this.props.field['#admin']) {
       this.props.formStore.createField(this, this.key, this.props.field, this.validate());
 
       if(this.state[supportedActions.required]) {

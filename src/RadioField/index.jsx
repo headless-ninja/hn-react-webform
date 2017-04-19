@@ -1,31 +1,31 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
 import WebformElement from '../WebformElement';
 import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })
-class RadioField extends React.Component {
+class RadioField extends Component {
   static meta = {
     wrapper: <fieldset />,
     label: <legend />,
   };
 
   static propTypes = {
-    field: React.PropTypes.shape({
-      '#required': React.PropTypes.bool,
-      '#options': React.PropTypes.object,
-      '#webform_key': React.PropTypes.string.isRequired,
-      '#title_display': React.PropTypes.string,
-      '#options_display': React.PropTypes.string,
+    field: PropTypes.shape({
+      '#required': PropTypes.bool,
+      '#options': PropTypes.object,
+      '#webform_key': PropTypes.string.isRequired,
+      '#title_display': PropTypes.string,
+      '#options_display': PropTypes.string,
     }).isRequired,
-    value: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
-      React.PropTypes.bool,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.bool,
     ]).isRequired,
-    webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
-    onChange: React.PropTypes.func.isRequired,
-    onBlur: React.PropTypes.func.isRequired,
+    webformElement: PropTypes.instanceOf(WebformElement).isRequired,
+    onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired,
   };
 
   onChange(e) {

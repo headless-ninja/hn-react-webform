@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 
-class ParagraphField extends React.Component {
+class ParagraphField extends Component {
   static propTypes = {
-    field: React.PropTypes.shape({
-      '#message_message': React.PropTypes.string,
+    field: PropTypes.shape({
+      '#message_message': PropTypes.string,
     }).isRequired,
   };
 

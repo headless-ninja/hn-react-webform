@@ -1,22 +1,22 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
 
 @CSSModules(styles)
-class TextArea extends React.Component {
+class TextArea extends Component {
   static propTypes = {
-    field: React.PropTypes.shape({
-      '#webform_key': React.PropTypes.string.isRequired,
-      '#required': React.PropTypes.bool,
+    field: PropTypes.shape({
+      '#webform_key': PropTypes.string.isRequired,
+      '#required': PropTypes.bool,
     }).isRequired,
-    value: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.number,
-      React.PropTypes.boolean,
+    value: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.boolean,
     ]),
-    webformElement: React.PropTypes.instanceOf(WebformElement).isRequired,
-    onChange: React.PropTypes.func.isRequired,
+    webformElement: PropTypes.instanceOf(WebformElement).isRequired,
+    onChange: PropTypes.func.isRequired,
   };
 
   static defaultProps = {

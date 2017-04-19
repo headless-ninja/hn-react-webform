@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import getNested from 'get-nested';
 import fetch from 'fetch-everywhere';
 import { observer } from 'mobx-react';
@@ -13,7 +13,7 @@ import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })
 @observer
-class Webform extends React.Component {
+class Webform extends Component {
   static formStates = {
     DEFAULT: 'DEFAULT',
     SENT: 'SENT',
@@ -31,41 +31,41 @@ class Webform extends React.Component {
   };
 
   static propTypes = {
-    settings: React.PropTypes.shape({
-      title: React.PropTypes.string.isRequired,
-      postUrl: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.bool,
+    settings: PropTypes.shape({
+      title: PropTypes.string.isRequired,
+      postUrl: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool,
       ]).isRequired,
-      tracking: React.PropTypes.oneOfType([
-        React.PropTypes.shape({
-          gtm_id: React.PropTypes.oneOfType([
-            React.PropTypes.string,
-            React.PropTypes.bool,
+      tracking: PropTypes.oneOfType([
+        PropTypes.shape({
+          gtm_id: PropTypes.oneOfType([
+            PropTypes.string,
+            PropTypes.bool,
           ]),
         }),
-        React.PropTypes.bool,
+        PropTypes.bool,
       ]),
     }).isRequired,
-    form: React.PropTypes.shape({
-      form_id: React.PropTypes.string.isRequired,
-      settings: React.PropTypes.shape({
-        nm_gtm_id: React.PropTypes.string,
-        nm_required_hint: React.PropTypes.string,
-        confirmation_message: React.PropTypes.string,
+    form: PropTypes.shape({
+      form_id: PropTypes.string.isRequired,
+      settings: PropTypes.shape({
+        nm_gtm_id: PropTypes.string,
+        nm_required_hint: PropTypes.string,
+        confirmation_message: PropTypes.string,
       }),
-      elements: React.PropTypes.arrayOf(React.PropTypes.shape({
-        '#type': React.PropTypes.string.isRequired,
+      elements: PropTypes.arrayOf(PropTypes.shape({
+        '#type': PropTypes.string.isRequired,
       })).isRequired,
-      token: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.bool]),
+      token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     }).isRequired,
-    onSubmit: React.PropTypes.oneOfType([
-      React.PropTypes.func,
-      React.PropTypes.bool,
+    onSubmit: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.bool,
     ]),
-    onAfterSubmit: React.PropTypes.oneOfType([
-      React.PropTypes.func,
-      React.PropTypes.bool,
+    onAfterSubmit: PropTypes.oneOfType([
+      PropTypes.func,
+      PropTypes.bool,
     ]),
   };
 
@@ -221,30 +221,34 @@ class Webform extends React.Component {
         <h1 styleName='formtitle'>{this.props.settings.title}</h1>
         { this.state.status === Webform.formStates.ERROR && errors}
         { this.state.status !== Webform.formStates.SENT &&
-          <form method='POST' onSubmit={this.onSubmit} name={this.props.form.form_id} id={this.props.form.form_id}>
-            { requiredHint }
-            { formElements }
-            <SubmitButton
-              form={this.props.form}
-              status={this.state.status}
-            />
-          </form>}
+        <form method='POST' onSubmit={this.onSubmit} name={this.props.form.form_id} id={this.props.form.form_id}>
+          { requiredHint }
+          { formElements }
+          <SubmitButton
+            form={this.props.form}
+            status={this.state.status}
+          />
+        </form>}
         { this.state.status === Webform.formStates.SENT &&
-          <ThankYouMessage message={this.props.form.settings.confirmation_message} />
+        <ThankYouMessage message={this.props.form.settings.confirmation_message} />
         }
         {this.props.settings.tracking !== false &&
-          <div>
-            <Script
-              url='//cdn-static.formisimo.com/tracking/js/tracking.js'
-              onLoad={() => {}}
-              onError={() => {}}
-            />
-            <Script
-              url='//cdn-static.formisimo.com/tracking/js/conversion.js'
-              onLoad={() => {}}
-              onError={() => {}}
-            />
-          </div>
+        <div>
+          <Script
+            url='//cdn-static.formisimo.com/tracking/js/tracking.js'
+            onLoad={() => {
+            }}
+            onError={() => {
+            }}
+          />
+          <Script
+            url='//cdn-static.formisimo.com/tracking/js/conversion.js'
+            onLoad={() => {
+            }}
+            onError={() => {
+            }}
+          />
+        </div>
         }
       </div>
     );

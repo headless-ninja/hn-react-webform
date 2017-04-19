@@ -3,14 +3,13 @@ import TextArea from './TextArea';
 import CheckboxField from './CheckboxField';
 import EmailField from './EmailField';
 import PhoneField from './PhoneField';
-import DateField from './DateField';
+import Date from './Date';
 import ParagraphField from './ParagraphField';
 import SelectField from './SelectField';
 import Input from './Input';
 import RadioField from './RadioField';
 import FetchForm from './FetchForm';
 import Fieldset from './Fieldset';
-import DateOfBirthField from './DateOfBirthField';
 
 const components = {
   textfield: Input,
@@ -18,12 +17,12 @@ const components = {
   checkbox: CheckboxField,
   email: EmailField,
   tel: PhoneField,
-  date: DateField,
+  webform_date_custom: Date,
   webform_message: ParagraphField,
   select: SelectField,
   radios: RadioField,
   fieldset: Fieldset,
-  webform_dateofbirth: DateOfBirthField,
+  webform_dateofbirth: Date,
 };
 
 export default Webform;

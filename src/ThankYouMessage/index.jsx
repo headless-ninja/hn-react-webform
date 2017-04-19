@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
 
@@ -7,7 +7,7 @@ const ThankYouMessage = ({ message }) => (
 );
 
 ThankYouMessage.propTypes = {
-  message: React.PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
 };
 
 export default CSSModules(ThankYouMessage, styles);
