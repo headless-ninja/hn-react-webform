@@ -23,6 +23,7 @@ const components = {
   radios: RadioField,
   fieldset: Fieldset,
   webform_dateofbirth: Date,
+  default: Fieldset,
 };
 
 export default Webform;
