@@ -1,5 +1,5 @@
 .react-date-field--theme-rdw {
-  border: 1px solid gray; }
+  border: none; }
   .react-date-field--theme-rdw.react-date-field--focused {
     border: 1px solid #349aef; }
   .react-date-field--theme-rdw > .react-date-field__picker {

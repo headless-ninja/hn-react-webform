@@ -56,7 +56,7 @@ class Date extends Component {
     Object.assign(rules, {
       [`date_${props.field['#webform_key']}`]: {
         rule: (value) => {
-          const timestamp = moment(value, props.dateFormat);
+          const timestamp = moment(value, props.dateFormat, true);
           return timestamp.isValid();
         },
         hint: () =>
@@ -93,7 +93,7 @@ class Date extends Component {
             }}
           />);
         },
-        shouldValidate: field => rules[`date_${props.field['#webform_key']}`].rule(field.getValue()),
+        shouldValidate: field => field.isBlurred && rules[`date_${props.field['#webform_key']}`].rule(field.getValue()),
       },
     });
 
@@ -156,6 +156,11 @@ class Date extends Component {
 
     const value = this.props.value || moment().locale('nl');
 
+    const inputElement = <Input {...this.props} field={field} />;
+    if(!Fieldset.getValue(field, 'show_picker')) {
+      return inputElement;
+    }
+
     return (
       // @see: http://zippyui.com/docs/react-date-picker/
       <DateField
@@ -167,7 +172,7 @@ class Date extends Component {
         theme='rdw'
         value={value}
         onChange={this.props.onChange}
-        renderInput={() => <Input {...this.props} field={field} />}
+        renderInput={() => inputElement}
       >
         <Calendar
           navigation
