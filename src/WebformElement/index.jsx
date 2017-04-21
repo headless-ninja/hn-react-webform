@@ -117,7 +117,8 @@ class WebformElement extends Component {
   }
 
   getFormElementComponent() {
-    const element = components[this.props.field['#type']] || components.default;
+    // const element = components[this.props.field['#type']] || components.default;
+    const element = components[this.props.field['#type']];
     return element || false;
   }
 
@@ -221,9 +222,7 @@ class WebformElement extends Component {
     //   log(this.key, '=> is', valid ? 'valid' : 'invalid');
     // }
 
-    field.setStorage({
-      valid,
-    });
+    field.setStorage({ valid });
 
     this.setState({ errors });
 

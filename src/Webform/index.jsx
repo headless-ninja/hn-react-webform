@@ -234,20 +234,20 @@ class Webform extends Component {
         }
         {this.props.settings.tracking !== false &&
         <div>
-          <Script
-            url='//cdn-static.formisimo.com/tracking/js/tracking.js'
-            onLoad={() => {
-            }}
-            onError={() => {
-            }}
-          />
-          <Script
-            url='//cdn-static.formisimo.com/tracking/js/conversion.js'
-            onLoad={() => {
-            }}
-            onError={() => {
-            }}
-          />
+          {/* <Script*/}
+            {/* url='//cdn-static.formisimo.com/tracking/js/tracking.js'*/}
+            {/* onLoad={() => {*/}
+            {/* }}*/}
+            {/* onError={() => {*/}
+            {/* }}*/}
+          {/* />*/}
+          {/* <Script*/}
+            {/* url='//cdn-static.formisimo.com/tracking/js/conversion.js'*/}
+            {/* onLoad={() => {*/}
+            {/* }}*/}
+            {/* onError={() => {*/}
+            {/* }}*/}
+          {/* />*/}
         </div>
         }
       </div>
