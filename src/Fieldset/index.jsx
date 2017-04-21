@@ -31,6 +31,10 @@ class Fieldset extends Component {
    * @return any Value of field or master, depending of overrides.
    */
   static getValue(field, key) {
+    if(key.startsWith('#')) {
+      throw new Error('Please use the field without leading hash.');
+    }
+
     if(field[`#override_${key}`]) {
       return field[`#${key}`];
     }
