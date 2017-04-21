@@ -4,7 +4,7 @@ import fetch from 'fetch-everywhere';
 import { observer } from 'mobx-react';
 import CSSModules from 'react-css-modules';
 import ReactGA from 'react-ga';
-import Script from 'react-load-script';
+// import Script from 'react-load-script';
 import FormStore from './FormStore';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';

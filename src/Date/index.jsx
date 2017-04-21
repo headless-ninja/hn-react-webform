@@ -151,7 +151,7 @@ class Date extends Component {
     const field = this.props.field;
 
     const inputProps = Object.assign({}, this.props);
-    inputProps.field['#mask'] = Fieldset.getValue(field, 'mask');;
+    inputProps.field['#mask'] = Fieldset.getValue(field, 'mask');
     delete inputProps.onChange;
 
     const value = this.props.value || moment().locale('nl');
