@@ -117,8 +117,7 @@ class WebformElement extends Component {
   }
 
   getFormElementComponent() {
-    // const element = components[this.props.field['#type']] || components.default;
-    const element = components[this.props.field['#type']];
+    const element = components[this.props.field['#type']] || components.default;
     return element || false;
   }
 
