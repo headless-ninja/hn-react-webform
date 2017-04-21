@@ -24,7 +24,10 @@ class Date extends Component {
       '#default_value': PropTypes.string,
       '#min': PropTypes.string,
       '#max': PropTypes.string,
-      '#mask': PropTypes.string,
+      '#mask': PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.bool,
+      ]),
       '#dateError': PropTypes.string,
       '#dateRangeError': PropTypes.string,
       '#dateBeforeError': PropTypes.string,

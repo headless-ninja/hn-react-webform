@@ -83,7 +83,7 @@ class WebformElement extends Component {
   }
 
   componentDidMount() {
-    if(this.getFormElementComponent() && !this.props.field['#admin']) {
+    if(this.shouldRender()) {
       this.props.formStore.createField(this, this.key, this.props.field, this.validate());
 
       if(this.state[supportedActions.required]) {
@@ -122,6 +122,10 @@ class WebformElement extends Component {
   }
 
   getFormElement() {
+    if(!this.shouldRender()) {
+      return false;
+    }
+
     const ElementComponent = this.getFormElementComponent();
     if(ElementComponent) {
       return {
@@ -239,6 +243,10 @@ class WebformElement extends Component {
     return field.isBlurred;
   }
 
+  shouldRender() {
+    return !this.props.field['#admin'];
+  }
+
   isSuccess() {
     return this.shouldValidate() && this.isValid();
   }
@@ -278,10 +286,11 @@ class WebformElement extends Component {
   }
 
   render() {
-    const element = this.getFormElement();
-    if(!element) {
+    if(!this.shouldRender()) {
       return null;
     }
+
+    const element = this.getFormElement();
 
     const errors = this.state.errors.length > 0 ? (
       <ul role='alert' styleName={`${this.getLabelClass()} validation-message`}> {this.state.errors} </ul>)
