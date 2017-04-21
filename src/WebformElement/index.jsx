@@ -206,12 +206,12 @@ class WebformElement extends Component {
       return true;
     }
 
-    const fails = validations.filter((validation) => {
+    const fails = validations ? validations.filter((validation) => {
       if(force || !validation.shouldValidate || validation.shouldValidate(field)) {
         return !validation.rule(this.getValue());
       }
       return false;
-    });
+    }) : [];
 
     const errors = fails.map(rule => rule.hint(this.getValue()));
     const valid = errors.length === 0;
