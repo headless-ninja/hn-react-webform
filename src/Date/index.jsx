@@ -106,48 +106,44 @@ class Date extends Component {
   }
 
   calculateDateRange(value) {
+    const result = {
+      valid: true,
+    };
+
     const { dateFormat } = this.props;
     const timestamp = moment(value, dateFormat, true);
 
     const minMoment = moment(this.min, dateFormat, true);
     const maxMoment = moment(this.max, dateFormat, true);
 
-    let min = minMoment;
+    result.min = minMoment;
     if(!minMoment.isValid()) {
-      min = moment().add(this.min, 'days');
+      result.min = moment().add(this.min, 'days');
     }
 
-    let max = maxMoment;
+    result.max = maxMoment;
     if(!maxMoment.isValid()) {
-      max = moment().add(this.max, 'days');
+      result.max = moment().add(this.max, 'days');
     }
 
     if(this.min && this.max) {
       return {
         type: 'range',
-        valid: timestamp.isBetween(min, max),
-        min,
-        max,
+        valid: timestamp.isBetween(result.min, result.max),
       };
     } else if(this.min) {
       return {
         type: 'after',
-        valid: timestamp.isAfter(min),
-        min,
-        max,
+        valid: timestamp.isAfter(result.min),
       };
     } else if(this.max) {
       return {
         type: 'before',
-        valid: timestamp.isBefore(max),
-        min,
-        max,
+        valid: timestamp.isBefore(result.max),
       };
     }
 
-    return {
-      valid: true,
-    };
+    return result;
   }
 
   render() {
@@ -160,6 +156,7 @@ class Date extends Component {
     const value = this.props.value || moment().locale('nl');
 
     const inputElement = <Input {...this.props} field={field} />;
+
     if(!Fieldset.getValue(field, 'show_picker')) {
       return inputElement;
     }
