@@ -22,6 +22,7 @@ build:
   artifacts:
     paths:
       - lib
+    expire_in: 3 hours
 pages:
   stage: deploy
   image: node:7
@@ -29,8 +30,9 @@ pages:
     - npm install --silent
     - npm run build-storybook -- -o public
   artifacts:
-      paths:
-        - public
+    paths:
+      - public
+    expire_in: 3 hours
   dependencies:
     - build
   only:
