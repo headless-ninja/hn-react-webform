@@ -39,11 +39,15 @@ class WebformElement extends Component {
       PropTypes.bool,
       PropTypes.object,
     ]),
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
   };
 
   static defaultProps = {
     label: false,
     parent: false,
+    onChange: () => {},
+    onBlur: () => {},
   };
 
   static validateRule(rule, field, force = false) {
@@ -123,12 +127,17 @@ class WebformElement extends Component {
     field.setStorage({ value });
     this.validate();
     this.props.formStore.checkConditionals();
+
+    this.props.onChange(e);
+
     return true;
   }
 
-  onBlur() {
+  onBlur(e) {
     this.getField().setStorage({ isBlurred: true });
     this.validate();
+
+    this.props.onBlur(e);
   }
 
   getField(key = this.key) {
@@ -194,7 +203,9 @@ class WebformElement extends Component {
     if(styles[labelClass]) {
       return labelClass;
     }
-    return 'label-display-inline';
+
+    const elementClass = this.getFormElementComponent();
+    return `label-display-${getNested(() => elementClass.meta.labelVisibility, 'inline')}`;
   }
 
   checkConditionals() {
@@ -239,7 +250,10 @@ class WebformElement extends Component {
     //   log(this.key, '=> is', valid ? 'valid' : 'invalid');
     // }
 
-    field.setStorage({ valid });
+    field.setStorage({
+      valid,
+      isBlurred: force ? true : field.isBlurred,
+    });
 
     this.setState({ errors });
 

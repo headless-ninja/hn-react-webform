@@ -53,14 +53,16 @@ class Field {
 }
 
 class FormStore {
+  @observable settings = {};
   @observable fields = [];
   @observable formProperties = {
     hasRequiredFields: false,
   };
   key = null;
 
-  constructor(formId) {
+  constructor(formId, settings) {
     this.key = formId;
+    this.settings = settings;
   }
 
   checkConditionals() {
@@ -68,8 +70,15 @@ class FormStore {
   }
 
   createField(component, key, props, valid) {
+    const existingFieldIndex = this.getFieldIndex(key);
     const field = new Field(component, key, props, valid);
+    if(existingFieldIndex > -1) {
+      // console.warn('Field', key, 'already exists! Overriding...');
+      this.fields[existingFieldIndex] = field;
+      return field;
+    }
     this.fields.push(field);
+    return field;
   }
 
   getField(key) {

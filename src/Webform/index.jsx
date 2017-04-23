@@ -91,7 +91,7 @@ class Webform extends Component {
     };
 
     this.key = props.form.form_id;
-    this.formStore = new FormStore(this.key);
+    this.formStore = new FormStore(this.key, props.settings);
 
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -112,7 +112,7 @@ class Webform extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props.form.form_id !== nextProps.form.form_id) {
-      this.formStore = new FormStore(this.key);
+      this.formStore = new FormStore(this.key, this.props.settings);
     }
   }
 

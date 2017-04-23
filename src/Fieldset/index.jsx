@@ -10,6 +10,7 @@ class Fieldset extends Component {
   static meta = {
     wrapper: <fieldset className={styles.fieldset} />,
     label: <legend data-extendClassName={styles['fieldset-legend']} />,
+    labelVisibility: 'invisible',
   };
 
   static propTypes = {
@@ -20,6 +21,13 @@ class Fieldset extends Component {
     }).isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+  };
+
+  static defaultProps = {
+    onChange: () => {},
+    onBlur: () => {},
   };
 
   /**
@@ -50,6 +58,8 @@ class Fieldset extends Component {
         field={field}
         formStore={this.props.formStore}
         parent={this.props.webformElement}
+        onChange={this.props.onChange}
+        onBlur={this.props.onBlur}
       />);
   }
 

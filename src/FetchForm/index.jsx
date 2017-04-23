@@ -78,6 +78,7 @@ class FetchForm extends Component {
           settings={{
             title: 'Form',
             postUrl: `${this.props.baseUrl}/form?_format=json`,
+            postcodeApiKey: 'KlPuqvDkZk3pERM81Epi74Bof4FwrBPLMMNtm83a',
           }}
           onSubmit={() => {
             const block = false;
