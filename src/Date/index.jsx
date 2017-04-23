@@ -172,7 +172,10 @@ class Date extends Component {
         theme='rdw'
         value={value}
         onChange={this.props.onChange}
-        renderInput={() => inputElement}
+        renderInput={(dateInputProps) => {
+          delete dateInputProps.className; // Don't inherit module's className.
+          return React.cloneElement(inputElement, dateInputProps); // Pass all module's props to inputElement.
+        }}
       >
         <Calendar
           navigation

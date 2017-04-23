@@ -35,6 +35,9 @@ class Input extends Component {
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
+    onFocus: PropTypes.func,
+    onClick: PropTypes.func,
+    onKeyDown: PropTypes.func,
   };
 
   static defaultProps = {
@@ -42,6 +45,9 @@ class Input extends Component {
     className: null,
     type: 'text',
     autoComplete: '',
+    onFocus: () => {},
+    onClick: () => {},
+    onKeyDown: () => {},
   };
 
   render() {
@@ -74,6 +80,9 @@ class Input extends Component {
         disabled={!this.props.webformElement.state.enabled}
         min={this.props.field['#min']}
         max={this.props.field['#max']}
+        onFocus={this.props.onFocus}
+        onClick={this.props.onClick}
+        onKeyDown={this.props.onKeyDown}
         {...attrs}
       />
       <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
