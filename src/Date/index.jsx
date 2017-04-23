@@ -42,6 +42,7 @@ class Date extends Component {
       PropTypes.bool,
     ]),
     onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired,
     dateFormat: PropTypes.string,
   };
 
@@ -91,8 +92,8 @@ class Date extends Component {
           return (<RuleHint
             key={`date_range_${props.field['#webform_key']}`} hint={hint} tokens={{
               value,
-              min: result.min.format(props.dateFormat),
-              max: result.max.format(props.dateFormat),
+              min: result.min ? result.min.format(props.dateFormat) : false,
+              max: result.max ? result.max.format(props.dateFormat) : false,
             }}
           />);
         },
@@ -127,20 +128,14 @@ class Date extends Component {
     }
 
     if(this.min && this.max) {
-      return {
-        type: 'range',
-        valid: timestamp.isBetween(result.min, result.max),
-      };
+      result.type = 'range';
+      result.valid = timestamp.isBetween(result.min, result.max);
     } else if(this.min) {
-      return {
-        type: 'after',
-        valid: timestamp.isAfter(result.min),
-      };
+      result.type = 'after';
+      result.valid = timestamp.isAfter(result.min);
     } else if(this.max) {
-      return {
-        type: 'before',
-        valid: timestamp.isBefore(result.max),
-      };
+      result.type = 'before';
+      result.valid = timestamp.isBefore(result.max);
     }
 
     return result;
@@ -172,9 +167,13 @@ class Date extends Component {
         theme='rdw'
         value={value}
         onChange={this.props.onChange}
+        onBlur={this.props.onBlur}
+        onCollapse={this.props.onBlur}
         renderInput={(dateInputProps) => {
           delete dateInputProps.className; // Don't inherit module's className.
-          return React.cloneElement(inputElement, dateInputProps); // Pass all module's props to inputElement.
+          const newInputProps = Object.assign({}, dateInputProps, inputProps);
+          newInputProps.onBlur = dateInputProps.onBlur;
+          return React.cloneElement(inputElement, newInputProps); // Pass all module's props to inputElement.
         }}
       >
         <Calendar

@@ -69,8 +69,6 @@ class Input extends Component {
     return (<div>
       <InputComponent
         type={this.props.type}
-        onChange={this.props.onChange}
-        onBlur={this.props.onBlur}
         value={this.props.value}
         name={this.props.field['#webform_key']}
         id={this.props.id || this.props.field['#webform_key']}
@@ -80,6 +78,8 @@ class Input extends Component {
         disabled={!this.props.webformElement.state.enabled}
         min={this.props.field['#min']}
         max={this.props.field['#max']}
+        onChange={this.props.onChange}
+        onBlur={this.props.onBlur}
         onFocus={this.props.onFocus}
         onClick={this.props.onClick}
         onKeyDown={this.props.onKeyDown}
