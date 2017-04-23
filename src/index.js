@@ -10,6 +10,7 @@ import Input from './Input';
 import RadioField from './RadioField';
 import FetchForm from './FetchForm';
 import Fieldset from './Fieldset';
+import IBAN from './IBAN';
 
 const components = {
   textfield: Input,
@@ -23,6 +24,7 @@ const components = {
   radios: RadioField,
   fieldset: Fieldset,
   webform_dateofbirth: Date,
+  iban: IBAN,
   default: Fieldset,
 };
 

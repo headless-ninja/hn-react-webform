@@ -39,7 +39,7 @@ class Fieldset extends Component {
       return field[`#${key}`];
     }
 
-    return getNested(() => field.composite_elements[key]['#default_value'], null);
+    return getNested(() => field.composite_elements.find(element => element['#key'] === key)['#default_value'], null);
   }
 
   getFormElements() {
