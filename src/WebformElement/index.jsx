@@ -48,8 +48,20 @@ class WebformElement extends Component {
 
   static validateRule(rule, field, force = false) {
     if(force || !rule.shouldValidate || rule.shouldValidate(field)) {
-      return !rule.rule(field.getValue());
+      return rule.rule(field.getValue());
     }
+    return true;
+  }
+
+  static isEmpty(field, value) {
+    if(value === '') {
+      return true;
+    }
+
+    if(field['#mask']) {
+      return value === '_'.repeat(field['#mask'].length);
+    }
+
     return false;
   }
 
@@ -63,7 +75,7 @@ class WebformElement extends Component {
 
     Object.assign(rules, {
       [`${supportedActions.required}_${this.key}`]: {
-        rule: value => value.toString().trim() !== '',
+        rule: value => !WebformElement.isEmpty(props.field, value),
         hint: value =>
           <RuleHint key={`req_${this.key}`} hint={props.field['#requiredError'] || 'This field is required'} tokens={{ value }} />,
         shouldValidate: field => field.isBlurred,
@@ -74,10 +86,10 @@ class WebformElement extends Component {
     if(pattern) {
       Object.assign(rules, {
         [`pattern_${this.key}`]: {
-          rule: (value = '') => new RegExp(pattern).test(value) || value.toString().trim() === '',
+          rule: (value = '') => new RegExp(pattern).test(value) || WebformElement.isEmpty(props.field, value),
           hint: value =>
             <RuleHint key={`pattern_${this.key}`} hint={props.field['#patternError'] || 'The value :value doesn\'t match the right pattern'} tokens={{ value }} />,
-          shouldValidate: field => field.isBlurred && field.getValue().toString().trim() !== '',
+          shouldValidate: field => field.isBlurred && WebformElement.validateRule(rules[`${supportedActions.required}_${this.key}`], field),
         },
       });
     }
@@ -217,7 +229,7 @@ class WebformElement extends Component {
       return true;
     }
 
-    const fails = validations ? validations.filter(validation => WebformElement.validateRule(validation, field, force)) : [];
+    const fails = validations ? validations.filter(validation => !WebformElement.validateRule(validation, field, force)) : [];
 
     const errors = fails.map(rule => rule.hint(this.getValue()));
     const valid = errors.length === 0;
