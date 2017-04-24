@@ -19,25 +19,27 @@ class Address extends Component {
     street: {
       formKey: 'address-street',
       apiValue: address => address.street,
+      hideField: true,
     },
     postcode: {
       formKey: 'address-postcode',
-      apiValue: address => address.postcode,
+      apiValue: () => false,
       triggerLookup: true,
     },
     number: {
       formKey: 'address-number',
-      apiValue: address => address.number,
+      apiValue: () => false,
       triggerLookup: true,
     },
     addition: {
       formKey: 'address-number-add',
-      apiValue: address => address.letter,
+      apiValue: () => false,
       triggerLookup: true,
     },
     city: {
       formKey: 'address-city',
       apiValue: address => address.city.label,
+      hideField: true,
     },
     locationLat: {
       formKey: 'address-location-lat',
@@ -57,6 +59,10 @@ class Address extends Component {
     };
 
     this.onBlur = this.onBlur.bind(this);
+  }
+
+  componentDidMount() {
+    this.setFieldVisibility(false);
   }
 
   onBlur(e) {
@@ -88,6 +94,18 @@ class Address extends Component {
     }
   }
 
+  setFieldVisibility(set) {
+    Object.keys(Address.addressFields).forEach((elementKey) => {
+      const element = Address.addressFields[elementKey];
+      const field = this.props.formStore.getField(element.formKey);
+      if(field) {
+        if(element.hideField) {
+          field.component.setState({ visible: set === null ? !field.component.state.visible : set });
+        }
+      }
+    });
+  }
+
   lookUp(query) {
     this.setState({ query });
 
@@ -99,11 +117,12 @@ class Address extends Component {
     // fetch(`https://postcode-api.apiwise.nl/v2/addresses${query}`, {
     //   headers,
     // })
-      // .then(res => res.json())
-      // .then((json) => {
+    //   .then(res => res.json())
+    //   .then((json) => {
     Promise.resolve()
       .then(() => {
         if(this.state.query !== query) {
+          this.setFieldVisibility(true);
           return;
         }
 
@@ -125,6 +144,7 @@ class Address extends Component {
               if(value) {
                 field.setStorage({ value });
                 field.component.validate(true);
+                this.setFieldVisibility(true);
               }
             }
           });
