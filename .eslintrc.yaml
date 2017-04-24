@@ -50,3 +50,7 @@ rules:
   react/no-did-mount-set-state: 0
 
 parser: babel-eslint
+globals:
+  window: true
+  document: true
+  requestAnimationFrame: true

@@ -65,8 +65,8 @@ class FormStore {
     this.settings = settings;
   }
 
-  checkConditionals() {
-    this.fields.forEach(field => field.component.checkConditionals());
+  checkConditionals(excluded = []) {
+    this.fields.forEach(field => field.component.checkConditionals(excluded));
   }
 
   createField(component, key, props, valid) {

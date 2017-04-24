@@ -9,6 +9,7 @@ import Fieldset from '../Fieldset';
 import Input from '../Input';
 import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
+import WebformElement from '../WebformElement';
 
 class Date extends Component {
   static meta = {
@@ -61,17 +62,17 @@ class Date extends Component {
       [`date_${props.field['#webform_key']}`]: {
         rule: (value) => {
           const timestamp = moment(value, props.dateFormat, true);
-          return timestamp.isValid();
+          return WebformElement.isEmpty(props.field, value) || timestamp.isValid();
         },
         hint: () =>
           <RuleHint key={`date_${props.field['#webform_key']}`} hint={props.field['#dateError'] || 'Please enter a valid date.'} />,
-        shouldValidate: field => field.isBlurred && field.getValue().toString().trim() !== '',
+        shouldValidate: field => field.isBlurred && !WebformElement.isEmpty(field, field.getValue()),
       },
     });
 
     Object.assign(rules, {
       [`date_range_${props.field['#webform_key']}`]: {
-        rule: value => this.calculateDateRange(value).valid,
+        rule: value => WebformElement.isEmpty(props.field, value) || this.calculateDateRange(value).valid,
         hint: (value) => {
           const result = this.calculateDateRange(value);
           let hint;
@@ -97,7 +98,7 @@ class Date extends Component {
             }}
           />);
         },
-        shouldValidate: field => field.isBlurred && rules[`date_${props.field['#webform_key']}`].rule(field.getValue()),
+        shouldValidate: field => field.isBlurred && !WebformElement.isEmpty(field, field.getValue()),
       },
     });
 

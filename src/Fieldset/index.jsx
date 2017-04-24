@@ -21,13 +21,8 @@ class Fieldset extends Component {
     }).isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
-    onChange: PropTypes.func,
-    onBlur: PropTypes.func,
-  };
-
-  static defaultProps = {
-    onChange: () => {},
-    onBlur: () => {},
+    onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired,
   };
 
   /**

@@ -63,7 +63,8 @@ class WebformElement extends Component {
     }
 
     if(field['#mask']) {
-      return value === '_'.repeat(field['#mask'].length);
+      const mask = field['#mask'].replace(/9|a|A/g, '_');
+      return value === mask;
     }
 
     return false;
@@ -126,7 +127,7 @@ class WebformElement extends Component {
     }
     field.setStorage({ value });
     this.validate();
-    this.props.formStore.checkConditionals();
+    this.props.formStore.checkConditionals([field.key]);
 
     this.props.onChange(e);
 
@@ -174,8 +175,6 @@ class WebformElement extends Component {
   }
 
   getValidations() {
-    const element = this.getFormElement();
-
     const validations = [
       getNested(() => this.state[supportedActions.required]) ? `${supportedActions.required}_${this.key}` : null,
       getNested(() => this.props.field['#pattern']) ? `pattern_${this.key}` : null,
@@ -183,7 +182,8 @@ class WebformElement extends Component {
 
     const populatedValidations = validations.map(validation => rules[validation] || null);
 
-    populatedValidations.push(...getNested(() => element.class.meta.validations.map(validation => validation(this) || null), []));
+    populatedValidations.push(...getNested(() => this.getFormElementComponent().meta.validations
+      .map(validation => validation(this) || null), []));
 
     const filteredValidations = populatedValidations.filter(v => v !== null);
 
@@ -208,9 +208,9 @@ class WebformElement extends Component {
     return `label-display-${getNested(() => elementClass.meta.labelVisibility, 'inline')}`;
   }
 
-  checkConditionals() {
+  checkConditionals(excluded = []) {
     const newState = checkConditionals(this.props.formStore, this.key, this.state);
-    if(newState) {
+    if(newState && !excluded.includes(this.key)) {
       this.setState(newState, () => {
         this.setState({ validations: this.getValidations() }, () => {
           this.validate();
@@ -280,7 +280,7 @@ class WebformElement extends Component {
   }
 
   renderTextContent(selector, checkValue = false, addClass = '') {
-    const value = this.props.field[getNested(() => this.getFormElement().class.meta.field_display[selector], selector)]; // Value in #description field
+    const value = this.props.field[getNested(() => this.getFormElementComponent().meta.field_display[selector], selector)]; // Value in #description field
     const displayValue = this.props.field[`${selector}_display`];
     const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
 
