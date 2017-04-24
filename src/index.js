@@ -12,6 +12,7 @@ import FetchForm from './FetchForm';
 import Fieldset from './Fieldset';
 import IBAN from './IBAN';
 import Address from './Address';
+import Hidden from './Hidden';
 
 const components = {
   textfield: Input,
@@ -27,6 +28,7 @@ const components = {
   webform_dateofbirth: Date,
   iban: IBAN,
   webform_address_custom: Address,
+  hidden: Hidden,
   default: Fieldset,
 };
 
