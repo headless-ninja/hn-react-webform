@@ -59,19 +59,15 @@ class Webform extends Component {
       })).isRequired,
       token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     }).isRequired,
-    onSubmit: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.bool,
-    ]),
-    onAfterSubmit: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.bool,
-    ]),
+    onSubmit: PropTypes.func,
+    onSubmitSuccess: PropTypes.func,
+    onSubmitFail: PropTypes.func,
   };
 
   static defaultProps = {
-    onSubmit: false,
-    onAfterSubmit: false,
+    onSubmit: () => {},
+    onSubmitSuccess: () => {},
+    onSubmitFail: () => {},
     nm_gtm_id: false,
     settings: {
       tracking: false,
@@ -146,7 +142,7 @@ class Webform extends Component {
   }
 
   async updateSubmission() {
-    let response = await (this.props.onSubmit ? this.props.onSubmit(this) : Promise.resolve()); // Trigger onSubmit hook and store response.
+    let response = await this.props.onSubmit(this); // Trigger onSubmit hook and store response.
 
     if(response.submit !== false) { // If onSubmit hook response is false, don't trigger default submit.
       response = await this.submit();
@@ -158,16 +154,14 @@ class Webform extends Component {
         category: Webform.analyticsEventsCategories.SUCCESSFUL,
         action: Webform.analyticsEventsActions.FORM_SUBMISSION,
       });
+      this.props.onSubmitSuccess(this); // Trigger onSubmitSuccess hook.
     } else {
       this.setState({ status: Webform.formStates.ERROR, errors: response.errors || [] });
       Webform.fireAnalyticsEvent({
         category: Webform.analyticsEventsCategories.ERROR,
         action: Webform.analyticsEventsActions.FORM_SUBMISSION,
       });
-    }
-
-    if(this.props.onAfterSubmit) {
-      this.props.onAfterSubmit(this); // Trigger onAfterSubmit hook if existing.
+      this.props.onSubmitFail(this); // Trigger onSubmitFail hook.
     }
   }
 
