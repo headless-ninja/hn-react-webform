@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
 // eslint-disable-next-line import/no-unresolved,import/no-webpack-loader-syntax
-import '!style!css!postcss!react-select/dist/react-select.css';
+import '!style!css!react-select/dist/react-select.css';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
 import WebformElement from '../WebformElement';

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { Calendar, DateField } from 'react-date-picker';
 // eslint-disable-next-line
-import '!style!css!postcss!react-date-picker/index.css';
+import '!style!css!react-date-picker/index.css';
 // eslint-disable-next-line
 import '!style!css!postcss!./rdw-date-theme.css';
 import Fieldset from '../Fieldset';
