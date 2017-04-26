@@ -11,9 +11,12 @@ module.exports = {
       test: /\.json$/,
       loader: 'json'
     }, {
-      test: /\.p?css$/,
-      exclude: /highlight.*\.css$/,
+      test: /\.pcss$/,
       loader: 'style!css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss'
+    }, {
+      test: /\.css$/,
+      exclude: /highlight.*\.css$/,
+      loader: 'style!css?importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss'
     }, {
       test: /highlight.*\.css$/,
       loader: 'style!css'
