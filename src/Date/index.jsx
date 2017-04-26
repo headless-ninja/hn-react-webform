@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { Calendar, DateField } from 'react-date-picker';
-// eslint-disable-next-line
-import '!style!css!react-date-picker/index.css';
-// eslint-disable-next-line
-import '!style!css!postcss!./rdw-date-theme.css';
+import 'react-date-picker/index.css';
+import './rdw-date-theme.css';
 import Fieldset from '../Fieldset';
 import Input from '../Input';
 import rules from '../Webform/rules';
