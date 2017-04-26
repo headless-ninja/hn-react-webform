@@ -23,6 +23,7 @@ class Fieldset extends Component {
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
+    settings: PropTypes.shape().isRequired,
   };
 
   /**
@@ -55,6 +56,7 @@ class Fieldset extends Component {
         parent={this.props.webformElement}
         onChange={this.props.onChange}
         onBlur={this.props.onBlur}
+        settings={this.props.settings}
       />);
   }
 

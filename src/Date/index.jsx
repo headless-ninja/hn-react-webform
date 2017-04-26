@@ -43,6 +43,7 @@ class Date extends Component {
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
     dateFormat: PropTypes.string,
+    settings: PropTypes.shape().isRequired,
   };
 
   static defaultProps = {
@@ -63,7 +64,7 @@ class Date extends Component {
           return WebformElement.isEmpty(props.field, value) || timestamp.isValid();
         },
         hint: () =>
-          <RuleHint key={`date_${props.field['#webform_key']}`} hint={props.field['#dateError'] || 'Please enter a valid date.'} />,
+          <RuleHint key={`date_${props.field['#webform_key']}`} hint={WebformElement.getCustomValue(props.field, 'dateError', props.settings) || 'Please enter a valid date.'} />,
         shouldValidate: field => field.isBlurred && !WebformElement.isEmpty(field, field.getValue()),
       },
     });
@@ -77,14 +78,14 @@ class Date extends Component {
 
           switch(result.type) {
             case 'before':
-              hint = props.field['#dateBeforeError'] || 'Please enter a date before :max';
+              hint = WebformElement.getCustomValue(props.field, 'dateBeforeError', props.settings) || 'Please enter a date before :max';
               break;
             case 'after':
-              hint = props.field['#dateAfterError'] || 'Please enter a date after :min';
+              hint = WebformElement.getCustomValue(props.field, 'dateAfterError', props.settings) || 'Please enter a date after :min';
               break;
             default:
             case 'range':
-              hint = props.field['#dateRangeError'] || 'Please enter a date between :min and :max';
+              hint = WebformElement.getCustomValue(props.field, 'dateRangeError', props.settings) || 'Please enter a date between :min and :max';
               break;
           }
 

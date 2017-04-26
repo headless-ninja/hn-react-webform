@@ -41,13 +41,23 @@ class WebformElement extends Component {
     ]),
     onChange: PropTypes.func,
     onBlur: PropTypes.func,
+    settings: PropTypes.shape({
+      custom_elements: PropTypes.shape({
+        patternError: PropTypes.shape({
+          '#default_value': PropTypes.string,
+          '#options': PropTypes.objectOf(PropTypes.string),
+        }),
+      }),
+    }).isRequired,
   };
 
   static defaultProps = {
     label: false,
     parent: false,
-    onChange: () => {},
-    onBlur: () => {},
+    onChange: () => {
+    },
+    onBlur: () => {
+    },
   };
 
   static validateRule(rule, field, force = false) {
@@ -70,6 +80,18 @@ class WebformElement extends Component {
     return false;
   }
 
+  static getCustomValue(field, key, settings) {
+    if(key.startsWith('#')) {
+      throw new Error('Please use the field without leading hash.');
+    }
+
+    if(field[`#override_${key}`]) {
+      return field[`#${key}`];
+    }
+
+    return getNested(() => settings.custom_elements[key]['#default_value'], null);
+  }
+
   constructor(props) {
     super(props);
 
@@ -82,7 +104,10 @@ class WebformElement extends Component {
       [`${supportedActions.required}_${this.key}`]: {
         rule: value => !WebformElement.isEmpty(props.field, value),
         hint: value =>
-          <RuleHint key={`req_${this.key}`} hint={props.field['#requiredError'] || 'This field is required'} tokens={{ value }} />,
+          <RuleHint key={`req_${this.key}`} hint={WebformElement.getCustomValue(props.field, 'requiredError', props.settings) || 'This field is required'} tokens={{
+            value,
+            name: props.field['#title']
+          }} />,
         shouldValidate: field => field.isBlurred,
       },
     });
@@ -92,8 +117,11 @@ class WebformElement extends Component {
       Object.assign(rules, {
         [`pattern_${this.key}`]: {
           rule: (value = '') => new RegExp(pattern).test(value) || WebformElement.isEmpty(props.field, value),
-          hint: value =>
-            <RuleHint key={`pattern_${this.key}`} hint={props.field['#patternError'] || 'The value :value doesn\'t match the right pattern'} tokens={{ value }} />,
+          hint: (value) => {
+            const patternError = WebformElement.getCustomValue(props.field, 'patternError', props.settings);
+            const populatedPatternError = getNested(() => props.settings.custom_elements.patternError['#options'][patternError], props.field['#patternError'] || 'The value :value doesn\'t match the right pattern');
+            return <RuleHint key={`pattern_${this.key}`} hint={populatedPatternError} tokens={{ value }} />;
+          },
           shouldValidate: field => field.isBlurred && WebformElement.validateRule(rules[`${supportedActions.required}_${this.key}`], field),
         },
       });
@@ -168,6 +196,7 @@ class WebformElement extends Component {
           formStore={this.props.formStore}
           validations={this.state.validations}
           webformElement={this}
+          settings={this.props.settings}
         />,
       };
     }

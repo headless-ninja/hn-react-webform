@@ -130,6 +130,7 @@ class Webform extends Component {
         field={field}
         formStore={this.formStore}
         webform={this}
+        settings={this.props.form.settings}
       />);
   }
 
