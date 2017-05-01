@@ -74,9 +74,9 @@ class Webform extends Component {
     },
   };
 
-  static fireAnalyticsEvent(event) {
-    // ReactGA.event(event);
-  }
+  // static fireAnalyticsEvent(event) {
+  //   ReactGA.event(event);
+  // }
 
   constructor(props) {
     super(props);
@@ -102,7 +102,7 @@ class Webform extends Component {
     const GTM = getNested(() => this.props.settings.tracking.gtm_id) || this.props.form.settings.nm_gtm_id;
 
     if(GTM) {
-      new GTMReact(GTM);
+      GTMReact.addTag(GTM);
     }
   }
 
