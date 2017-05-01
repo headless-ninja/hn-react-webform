@@ -4,7 +4,7 @@ import fetch from 'fetch-everywhere';
 import { observer } from 'mobx-react';
 import CSSModules from 'react-css-modules';
 // import Script from 'react-load-script';
-import GTMReact from 'gtm-react';
+import GoogleTag from 'google_tag';
 import FormStore from './FormStore';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
@@ -102,7 +102,7 @@ class Webform extends Component {
     const GTM = getNested(() => this.props.settings.tracking.gtm_id) || this.props.form.settings.nm_gtm_id;
 
     if(GTM) {
-      GTMReact.addTag(GTM);
+      GoogleTag.addTag(GTM);
     }
   }
 
