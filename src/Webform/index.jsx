@@ -3,8 +3,8 @@ import getNested from 'get-nested';
 import fetch from 'fetch-everywhere';
 import { observer } from 'mobx-react';
 import CSSModules from 'react-css-modules';
-import ReactGA from 'react-ga';
 // import Script from 'react-load-script';
+import GTMReact from 'gtm-react';
 import FormStore from './FormStore';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
@@ -75,7 +75,7 @@ class Webform extends Component {
   };
 
   static fireAnalyticsEvent(event) {
-    ReactGA.event(event);
+    // ReactGA.event(event);
   }
 
   constructor(props) {
@@ -99,10 +99,10 @@ class Webform extends Component {
   componentDidMount() {
     this.formStore.checkConditionals();
 
-    const GA = getNested(() => this.props.settings.tracking.gtm_id) || this.props.form.settings.nm_gtm_id;
+    const GTM = getNested(() => this.props.settings.tracking.gtm_id) || this.props.form.settings.nm_gtm_id;
 
-    if(GA) {
-      ReactGA.initialize(GA);
+    if(GTM) {
+      new GTMReact(GTM);
     }
   }
 
