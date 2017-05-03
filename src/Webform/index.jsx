@@ -32,11 +32,11 @@ class Webform extends Component {
 
   static propTypes = {
     settings: PropTypes.shape({
-      title: PropTypes.string.isRequired,
+      title: PropTypes.string,
       postUrl: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.bool,
-      ]).isRequired,
+      ]),
       tracking: PropTypes.oneOfType([
         PropTypes.shape({
           gtm_id: PropTypes.oneOfType([
