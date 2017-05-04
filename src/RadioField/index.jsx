@@ -15,8 +15,8 @@ class RadioField extends Component {
     field: PropTypes.shape({
       '#required': PropTypes.bool,
       '#options': PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.string,
-        text: PropTypes.string,
+        value: PropTypes.node,
+        text: PropTypes.node,
       })),
       '#webform_key': PropTypes.string.isRequired,
       '#title_display': PropTypes.string,

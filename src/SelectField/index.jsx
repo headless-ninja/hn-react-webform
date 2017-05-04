@@ -15,7 +15,10 @@ class SelectField extends Component {
   static propTypes = {
     field: PropTypes.shape({
       '#title_display': PropTypes.string.string,
-      '#options': PropTypes.object,
+      '#options': PropTypes.arrayOf(PropTypes.shape({
+        value: PropTypes.node,
+        text: PropTypes.node,
+      })),
       '#webform_key': PropTypes.string.isRequired,
       '#multiple': PropTypes.bool,
     }).isRequired,
@@ -53,13 +56,10 @@ class SelectField extends Component {
   render() {
     const cssClassesWrapper = `select-wrapper ${this.getLabelPositionClass()} ${this.props.webformElement.isValid() ? 'validate-success' : 'validate-error'}`;
     const options = this.props.field['#options'] || {};
-    const mappedOptions = Object.keys(options).map((optionKey) => {
-      const option = options[optionKey];
-      return {
-        label: option,
-        value: optionKey,
-      };
-    });
+    const mappedOptions = options.map((option) => ({
+      label: option.text,
+      value: option.value,
+    }));
     return (
       <div styleName={cssClassesWrapper}>
         <Select
