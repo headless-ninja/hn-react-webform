@@ -13,6 +13,7 @@ class Address extends Component {
   static propTypes = {
     formStore: PropTypes.instanceOf(FormStore).isRequired,
     field: PropTypes.shape({
+      '#webform_key': PropTypes.string.isRequired,
       composite_elements: PropTypes.arrayOf(PropTypes.shape({
         '#webform_key': PropTypes.string.isRequired,
         '#default_value': PropTypes.string,
@@ -71,24 +72,20 @@ class Address extends Component {
   }
 
   onBlur(e) {
-    const triggerElement = Object.values(Address.addressFields).find(element => element.formKey === e.target.name);
+    const triggerElement = Object.values(Address.addressFields).find(element => `${element.formKey}-${this.props.field['#webform_key']}` === e.target.name);
     if(!triggerElement || !triggerElement.triggerLookup) {
       return;
     }
 
     const addressFields = {};
-    Object.keys(Address.addressFields).forEach((elementKey) => {
-      const element = Address.addressFields[elementKey];
-      const field = this.props.formStore.getField(element.formKey);
-      if(field) {
-        const value = field.getValue();
-        if(!WebformElement.isEmpty(field.props, value)) {
-          addressFields[elementKey] = value;
-        }
+    this.addressFieldIterator((field, element) => {
+      const value = field.getValue();
+      if(!WebformElement.isEmpty(field.props, value)) {
+        addressFields[element.elementKey] = value;
       }
     });
 
-    const postCodeField = this.props.formStore.getField(Address.addressFields.postcode.formKey);
+    const postCodeField = this.getAddressField('postcode').field;
 
     if(!addressFields.postcode || !postCodeField || !postCodeField.component.isValid()) {
       return;
@@ -102,13 +99,28 @@ class Address extends Component {
   }
 
   setFieldVisibility(set) {
+    this.addressFieldIterator((field, element) => {
+      if(element.hideField) {
+        field.component.setState({ visible: set === null ? !field.component.state.visible : set });
+      }
+    });
+  }
+
+  getAddressField(elementKey) {
+    const element = Address.addressFields[elementKey];
+    element.elementKey = elementKey;
+    const field = this.props.formStore.getField(`${element.formKey}-${this.props.field['#webform_key']}`);
+    return {
+      element,
+      field,
+    };
+  }
+
+  addressFieldIterator(cb) {
     Object.keys(Address.addressFields).forEach((elementKey) => {
-      const element = Address.addressFields[elementKey];
-      const field = this.props.formStore.getField(element.formKey);
+      const { element, field } = this.getAddressField(elementKey);
       if(field) {
-        if(element.hideField) {
-          field.component.setState({ visible: set === null ? !field.component.state.visible : set });
-        }
+        cb(field, element);
       }
     });
   }
@@ -143,18 +155,15 @@ class Address extends Component {
           // eslint-disable-next-line no-underscore-dangle
           const address = json._embedded.addresses[0];
 
-          Object.keys(Address.addressFields).forEach((elementKey) => {
-            const element = Address.addressFields[elementKey];
-            const field = this.props.formStore.getField(element.formKey);
-            if(field) {
-              const value = getNested(() => element.apiValue(address));
-              if(value) {
-                field.setStorage({ value });
-                field.component.validate(true);
-                this.setFieldVisibility(true);
-              }
+          this.addressFieldIterator((field, element) => {
+            const value = getNested(() => element.apiValue(address));
+            if(value) {
+              field.setStorage({ value });
+              field.component.validate(true);
             }
           });
+
+          this.setFieldVisibility(true);
 
           this.props.formStore.checkConditionals();
         }
