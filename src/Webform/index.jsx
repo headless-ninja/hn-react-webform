@@ -9,7 +9,7 @@ import FormStore from './FormStore';
 import Parser from '../Parser';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
-import ThankYouMessage from '../ThankYouMessage';
+// import ThankYouMessage from '../ThankYouMessage';
 import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })

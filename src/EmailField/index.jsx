@@ -18,6 +18,7 @@ class EmailField extends Component {
       '#webform_key': PropTypes.string.isRequired,
       '#emailError': PropTypes.string,
     }).isRequired,
+    settings: PropTypes.shape().isRequired,
   };
 
   constructor(props) {
