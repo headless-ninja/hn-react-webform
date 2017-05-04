@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
+import Parser from '../Parser';
 import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
 
@@ -75,7 +76,7 @@ class CheckboxField extends Component {
             disabled={!this.props.webformElement.state.enabled}
           />
           <span styleName='indicator' />
-          {this.props.field['#description']}
+          {Parser(this.props.field['#description'])}
         </label>
       </div>
     );

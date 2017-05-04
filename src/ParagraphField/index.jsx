@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Parser from '../Parser';
 
 class ParagraphField extends Component {
   static propTypes = {
@@ -8,7 +9,7 @@ class ParagraphField extends Component {
   };
 
   getFormattedMarkup() {
-    return this.props.field['#message_message'];
+    return Parser(this.props.field['#message_message']);
   }
 
   render() {

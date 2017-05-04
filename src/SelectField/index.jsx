@@ -56,7 +56,7 @@ class SelectField extends Component {
   render() {
     const cssClassesWrapper = `select-wrapper ${this.getLabelPositionClass()} ${this.props.webformElement.isValid() ? 'validate-success' : 'validate-error'}`;
     const options = this.props.field['#options'] || {};
-    const mappedOptions = options.map((option) => ({
+    const mappedOptions = options.map(option => ({
       label: option.text,
       value: option.value,
     }));

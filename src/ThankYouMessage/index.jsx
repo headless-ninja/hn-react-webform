@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
+import Parser from '../Parser';
 import styles from './styles.pcss';
 
 const ThankYouMessage = ({ message }) => (
-  <h1 styleName='thankyou'>{message}</h1>
+  <h1 styleName='thankyou'>{Parser(message)}</h1>
 );
 
 ThankYouMessage.propTypes = {

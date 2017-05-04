@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
 import getNested from 'get-nested';
+import Parser from '../Parser';
 import WebformElement from '../WebformElement';
 import styles from './styles.pcss';
 
@@ -80,7 +81,7 @@ class RadioField extends Component {
                   checked={this.props.value === option.value}
                 />
                 <span styleName='indicator' />
-                { option.text }
+                { Parser(option.text) }
               </label>
             );
           })

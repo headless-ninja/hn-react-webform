@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Parser from '../Parser';
 
 class RuleHint extends Component {
   static propTypes = {
@@ -30,7 +31,7 @@ class RuleHint extends Component {
     return (
       <li>
         <span>
-          {hint}
+          {Parser(hint)}
         </span>
       </li>
     );

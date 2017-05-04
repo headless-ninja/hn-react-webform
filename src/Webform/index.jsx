@@ -6,6 +6,7 @@ import CSSModules from 'react-css-modules';
 // import Script from 'react-load-script';
 import GoogleTag from 'google_tag';
 import FormStore from './FormStore';
+import Parser from '../Parser';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
 import ThankYouMessage from '../ThankYouMessage';
@@ -204,7 +205,7 @@ class Webform extends Component {
       this.formStore.formProperties.hasRequiredFields &&
       this.props.form.settings.nm_required_hint
     ) {
-      requiredHint = <span>{ this.props.form.settings.nm_required_hint }</span>;
+      requiredHint = <span>{ Parser(this.props.form.settings.nm_required_hint) }</span>;
     }
 
     const errors = Object.keys(this.state.errors).map(error =>

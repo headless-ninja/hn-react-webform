@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import getNested from 'get-nested';
 import CSSModules from 'react-css-modules';
+import Parser from '../Parser';
 import { components } from '../index';
 import FormStore from '../Webform/FormStore';
 import rules from '../Webform/rules';
@@ -323,7 +324,7 @@ class WebformElement extends Component {
 
     const className = `${addClass} ${styles[cssClass] ? cssClass : ''}`;
 
-    return (<span styleName={className}>{value}</span>);
+    return (<span styleName={className}>{Parser(value)}</span>);
   }
 
   renderFieldLabel(element, show = true) {
@@ -335,7 +336,7 @@ class WebformElement extends Component {
           component={getNested(() => element.class.meta.label, <label htmlFor={this.key} />)}
           styleName={`label ${this.getLabelClass()}`}
         >
-          {this.props.field['#title']}
+          {Parser(this.props.field['#title'])}
           {this.state[supportedActions.required] ? (<small>*</small>) : null}
         </Wrapper>
       );
