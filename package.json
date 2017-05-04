@@ -5,6 +5,14 @@
   "stylelint": {
     "extends": "stylelint-config-standard",
     "rules": {
+      "property-no-unknown": [
+        true,
+        {
+          "ignoreProperties": [
+            "composes"
+          ]
+        }
+      ],
       "selector-pseudo-class-no-unknown": [
         true,
         {
@@ -39,7 +47,7 @@
     "moment": "^2.18.1",
     "react": "^15.4.2",
     "react-css-modules": "^4.1.0",
-    "react-date-picker": "^5.3.28",
+    "react-day-picker": "^5.4.1",
     "react-ga": "^2.1.2",
     "react-input-mask": "^0.7.9",
     "react-load-script": "0.0.2",

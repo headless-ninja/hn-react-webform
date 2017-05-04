@@ -1,14 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
-import { Calendar, DateField } from 'react-date-picker';
-import 'react-date-picker/index.css';
-import './rdw-date-theme.css';
+import CSSModules from 'react-css-modules';
+import DayPicker from 'react-day-picker';
+import MomentLocaleUtils from 'react-day-picker/moment';
+import 'react-day-picker/lib/style.css';
+import labelTranslations from './labelTranslations';
+import styles from './rdw-date-theme.pcss';
 import Fieldset from '../Fieldset';
 import Input from '../Input';
 import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
 import WebformElement from '../WebformElement';
 
+@CSSModules(styles, { allowMultiple: true })
 class Date extends Component {
   static meta = {
     validations: [
@@ -39,16 +43,19 @@ class Date extends Component {
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.bool,
-    ]),
+    ]).isRequired,
     onChange: PropTypes.func.isRequired,
+    onFocus: PropTypes.func,
     onBlur: PropTypes.func.isRequired,
     dateFormat: PropTypes.string,
     settings: PropTypes.shape().isRequired,
+    locale: PropTypes.string,
   };
 
   static defaultProps = {
-    value: moment().locale('nl'),
+    locale: 'nl',
     dateFormat: 'DD/MM/YYYY',
+    onFocus: () => {},
   };
 
   constructor(props) {
@@ -101,9 +108,27 @@ class Date extends Component {
       },
     });
 
+    this.clickedInside = false;
+
     this.state = {
-      showPicker: false,
+      showOverlay: false,
+      selectedDay: moment(props.value, props.dateFormat, true).isValid() ? moment(props.value, props.dateFormat).toDate() : null,
     };
+
+    this.handleInputFocus = this.handleInputFocus.bind(this);
+    this.handleInputBlur = this.handleInputBlur.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleContainerMouseDown = this.handleContainerMouseDown.bind(this);
+    this.handleDayClick = this.handleDayClick.bind(this);
+    this.setRef = this.setRef.bind(this);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.clickTimeout);
+  }
+
+  setRef(ref, el) {
+    this[ref] = el;
   }
 
   calculateDateRange(value) {
@@ -141,64 +166,91 @@ class Date extends Component {
     return result;
   }
 
+  handleInputBlur() {
+    const showOverlay = this.clickedInside;
+
+    this.setState({ showOverlay });
+
+    // Force input's focus if blur event was caused by clicking on the calendar.
+    if(showOverlay) {
+      this.props.onFocus();
+    }
+  }
+
+  handleInputFocus() {
+    this.setState({ showOverlay: true });
+  }
+
+  handleInputChange(e) {
+    const value = e.target.value;
+    const momentDay = moment(value, this.props.dateFormat, true);
+    const newValue = momentDay.isValid() ? momentDay.format(this.props.dateFormat) : value;
+    const selectedDay = momentDay.isValid() ? momentDay.toDate() : null;
+    this.props.onChange(newValue);
+    this.setState({ selectedDay },
+      () => selectedDay && this.daypicker.showMonth(selectedDay),
+    );
+  }
+
+  handleContainerMouseDown() {
+    this.clickedInside = true;
+    // The input's onBlur method is called from a queue right after onMouseDown event.
+    // setTimeout adds another callback in the queue, but is called later than onBlur event.
+    this.clickTimeout = setTimeout(() => this.clickedInside = false, 0);
+  }
+
+  handleDayClick(selectedDay) {
+    this.props.onChange(moment(selectedDay).format(this.props.dateFormat));
+    this.setState({
+      selectedDay,
+      showOverlay: false,
+    });
+    this.props.onBlur();
+  }
+
   render() {
-    const field = this.props.field;
+    const { value, field } = this.props;
 
-    const inputProps = Object.assign({}, this.props);
-    inputProps.field['#mask'] = Fieldset.getValue(field, 'mask');
-    delete inputProps.onChange;
+    field['#mask'] = Fieldset.getValue(field, 'mask');
 
-    const value = this.props.value || moment().locale('nl');
-
-    const inputElement = <Input {...this.props} field={field} />;
+    const inputElement = (
+      <Input
+        {...this.props}
+        field={field}
+      />);
 
     if(!Fieldset.getValue(field, 'show_picker')) {
       return inputElement;
     }
 
+    const DateInput = React.cloneElement(inputElement, {
+      onChange: this.handleInputChange,
+      onFocus: this.handleInputFocus,
+      onBlur: this.handleInputBlur,
+      value,
+    });
+
     return (
-      // @see: http://zippyui.com/docs/react-date-picker/
-      <DateField
-        dateFormat={this.props.dateFormat}
-        forceValidDate
-        updateOnDateClick
-        collapseOnDateClick
-        showClock={false}
-        theme='rdw'
-        value={value}
-        onChange={this.props.onChange}
-        onBlur={this.props.onBlur}
-        onCollapse={this.props.onBlur}
-        renderInput={(dateInputProps) => {
-          delete dateInputProps.className; // Don't inherit module's className.
-          const newInputProps = Object.assign({}, dateInputProps, inputProps);
-          newInputProps.onBlur = dateInputProps.onBlur;
-          return React.cloneElement(inputElement, newInputProps); // Pass all module's props to inputElement.
-        }}
+      <div
+        onMouseDown={this.handleContainerMouseDown}
+        onBlur={this.handleInputBlur}
+        styleName='wrapper'
       >
-        <Calendar
-          navigation
-          locale='nl'
-          highlightWeekends
-          highlightToday
-          weekDayNames={false}
-          weekNumbers={false}
-          weekStartDay={1}
-          todayButtonText={{
-            children: 'Vandaag',
-            type: 'button',
-          }}
-          okButtonText={{
-            children: 'OK',
-            type: 'button',
-          }}
-          cancelButtonText={{
-            children: 'Annuleren',
-            type: 'button',
-          }}
-          clearButton={false}
-        />
-      </DateField>
+        {DateInput}
+        {this.state.showOverlay &&
+          <div styleName='overlay'>
+            <DayPicker
+              ref={el => this.setRef('daypicker', el)}
+              initialMonth={this.state.selectedDay || undefined}
+              onDayClick={this.handleDayClick}
+              selectedDays={this.state.selectedDay}
+              locale={this.props.locale}
+              localeUtils={MomentLocaleUtils}
+              labels={labelTranslations[this.props.locale]}
+            />
+          </div>
+        }
+      </div>
     );
   }
 }

@@ -39,7 +39,7 @@ rules:
     - 2
     - prefer-single
   no-return-assign:
-    - 1
+    - 0
   no-console:
     - 2
     -

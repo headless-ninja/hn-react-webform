@@ -38,6 +38,7 @@ class Input extends Component {
     onFocus: PropTypes.func,
     onClick: PropTypes.func,
     onKeyDown: PropTypes.func,
+    parentRef: PropTypes.func,
   };
 
   static defaultProps = {
@@ -48,6 +49,7 @@ class Input extends Component {
     onFocus: () => {},
     onClick: () => {},
     onKeyDown: () => {},
+    parentRef: () => {},
   };
 
   render() {
@@ -83,6 +85,7 @@ class Input extends Component {
         onFocus={this.props.onFocus}
         onClick={this.props.onClick}
         onKeyDown={this.props.onKeyDown}
+        ref={this.props.parentRef}
         {...attrs}
       />
       <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
