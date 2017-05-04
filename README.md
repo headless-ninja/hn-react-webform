@@ -31,3 +31,6 @@ If you want to help contributing, follow these steps:
 3. Run `npm install`
 5. Run `npm run storybook`
 6. Edit files in `/src` and view changes on http://localhost:6006/
+
+
+If you want to contribute and to use this version of the module in a different project on your local machine without storybook, run `npm link`
