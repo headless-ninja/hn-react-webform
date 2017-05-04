@@ -5,6 +5,7 @@ import styles from './styles.pcss';
 import Input from '../Input';
 import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
+import WebformElement from '../WebformElement';
 
 @CSSModules(styles)
 class EmailField extends Component {
@@ -26,7 +27,7 @@ class EmailField extends Component {
       [`email_${props.field['#webform_key']}`]: {
         rule: value => validator.isEmail(value) || value.toString().trim() === '',
         hint: value =>
-          <RuleHint key={`email_${props.field['#webform_key']}`} hint={props.field['#emailError'] || '":value" isn\'t an Email.'} tokens={{ value }} />,
+          <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformElement.getCustomValue(props.field, 'emailError', props.settings) || '":value" isn\'t an Email.'} tokens={{ value }} />,
         shouldValidate: field => field.isBlurred && field.getValue().toString().trim() !== '',
       },
     });
