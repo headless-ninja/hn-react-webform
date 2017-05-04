@@ -28,8 +28,6 @@ class WebformElement extends Component {
       '#patternError': PropTypes.string,
       '#emailError': PropTypes.string,
       '#title': PropTypes.string,
-      '#states': PropTypes.object,
-      '#options': PropTypes.object,
       '#title_display': PropTypes.string,
       '#options_display': PropTypes.string,
       '#admin': PropTypes.bool,

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import CSSModules from 'react-css-modules';
+import getNested from 'get-nested';
 import WebformElement from '../WebformElement';
 import styles from './styles.pcss';
 
@@ -13,7 +14,10 @@ class RadioField extends Component {
   static propTypes = {
     field: PropTypes.shape({
       '#required': PropTypes.bool,
-      '#options': PropTypes.object,
+      '#options': PropTypes.arrayOf(PropTypes.shape({
+        value: PropTypes.string,
+        text: PropTypes.string,
+      })),
       '#webform_key': PropTypes.string.isRequired,
       '#title_display': PropTypes.string,
       '#options_display': PropTypes.string,
@@ -61,22 +65,22 @@ class RadioField extends Component {
     return (
       <div styleName={cssClassesWrapper} role='radiogroup' {...wrapperAttrs}>
         {
-          this.props.field && Object.keys(this.props.field['#options']).map((option, index) => {
+          getNested(() => this.props.field['#options'], []).map((option, index) => {
             const labelKey = `${this.props.field['#webform_key']}_${index}`;
             return (
-              <label key={option} styleName={cssClassesRadio} htmlFor={labelKey}>
+              <label key={option.value} styleName={cssClassesRadio} htmlFor={labelKey}>
                 <input
                   type='radio'
                   onChange={e => this.onChange(e)}
-                  value={option}
+                  value={option.value}
                   name={this.props.field['#webform_key']}
                   styleName='radio'
                   id={labelKey}
                   disabled={!this.props.webformElement.state.enabled}
-                  checked={this.props.value === option}
+                  checked={this.props.value === option.value}
                 />
                 <span styleName='indicator' />
-                { this.props.field['#options'][option]}
+                { option.text }
               </label>
             );
           })
