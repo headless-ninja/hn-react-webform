@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-// import fetch from 'fetch-everywhere';
+import fetch from 'fetch-everywhere';
 import getNested from 'get-nested';
 import Fieldset from '../Fieldset';
 import FormStore from '../Webform/FormStore';
 import WebformElement from '../WebformElement';
-import json from './test.json';
 
 class Address extends Component {
   static meta = {
@@ -13,6 +12,12 @@ class Address extends Component {
 
   static propTypes = {
     formStore: PropTypes.instanceOf(FormStore).isRequired,
+    field: PropTypes.shape({
+      composite_elements: PropTypes.arrayOf(PropTypes.shape({
+        '#webform_key': PropTypes.string.isRequired,
+        '#default_value': PropTypes.string,
+      })),
+    }).isRequired,
   };
 
   static addressFields = {
@@ -83,7 +88,9 @@ class Address extends Component {
       }
     });
 
-    if(!addressFields.postcode) {
+    const postCodeField = this.props.formStore.getField(Address.addressFields.postcode.formKey);
+
+    if(!addressFields.postcode || !postCodeField || !postCodeField.component.isValid()) {
       return;
     }
 
@@ -110,17 +117,17 @@ class Address extends Component {
     this.setState({ query });
 
     // eslint-disable-next-line no-undef
-    // const headers = new Headers({
-    //   'X-Api-Key': this.props.formStore.settings.postcodeApiKey,
-    // });
+    const headers = new Headers({
+      'X-Api-Key': getNested(() => this.props.field.composite_elements
+        .find(element =>
+          element['#webform_key'].includes('postcode-api-key'))['#default_value']) || this.props.formStore.settings.postcodeApiKey,
+    });
 
-    // fetch(`https://postcode-api.apiwise.nl/v2/addresses${query}`, {
-    //   headers,
-    // })
-    //   .then(res => res.json())
-    //   .then((json) => {
-    Promise.resolve()
-      .then(() => {
+    fetch(`https://postcode-api.apiwise.nl/v2/addresses${query}`, {
+      headers,
+    })
+      .then(res => res.json())
+      .then((json) => {
         if(this.state.query !== query) {
           this.setFieldVisibility(true);
           return;
