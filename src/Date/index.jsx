@@ -115,6 +115,7 @@ class Date extends Component {
       selectedDay: moment(props.value, props.dateFormat, true).isValid() ? moment(props.value, props.dateFormat).toDate() : null,
     };
 
+    this.calculateDisabledDates = this.calculateDisabledDates.bind(this);
     this.handleInputFocus = this.handleInputFocus.bind(this);
     this.handleInputBlur = this.handleInputBlur.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -131,14 +132,7 @@ class Date extends Component {
     this[ref] = el;
   }
 
-  calculateDateRange(value) {
-    const result = {
-      valid: true,
-    };
-
-    const { dateFormat } = this.props;
-    const timestamp = moment(value, dateFormat, true);
-
+  getDateRange(result = {}, dateFormat = this.props.dateFormat) {
     const minMoment = moment(this.min, dateFormat, true);
     const maxMoment = moment(this.max, dateFormat, true);
 
@@ -152,6 +146,17 @@ class Date extends Component {
       result.max = moment().add(this.max, 'days');
     }
 
+    return result;
+  }
+
+  calculateDateRange(value) {
+    const result = this.getDateRange({
+      valid: true,
+    });
+
+    const { dateFormat } = this.props;
+    const timestamp = moment(value, dateFormat, true);
+
     if(this.min && this.max) {
       result.type = 'range';
       result.valid = timestamp.isBetween(result.min, result.max);
@@ -164,6 +169,11 @@ class Date extends Component {
     }
 
     return result;
+  }
+
+  calculateDisabledDates(day) {
+    const result = this.calculateDateRange(moment(day).format(this.props.dateFormat));
+    return !result.valid;
   }
 
   handleInputBlur() {
@@ -238,17 +248,19 @@ class Date extends Component {
       >
         {DateInput}
         {this.state.showOverlay &&
-          <div styleName='overlay'>
-            <DayPicker
-              ref={el => this.setRef('daypicker', el)}
-              initialMonth={this.state.selectedDay || undefined}
-              onDayClick={this.handleDayClick}
-              selectedDays={this.state.selectedDay}
-              locale={this.props.locale}
-              localeUtils={MomentLocaleUtils}
-              labels={labelTranslations[this.props.locale]}
-            />
-          </div>
+        <div styleName='overlay'>
+          <DayPicker
+            ref={el => this.setRef('daypicker', el)}
+            initialMonth={this.state.selectedDay || undefined}
+            onDayClick={this.handleDayClick}
+            selectedDays={this.state.selectedDay}
+            locale={this.props.locale}
+            localeUtils={MomentLocaleUtils}
+            labels={labelTranslations[this.props.locale]}
+            enableOutsideDays
+            disabledDays={[this.calculateDisabledDates]}
+          />
+        </div>
         }
       </div>
     );
