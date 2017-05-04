@@ -34,10 +34,7 @@ class Webform extends Component {
   static propTypes = {
     settings: PropTypes.shape({
       title: PropTypes.string,
-      postUrl: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.bool,
-      ]),
+      cmsBaseUrl: PropTypes.string.isRequired,
       tracking: PropTypes.oneOfType([
         PropTypes.shape({
           gtm_id: PropTypes.oneOfType([
@@ -75,9 +72,9 @@ class Webform extends Component {
     },
   };
 
-  // static fireAnalyticsEvent(event) {
-  //   ReactGA.event(event);
-  // }
+  static fireAnalyticsEvent() {
+    // ReactGA.event(event);
+  }
 
   constructor(props) {
     super(props);
@@ -145,12 +142,11 @@ class Webform extends Component {
 
   async updateSubmission() {
     let response = await this.props.onSubmit(this); // Trigger onSubmit hook and store response.
-
-    if(response.submit !== false) { // If onSubmit hook response is false, don't trigger default submit.
+    if(!response || response.submit !== false) { // If onSubmit hook response is false, don't trigger default submit.
       response = await this.submit();
     }
 
-    if(response.status === 200) {
+    if(response.status === 200 || response.status === 201) {
       this.setState({ status: Webform.formStates.SENT });
       Webform.fireAnalyticsEvent({
         category: Webform.analyticsEventsCategories.SUCCESSFUL,
@@ -168,7 +164,6 @@ class Webform extends Component {
   }
 
   async submit() {
-    console.info('submit');
     // eslint-disable-next-line no-undef
     const headers = new Headers({
       'Content-Type': 'application/json',
@@ -182,7 +177,7 @@ class Webform extends Component {
       }
     });
     this.setState({ status: Webform.formStates.PENDING });
-    return fetch(this.props.settings.postUrl, {
+    return fetch(`${this.props.settings.cmsBaseUrl}/api/v1/form?_format=json`, {
       headers,
       method: 'POST',
       body: JSON.stringify(Object.assign({
@@ -225,9 +220,9 @@ class Webform extends Component {
             status={this.state.status}
           />
         </form>}
-        { this.state.status === Webform.formStates.SENT &&
-        <ThankYouMessage message={this.props.form.settings.confirmation_message} />
-        }
+        {/* { this.state.status === Webform.formStates.SENT &&*/}
+        {/* <ThankYouMessage message={this.props.form.settings.confirmation_message} /> */}
+        {/* }*/}
         {this.props.settings.tracking !== false &&
         <div>
           {/* <Script*/}
