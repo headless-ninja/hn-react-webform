@@ -151,7 +151,7 @@ class WebformElement extends Component {
 
   onChange(e) {
     // update store value for field
-    const value = e.target ? e.target.value : e; // Check if 'e' is event, or direct value
+    const value = (e && e.target) ? e.target.value : e; // Check if 'e' is event, or direct value
     const field = this.getField();
     if(!field) {
       return false;
