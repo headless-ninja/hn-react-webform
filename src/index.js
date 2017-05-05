@@ -13,6 +13,7 @@ import Fieldset from './Fieldset';
 import IBAN from './IBAN';
 import Address from './Address';
 import Hidden from './Hidden';
+import WizardPages from './Wizard';
 
 const components = {
   textfield: Input,
@@ -29,6 +30,7 @@ const components = {
   iban: IBAN,
   webform_address_custom: Address,
   hidden: Hidden,
+  webform_wizard_pages: WizardPages,
   default: Fieldset,
 };
 
