@@ -28,7 +28,7 @@
     "build": "rimraf lib && babel src --out-dir lib --copy-files",
     "lint": "npm run lint-js && npm run lint-style",
     "lint-js": "eslint --ext .jsx,.js src",
-    "lint-js-fix": "npm run lint -- --fix",
+    "lint-js-fix": "eslint --ext .jsx,.js src --fix",
     "lint-js-watch": "node node_modules/eslint-watch/bin/esw -w --fix --ext .jsx,.js src",
     "lint-style": "stylelint \"src/**/*.pcss\"",
     "lint-style-fix": "stylelint \"src/**/*.pcss\" --fix",
