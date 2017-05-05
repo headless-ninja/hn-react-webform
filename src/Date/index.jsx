@@ -35,6 +35,7 @@ class Date extends Component {
       '#dateRangeError': PropTypes.string,
       '#dateBeforeError': PropTypes.string,
       '#dateAfterError': PropTypes.string,
+      '#title_display': PropTypes.string,
       composite_elements: PropTypes.oneOfType([
         PropTypes.array,
         PropTypes.object,
@@ -149,6 +150,14 @@ class Date extends Component {
     return result;
   }
 
+  getLabelPositionClass() {
+    const labelClass = `display-${this.props.field['#title_display']}`;
+    if(styles[labelClass]) {
+      return labelClass;
+    }
+    return '';
+  }
+
   calculateDateRange(value) {
     const result = this.getDateRange({
       valid: true,
@@ -240,26 +249,30 @@ class Date extends Component {
       value,
     });
 
+    const cssClassesWrapper = `input-wrapper ${this.getLabelPositionClass()}`;
+
     return (
       <div
         onMouseDown={this.handleContainerMouseDown}
         onBlur={this.handleInputBlur}
-        styleName='wrapper'
+        styleName={cssClassesWrapper}
       >
         {DateInput}
         {this.state.showOverlay &&
-        <div styleName='overlay'>
-          <DayPicker
-            ref={el => this.setRef('daypicker', el)}
-            initialMonth={this.state.selectedDay || undefined}
-            onDayClick={this.handleDayClick}
-            selectedDays={this.state.selectedDay}
-            locale={this.props.locale}
-            localeUtils={MomentLocaleUtils}
-            labels={labelTranslations[this.props.locale]}
-            enableOutsideDays
-            disabledDays={[this.calculateDisabledDates]}
-          />
+        <div styleName='overlay-wrapper'>
+          <div styleName='overlay'>
+            <DayPicker
+              ref={el => this.setRef('daypicker', el)}
+              initialMonth={this.state.selectedDay || undefined}
+              onDayClick={this.handleDayClick}
+              selectedDays={this.state.selectedDay}
+              locale={this.props.locale}
+              localeUtils={MomentLocaleUtils}
+              labels={labelTranslations[this.props.locale]}
+              enableOutsideDays
+              disabledDays={[this.calculateDisabledDates]}
+            />
+          </div>
         </div>
         }
       </div>
