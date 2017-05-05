@@ -3,6 +3,7 @@ import CSSModules from 'react-css-modules';
 import InputMask from 'react-input-mask';
 import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
+import Fieldset from '../Fieldset';
 
 @CSSModules(styles, { allowMultiple: true })
 class Input extends Component {
@@ -22,6 +23,7 @@ class Input extends Component {
       ]),
       '#min': PropTypes.string,
       '#max': PropTypes.string,
+      '#step': PropTypes.string,
     }).isRequired,
     className: PropTypes.string,
     value: PropTypes.oneOfType([
@@ -30,7 +32,6 @@ class Input extends Component {
       PropTypes.bool,
     ]).isRequired,
     type: PropTypes.string,
-    autoComplete: PropTypes.string,
     id: PropTypes.number,
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
     onChange: PropTypes.func.isRequired,
@@ -61,10 +62,11 @@ class Input extends Component {
   }
 
   render() {
+    const fieldAttrs = false || Fieldset.getValue(this.props.field, 'attributes');
     const attrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,
       'aria-required': this.props.field['#required'] ? true : null,
-      autoComplete: this.props.autoComplete !== '' ? this.props.autoComplete : null,
+      autoComplete: fieldAttrs ? fieldAttrs.autoComplete : '',
     };
 
     let InputComponent = 'input'; // Input HTML element is 'input' by default
@@ -88,6 +90,7 @@ class Input extends Component {
         disabled={!this.props.webformElement.state.enabled}
         min={this.props.field['#min']}
         max={this.props.field['#max']}
+        step={this.props.field['#step']}
         onChange={this.props.onChange}
         onBlur={this.props.onBlur}
         onFocus={this.props.onFocus}

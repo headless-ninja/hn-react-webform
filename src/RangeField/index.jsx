@@ -9,6 +9,8 @@ class RangeField extends Component {
   static propTypes = {
     field: PropTypes.shape({
       '#title_display': PropTypes.string,
+      '#min': PropTypes.string,
+      '#max': PropTypes.string,
     }).isRequired,
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -18,10 +20,10 @@ class RangeField extends Component {
     onChange: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.props.onChange(this.getNumericValue());
+  componentDidMount() {
+    // rewrite to 0 if not numeric
+    const value = !isNaN(parseFloat(this.props.value)) && isFinite(this.props.value) ? this.props.value : 0;
+    this.props.onChange(value);
   }
 
   getLabelPositionClass() {
@@ -32,9 +34,14 @@ class RangeField extends Component {
     return '';
   }
 
-  getNumericValue() {
-    // rewrite to 0 if not numeric
-    return !isNaN(parseFloat(this.props.value)) && isFinite(this.props.value) ? this.props.value : 0;
+  getPercentageValue() {
+    const minValue = parseFloat(this.props.field['#min']);
+    const range = parseFloat(this.props.field['#max']) - minValue;
+    let rangeValue = (this.props.value - minValue) / range;
+    rangeValue = isFinite(rangeValue) ? rangeValue : 0;
+    rangeValue = rangeValue > 0 ? rangeValue : 0;
+
+    return rangeValue * 100;
   }
 
   render() {
@@ -47,7 +54,7 @@ class RangeField extends Component {
           type='range'
           styleName='range'
         />
-        <span styleName={`range-value-wrapper ${this.getLabelPositionClass()}`}><span styleName='range-value' style={{ left: `${this.getNumericValue()}%` }}>{this.getNumericValue()}</span></span>
+        <span styleName={`range-value-wrapper ${this.getLabelPositionClass()}`}><span styleName='range-value' style={{ left: `${this.getPercentageValue()}%` }}>{this.props.value}</span></span>
       </div>
     );
   }
