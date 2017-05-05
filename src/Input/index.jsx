@@ -52,6 +52,14 @@ class Input extends Component {
     parentRef: () => {},
   };
 
+  getLabelClass() {
+    const labelClass = this.props.webformElement.getLabelClass();
+    if(styles[labelClass]) {
+      return labelClass;
+    }
+    return '';
+  }
+
   render() {
     const attrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,
@@ -75,7 +83,7 @@ class Input extends Component {
         name={this.props.field['#webform_key']}
         id={this.props.id || this.props.field['#webform_key']}
         placeholder={this.props.field['#placeholder']}
-        styleName={`input ${this.props.webformElement.isValid() ? '' : 'validate-error'}`}
+        styleName={`input ${this.getLabelClass()} ${this.props.webformElement.isValid() ? '' : 'validate-error'}`}
         className={this.props.className ? this.props.className : ''}
         disabled={!this.props.webformElement.state.enabled}
         min={this.props.field['#min']}
