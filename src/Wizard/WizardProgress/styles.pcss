@@ -1,7 +1,84 @@
+@import '../../styles/_variables.pcss';
+
 .done {
   color: green;
 }
 
 .todo {
   color: grey;
+}
+
+.bar {
+  margin: 0;
+  padding: 0;
+}
+
+.step {
+  display: inline-block;
+  padding: 15px 30px;
+  position: relative;
+  margin-right: 5px;
+  background: #f4f4f4;
+
+  &::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    left: 0;
+    border-left: 20px solid #fff;
+    border-bottom: 24px solid transparent;
+    border-top: 24px solid transparent;
+    clear: both;
+  }
+
+  &::after {
+    position: absolute;
+    content: '';
+    top: 0;
+    right: -20px;
+    border-left: 20px solid #f4f4f4;
+    border-bottom: 24px solid transparent;
+    border-top: 24px solid transparent;
+    clear: both;
+  }
+
+  &.done,
+  &.active {
+    background: var(--primaryColor);
+    color: #fff;
+
+    &::after {
+      border-left: 20px solid var(--primaryColor);
+    }
+  }
+
+  /* should loop this: */
+
+  &.step-4 {
+    z-index: 1;
+  }
+
+  &.step-3 {
+    z-index: 2;
+  }
+
+  &.step-2 {
+    z-index: 3;
+  }
+
+  &.step-1 {
+    z-index: 4;
+
+    &::before {
+      display: none;
+    }
+  }
+}
+
+.step-number {
+  margin-right: 5px;
+}
+
+.step-title {
+  color: #000;
 }
