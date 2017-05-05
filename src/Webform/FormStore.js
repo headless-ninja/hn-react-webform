@@ -73,8 +73,6 @@ class FormStore {
     const existingFieldIndex = this.getFieldIndex(key);
     const field = new Field(component, key, props, valid);
     if(existingFieldIndex > -1) {
-      // console.warn('Field', key, 'already exists! Overriding...');
-      this.fields[existingFieldIndex] = field;
       return field;
     }
     this.fields.push(field);
