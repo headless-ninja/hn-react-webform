@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
+import CSSModules from 'react-css-modules';
 import Parser from '../Parser';
+import styles from './style.pcss';
 
+@CSSModules(styles)
 class RuleHint extends Component {
   static propTypes = {
     hint: PropTypes.oneOfType([
@@ -29,7 +32,7 @@ class RuleHint extends Component {
   render() {
     const hint = this.getHint();
     return (
-      <li>
+      <li styleName='validation-message'>
         <span>
           {Parser(hint)}
         </span>

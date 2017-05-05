@@ -15,23 +15,26 @@ import Address from './Address';
 import Hidden from './Hidden';
 import RangeField from './RangeField';
 import WizardPages from './Wizard';
+import Relation from './Relation';
 
 const components = {
-  textfield: Input,
-  textarea: TextArea,
   checkbox: CheckboxField,
   email: EmailField,
-  tel: PhoneField,
-  webform_date_custom: Date,
-  webform_message: ParagraphField,
-  select: SelectField,
-  radios: RadioField,
   fieldset: Fieldset,
-  webform_dateofbirth: Date,
-  iban: IBAN,
-  webform_address_custom: Address,
   hidden: Hidden,
+  iban: IBAN,
+  radios: RadioField,
   range: RangeField,
+  select: SelectField,
+  tel: PhoneField,
+  textfield: Input,
+  textarea: TextArea,
+  webform_address_custom: Address,
+  webform_date_custom: Date,
+  webform_dateofbirth: Date,
+  webform_message: ParagraphField,
+  webform_relation_custom: Relation,
+  webform_relation_postcode_custom: Relation,
   webform_wizard_pages: WizardPages,
   default: Fieldset,
 };

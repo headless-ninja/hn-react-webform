@@ -24,6 +24,11 @@ class Fieldset extends Component {
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
     settings: PropTypes.shape().isRequired,
+    children: PropTypes.node,
+  };
+
+  static defaultProps = {
+    children: [],
   };
 
   /**
@@ -64,6 +69,7 @@ class Fieldset extends Component {
     const formElements = this.getFormElements();
     return (
       <div styleName='fieldset-inner'>
+        {this.props.children}
         {formElements}
       </div>
     );
