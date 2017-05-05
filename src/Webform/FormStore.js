@@ -11,7 +11,7 @@ class Field {
   hasChanged = false;
   isBlurred = false;
 
-  constructor(component, key, props = {}, valid = false) {
+  constructor(component, key, props = {}, valid = false, defaultValue) {
     if(!component) {
       throw new Error('Element instance reference is required');
     }
@@ -23,7 +23,7 @@ class Field {
     this.component = component;
     this.key = key;
     this.valid = valid;
-    this.value = props['#default_value'] || '';
+    this.value = defaultValue || props['#default_value'] || '';
     this.props = props;
     this.conditionals = formatConditionals(props['#states']);
   }
@@ -60,9 +60,10 @@ class FormStore {
   };
   key = null;
 
-  constructor(formId, settings) {
+  constructor(formId, settings, defaults = {}) {
     this.key = formId;
     this.settings = settings;
+    this.defaults = defaults;
   }
 
   checkConditionals(excluded = []) {
@@ -71,7 +72,13 @@ class FormStore {
 
   createField(component, key, props, valid) {
     const existingFieldIndex = this.getFieldIndex(key);
-    const field = new Field(component, key, props, valid);
+
+    let defaultValue;
+    if(typeof this.defaults[key] !== 'undefined') {
+      defaultValue = this.defaults[key];
+    }
+
+    const field = new Field(component, key, props, valid, defaultValue);
     if(existingFieldIndex > -1) {
       return field;
     }

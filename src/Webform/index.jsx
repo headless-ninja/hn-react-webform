@@ -60,6 +60,7 @@ class Webform extends Component {
     onSubmit: PropTypes.func,
     onSubmitSuccess: PropTypes.func,
     onSubmitFail: PropTypes.func,
+    defaultValues: PropTypes.objectOf(PropTypes.string.isRequired),
   };
 
   static defaultProps = {
@@ -70,6 +71,7 @@ class Webform extends Component {
     settings: {
       tracking: false,
     },
+    defaultValues: {},
   };
 
   static fireAnalyticsEvent() {
@@ -85,7 +87,7 @@ class Webform extends Component {
     };
 
     this.key = props.form.form_id;
-    this.formStore = new FormStore(this.key, props.settings);
+    this.formStore = new FormStore(this.key, props.settings, this.props.defaultValues);
 
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -106,7 +108,7 @@ class Webform extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props.form.form_id !== nextProps.form.form_id) {
-      this.formStore = new FormStore(this.key, this.props.settings);
+      this.formStore = new FormStore(this.key, this.props.settings, this.props.defaultValues);
     }
   }
 
