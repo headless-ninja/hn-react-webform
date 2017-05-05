@@ -137,7 +137,7 @@ class WebformElement extends Component {
     Object.assign(this.state, defaultStates(props.field));
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if(this.shouldRender()) {
       this.props.formStore.createField(this, this.key, this.props.field, this.validate());
 

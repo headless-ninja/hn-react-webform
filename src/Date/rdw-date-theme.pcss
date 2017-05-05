@@ -1,14 +1,29 @@
 @import '../styles/_variables.pcss';
 
-.wrapper {
+.input-wrapper {
+  @media (min-width: 768px) {
+    display: inline-block;
+    float: left;
+    width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
+  }
+
+  & .display-before {
+    float: none;
+    width: 100%;
+  }
+}
+
+.overlay-wrapper {
   position: relative;
 }
 
 .overlay {
   position: absolute;
-  right: 170px;
+  left: 0;
+  top: 5px;
   background: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  z-index: 1;
 }
 
 /* Navigation */
