@@ -19,6 +19,7 @@ class LookUp extends Component {
         '#default_value': PropTypes.string,
       })),
     }).isRequired,
+    onBlur: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -69,6 +70,8 @@ class LookUp extends Component {
     if(lookUpObject && lookUpObject.query !== this.state.query) {
       this.lookUp(lookUpObject.query, lookUpObject.checkResponse, lookUpObject.headers);
     }
+
+    this.props.onBlur(e);
   }
 
   setFieldVisibility(set) {
