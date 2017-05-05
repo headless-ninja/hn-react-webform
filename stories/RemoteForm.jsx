@@ -47,7 +47,7 @@ class RemoteForm extends React.Component {
     this.state = {
       baseUrl: 'https://redactie.natuurmonumenten.nl/api/v1',
       // baseUrl: 'http://dev.natuurmonumenten.nl/api/v1',
-      node: 2,
+      path: 'node/2',
       field: 'field_form',
       visible: false,
     };
@@ -62,8 +62,8 @@ class RemoteForm extends React.Component {
             <input id='baseUrl' style={style.input} type='text' onChange={e => this.setState({ baseUrl: e.target.value })} value={this.state.baseUrl} />
             <br />
 
-            <label htmlFor='node' style={style.label}>Drupal node:</label>
-            <input id='node' style={style.input} type='number' onChange={e => this.setState({ node: e.target.value })} value={this.state.node} />
+            <label htmlFor='path' style={style.label}>Drupal path:</label>
+            <input id='path' style={style.input} type='text' onChange={e => this.setState({ path: e.target.value })} value={this.state.path} />
             <br />
 
             <label htmlFor='field' style={style.label}>Drupal field:</label>
@@ -81,7 +81,7 @@ class RemoteForm extends React.Component {
         <FetchForm
           ref={component => this.form = component}
           baseUrl={this.state.baseUrl}
-          node={this.state.node}
+          path={this.state.path}
           field={this.state.field}
         />
       </div>

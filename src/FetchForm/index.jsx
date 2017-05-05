@@ -11,7 +11,7 @@ const LOAD_STATES = {
 class FetchForm extends Component {
   static propTypes = {
     baseUrl: PropTypes.string.isRequired,
-    node: PropTypes.number.isRequired,
+    path: PropTypes.string.isRequired,
     field: PropTypes.string,
   }
 
@@ -34,7 +34,7 @@ class FetchForm extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps.baseUrl !== this.props.baseUrl || prevProps.node !== this.props.node || prevProps.field !== this.props.field) {
+    if(prevProps.baseUrl !== this.props.baseUrl || prevProps.path !== this.props.path || prevProps.field !== this.props.field) {
       this.fetchForm();
     }
   }
@@ -48,7 +48,7 @@ class FetchForm extends Component {
     // console.info('Loading..');
     this.setState({ loadState: LOAD_STATES.LOADING });
 
-    this.fetch = fetch(`${this.props.baseUrl}/url?url=/node/${this.props.node}&_format=json`)
+    this.fetch = fetch(`${this.props.baseUrl}/url?url=/${this.props.path}&_format=json`)
       .then(data => data.json())
       .then((json) => {
         if(typeof json.content !== 'object' || (!this.props.field && !json.content.form_id) || (this.props.field && !json.content[this.props.field].form_id)) {
