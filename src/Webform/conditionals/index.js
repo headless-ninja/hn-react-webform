@@ -97,7 +97,7 @@ export function formatConditionals(states = false) {
 
     const mappedConditions = conditionalKeys.map((conditionalKey2) => { // e.g. ':input[name="name"]'.
       let conditionalKey = conditionalKey2;
-      let conditionObject = states[stateKey][conditionalKey];
+      let conditionObject = states[stateKey];
 
       if(conditionLogic === supportedLogic.or) { // If conditional logic is set to 'or'.
         if(conditionObject === supportedLogic.or) {
