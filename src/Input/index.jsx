@@ -24,6 +24,9 @@ class Input extends Component {
       '#min': PropTypes.string,
       '#max': PropTypes.string,
       '#step': PropTypes.string,
+      '#attributes': PropTypes.shape({
+        autoComplete: PropTypes.string,
+      }),
     }).isRequired,
     className: PropTypes.string,
     value: PropTypes.oneOfType([
@@ -62,11 +65,11 @@ class Input extends Component {
   }
 
   render() {
-    const fieldAttrs = false || Fieldset.getValue(this.props.field, 'attributes');
+    const fieldAttrs = this.props.field['#attributes'];
     const attrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,
       'aria-required': this.props.field['#required'] ? true : null,
-      autoComplete: fieldAttrs ? fieldAttrs.autoComplete : '',
+      autoComplete: fieldAttrs ? fieldAttrs.autoComplete : null,
     };
 
     let InputComponent = 'input'; // Input HTML element is 'input' by default
