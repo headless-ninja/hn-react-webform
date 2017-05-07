@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import fetch from 'fetch-everywhere';
 import getNested from 'get-nested';
 import Fieldset from '../Fieldset';

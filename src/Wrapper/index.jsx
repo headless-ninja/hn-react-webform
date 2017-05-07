@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Wrapper = (p) => {
   const props = Object.assign({}, p, p.component.props); // Merge Wrapper props with Wrapper override props.
