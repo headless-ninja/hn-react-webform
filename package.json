@@ -34,7 +34,7 @@
     "lint-style-fix": "stylelint \"src/**/*.pcss\" --fix",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "test": "npm run lint",
+    "test": "jest src",
     "precommit": "npm run lint",
     "prepush": "npm test"
   },
@@ -76,6 +76,7 @@
     "eslint-watch": "^3.0.1",
     "highlight.js": "^9.10.0",
     "husky": "^0.13.3",
+    "jest-cli": "^20.0.0",
     "json-loader": "^0.5.4",
     "mobx-remotedev": "^0.2.6",
     "postcss-cssnext": "^2.10.0",
