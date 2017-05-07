@@ -3,7 +3,6 @@ import CSSModules from 'react-css-modules';
 import InputMask from 'react-input-mask';
 import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
-import Fieldset from '../Fieldset';
 
 @CSSModules(styles, { allowMultiple: true })
 class Input extends Component {
