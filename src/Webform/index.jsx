@@ -62,6 +62,7 @@ class Webform extends Component {
     onSubmitSuccess: PropTypes.func,
     onSubmitFail: PropTypes.func,
     defaultValues: PropTypes.objectOf(PropTypes.string.isRequired),
+    hiddenData: PropTypes.objectOf(PropTypes.string.isRequired),
   };
 
   static defaultProps = {
@@ -73,6 +74,7 @@ class Webform extends Component {
       tracking: false,
     },
     defaultValues: {},
+    hiddenData: {},
   };
 
   static fireAnalyticsEvent() {
@@ -173,7 +175,7 @@ class Webform extends Component {
       'X-CSRF-Token': this.props.form.token,
     });
 
-    const values = {};
+    const values = Object.assign({}, this.props.hiddenData);
     this.formStore.fields.forEach((field) => {
       if(field.value.toString().trim() !== '') {
         values[field.key] = field.value;
