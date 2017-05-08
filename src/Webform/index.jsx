@@ -134,6 +134,7 @@ class Webform extends Component {
         formStore={this.formStore}
         webform={this}
         settings={this.props.form.settings}
+        webformSettings={this.props.settings}
       />);
   }
 

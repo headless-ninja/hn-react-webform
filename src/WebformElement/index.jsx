@@ -49,6 +49,7 @@ class WebformElement extends Component {
         }),
       }),
     }).isRequired,
+    webformSettings: PropTypes.shape().isRequired,
   };
 
   static defaultProps = {
@@ -145,9 +146,11 @@ class WebformElement extends Component {
       if(this.state[supportedActions.required]) {
         this.props.formStore.formProperties.hasRequiredFields = true;
       }
-
-      this.setState({ validations: this.getValidations() });
     }
+  }
+
+  componentDidMount() {
+    this.setState({ validations: this.getValidations() });
   }
 
   onChange(e) {
@@ -201,6 +204,7 @@ class WebformElement extends Component {
           validations={this.state.validations}
           webformElement={this}
           settings={this.props.settings}
+          webformSettings={this.props.webformSettings}
         />,
       };
     }

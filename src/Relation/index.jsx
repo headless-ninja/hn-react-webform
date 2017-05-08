@@ -1,34 +1,50 @@
-import React from 'react';
+import React, { Component } from 'react';
 import getNested from 'get-nested';
-import LookUp from '../LookUp';
+import PropTypes from 'prop-types';
+import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
 import RuleHint from '../RuleHint';
 
-class Relation extends LookUp {
+class Relation extends Component {
+  static meta = {
+    labelVisibility: Fieldset.meta.labelVisibility,
+  };
+
+  static propTypes = {
+    field: PropTypes.shape({
+      '#webform_key': PropTypes.string.isRequired,
+      '#relationError': PropTypes.string,
+      composite_elements: PropTypes.arrayOf(PropTypes.shape()),
+    }).isRequired,
+    webformSettings: PropTypes.shape({
+      cmsBaseUrl: PropTypes.string.isRequired,
+    }).isRequired,
+    fieldIterator: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired,
+    sent: PropTypes.bool.isRequired,
+    successful: PropTypes.bool.isRequired,
+    formKeySuffix: PropTypes.string.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
     this.lookUpFields = {
       relation_number: {
-        formKey: `relation_number${this.formKeySuffix}`,
+        formKey: `relation_number${props.formKeySuffix}`,
         triggerLookup: true,
         apiValue: () => false,
         required: true,
       },
       postcode: {
-        formKey: `address_postcode${this.fullAddressLookUp() ? `-${this.fullAddressLookUp()}` : this.formKeySuffix}`,
+        formKey: `address_postcode${this.fullAddressLookUp() ? `-${this.fullAddressLookUp()}` : props.formKeySuffix}`,
         triggerLookup: true,
         apiValue: () => false,
         required: true,
       },
     };
 
-    this.lookUpBase = '/services/data/v37.0/query/?q=SELECT+Id,name,otherstreet,othercity,otherpostalcode,othercountry,Is_Lid__c,email,phone,Primaire_Lidmaatschap__c+from+Contact+where+';
-
-    this.state = {
-      sent: false,
-      successful: false,
-    };
+    this.lookUpBase = `${props.webformSettings.cmsBaseUrl}/relation-lookup/validate-single?_format=json`;
   }
 
   /**
@@ -41,8 +57,8 @@ class Relation extends LookUp {
 
   prepareLookUp(fields) {
     let performLookUp = true;
-    this.fieldIterator((field, element) => {
-      if(element.required && (!fields[element.elementKey] || !field.component.isValid())) {
+    this.props.fieldIterator((field, element) => {
+      if(element.required && (!fields[element.elementKey] || !field.component.isValid(true))) {
         performLookUp = false;
         return false;
       }
@@ -53,33 +69,22 @@ class Relation extends LookUp {
       return false;
     }
 
-    const query = `relatienummer__c='${fields.relation_number}'+AND+OtherPostalCode='${fields.postcode}'`;
+    const query = `&relation_number=${fields.relation_number}&postal_code=${fields.postcode}`;
 
     return {
       query,
       checkResponse: json => (json.done ? json : false),
-      headers: {
-        'X-Api-Key': getNested(() => this.props.field.composite_elements
-          .find(element =>
-            element['#webform_key'].includes('relation_api_key'))['#default_value']) || this.props.formStore.settings.postcodeApiKey,
-      },
+      isSuccessful: response => response.totalSize > 0,
     };
-  }
-
-  lookUpCallback(response) {
-    this.setState({
-      sent: true,
-      successful: response.totalSize > 0,
-    });
   }
 
   render() {
     return (
       <Fieldset
         {...this.props}
-        onBlur={this.onBlur}
+        onBlur={this.props.onBlur}
       >
-        {this.state.sent && !this.state.successful &&
+        {this.props.sent && !this.props.successful &&
         <RuleHint key={`relation_${this.props.field['#webform_key']}`} hint={this.props.field['#relationError'] || 'We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.'} />
         }
       </Fieldset>
@@ -87,4 +92,4 @@ class Relation extends LookUp {
   }
 }
 
-export default Relation;
+export default composeLookUp(Relation);

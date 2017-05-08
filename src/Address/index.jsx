@@ -1,44 +1,62 @@
-import React from 'react';
+import React, { Component } from 'react';
 import getNested from 'get-nested';
-import LookUp from '../LookUp';
+import PropTypes from 'prop-types';
+import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
+import FormStore from '../Webform/FormStore';
 
-class Address extends LookUp {
+class Address extends Component {
+  static meta = {
+    labelVisibility: Fieldset.meta.labelVisibility,
+  };
+
+  static propTypes = {
+    field: PropTypes.shape({
+      '#webform_key': PropTypes.string.isRequired,
+      composite_elements: PropTypes.arrayOf(PropTypes.shape()),
+    }).isRequired,
+    getField: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired,
+    settings: PropTypes.shape().isRequired,
+    formKeySuffix: PropTypes.string.isRequired,
+    formStore: PropTypes.instanceOf(FormStore).isRequired,
+  };
+
   constructor(props) {
     super(props);
 
     this.lookUpFields = {
       street: {
-        formKey: `address_street${this.formKeySuffix}`,
+        formKey: `address_street${props.formKeySuffix}`,
         apiValue: address => address.street,
         hideField: true,
       },
       postcode: {
-        formKey: `address_postcode${this.formKeySuffix}`,
+        formKey: `address_postcode${props.formKeySuffix}`,
         apiValue: () => false,
         triggerLookup: true,
       },
       number: {
-        formKey: `address_number${this.formKeySuffix}`,
+        formKey: `address_number${props.formKeySuffix}`,
         apiValue: () => false,
         triggerLookup: true,
       },
       addition: {
-        formKey: `address_number_add${this.formKeySuffix}`,
+        formKey: `address_number_add${props.formKeySuffix}`,
         apiValue: () => false,
         triggerLookup: true,
       },
       city: {
-        formKey: `address_city${this.formKeySuffix}`,
+        formKey: `address_city${props.formKeySuffix}`,
         apiValue: address => address.city.label,
         hideField: true,
       },
       locationLat: {
-        formKey: `address_location_lat${this.formKeySuffix}`,
+        formKey: `address_location_lat${props.formKeySuffix}`,
         apiValue: address => address.geo.center.wgs84.coordinates[1],
       },
       locationLng: {
-        formKey: `address_location_lng${this.formKeySuffix}`,
+        formKey: `address_location_lng${props.formKeySuffix}`,
         apiValue: address => address.geo.center.wgs84.coordinates[0],
       },
     };
@@ -47,7 +65,7 @@ class Address extends LookUp {
   }
 
   prepareLookUp(fields) {
-    const postCodeField = this.getField('postcode').field;
+    const postCodeField = this.props.getField('postcode').field;
 
     if(!fields.postcode || !postCodeField || !postCodeField.component.isValid()) {
       return false;
@@ -71,10 +89,10 @@ class Address extends LookUp {
     return (
       <Fieldset
         {...this.props}
-        onBlur={this.onBlur}
+        onBlur={this.props.onBlur}
       />
     );
   }
 }
 
-export default Address;
+export default composeLookUp(Address);

@@ -26,6 +26,7 @@ class Fieldset extends Component {
     onBlur: PropTypes.func.isRequired,
     settings: PropTypes.shape().isRequired,
     children: PropTypes.node,
+    webformSettings: PropTypes.shape().isRequired,
   };
 
   static defaultProps = {
@@ -63,6 +64,7 @@ class Fieldset extends Component {
         onChange={this.props.onChange}
         onBlur={this.props.onBlur}
         settings={this.props.settings}
+        webformSettings={this.props.webformSettings}
       />);
   }
 
