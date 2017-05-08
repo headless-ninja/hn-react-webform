@@ -1,16 +1,9 @@
 @import '../../styles/_variables.pcss';
 
-.done {
-  color: green;
-}
-
-.todo {
-  color: grey;
-}
-
 .bar {
-  margin: 0;
+  margin: 0 0 calc(2 * var(--spacingUnit)) 0;
   padding: 0;
+  width: 100%;
 }
 
 .step {
@@ -41,44 +34,42 @@
     border-top: 24px solid transparent;
     clear: both;
   }
+}
 
-  &.done,
-  &.active {
-    background: var(--primaryColor);
-    color: #fff;
+.done,
+.active {
+  background: var(--primaryColor);
+  color: #fff;
 
-    &::after {
-      border-left: 20px solid var(--primaryColor);
-    }
+  &::after {
+    border-left: 20px solid var(--primaryColor);
   }
+}
 
-  /* should loop this: */
+@for $i from 1 to 8 {
+  /* give each step class a higher z-index than the next step */
 
-  &.step-4 {
-    z-index: 1;
-  }
+  .step-$i { z-index: calc(9 - $i); }
+}
 
-  &.step-3 {
-    z-index: 2;
-  }
-
-  &.step-2 {
-    z-index: 3;
-  }
-
-  &.step-1 {
-    z-index: 4;
-
-    &::before {
-      display: none;
-    }
+.step-1 {
+  &::before {
+    display: none;
   }
 }
 
 .step-number {
   margin-right: 5px;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
 }
 
 .step-title {
-  color: #000;
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+  }
 }
