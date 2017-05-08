@@ -32,10 +32,11 @@
     "lint-js-watch": "node node_modules/eslint-watch/bin/esw -w --fix --ext .jsx,.js src",
     "lint-style": "stylelint \"src/**/*.pcss\"",
     "lint-style-fix": "stylelint \"src/**/*.pcss\" --fix",
+    "lint-fix": "npm run lint-js-fix && npm run lint-style-fix",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "test": "jest src",
-    "precommit": "npm run lint",
+    "test": "npm run lint && jest src",
+    "precommit": "npm run lint-fix",
     "prepush": "npm test"
   },
   "dependencies": {
