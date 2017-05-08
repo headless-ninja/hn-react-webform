@@ -28,6 +28,7 @@ module.exports = {
       options: {
         postcss: postcss([
           require("postcss-import"),
+          require("postcss-for"),
           cssnext()
         ]),
         context: '/',
