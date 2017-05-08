@@ -36,8 +36,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "test": "npm run lint && jest src",
-    "precommit": "npm run lint-fix",
-    "prepush": "npm test"
+    "precommit": "npm run lint-fix && npm test"
   },
   "dependencies": {
     "classnames": "^2.2.5",
