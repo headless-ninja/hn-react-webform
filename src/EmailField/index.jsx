@@ -109,6 +109,4 @@ class EmailField extends Component {
   }
 }
 
-export default composeLookUp(EmailField, {
-  lookUpFields: props => EmailField.getLookUpFields(props),
-});
+export default composeLookUp(EmailField);
