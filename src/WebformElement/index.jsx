@@ -358,7 +358,7 @@ class WebformElement extends Component {
     const element = this.getFormElement();
 
     const errors = this.state.errors.length > 0 ? (
-      <ul role='alert' styleName={`${this.getLabelClass()} validation-message`}> {this.state.errors} </ul>)
+      <ul role='alert' styleName={`${this.getLabelClass()} validation-message-wrapper`}> {this.state.errors} </ul>)
       : null;
 
     return (

@@ -59,17 +59,23 @@ fieldset.formrow {
 }
 
 .description-after,
-.validation-message {
+.validation-message-wrapper {
   font-size: 0.8em;
   margin-top: calc(var(--spacingUnit) / 3);
 
   &.label-display-inline {
-    padding-left: calc(var(--spacingUnit) / 2);
-
     @media (min-width: 768px) {
+      padding-left: calc(var(--spacingUnit) / 2);
       margin-left: 50%;
     }
   }
+}
+
+/* Validation wrapper */
+
+.validation-message-wrapper {
+  margin: 0;
+  padding: 0;
 }
 
 /* Prefix & Suffix */
