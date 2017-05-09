@@ -7,6 +7,8 @@ import FormStore from '../Webform/FormStore';
 
 class Address extends Component {
   static meta = {
+    wrapper: <fieldset />,
+    label: <legend />,
     labelVisibility: Fieldset.meta.labelVisibility,
   };
 
