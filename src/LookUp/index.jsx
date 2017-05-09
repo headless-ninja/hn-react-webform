@@ -130,12 +130,8 @@ function composeLookUp(LookUpComponent) {
       return true;
     }
 
-    lookUp({
-             query,
-             checkResponse = () => false,
-             isSuccessful = () => true,
-             headers = {},
-           }) {
+    lookUp(request) {
+      const { query, headers = {} } = request;
       this.setState({ query });
 
       // eslint-disable-next-line no-undef
@@ -145,39 +141,40 @@ function composeLookUp(LookUpComponent) {
         headers: headersObject,
       })
         .then(res => res.json())
-        .then((json) => {
-          if(this.state.query !== query) {
-            this.setFieldVisibility(true);
-            return;
+        .then(response => this.processResponse(response, request))
+        .catch(response => this.processResponse(response, request));
+    }
+
+    processResponse(jsonResponse, {
+      query,
+      checkResponse = () => false,
+      isSuccessful = () => true,
+    }) {
+      if(this.state.query !== query) {
+        return;
+      }
+
+      const response = checkResponse(jsonResponse);
+      this.setState({
+        sent: true,
+        successful: isSuccessful(response),
+      }, () => {
+        this.fieldIterator((field, element) => {
+          const value = getNested(() => element.apiValue(response));
+          if(value) {
+            field.setStorage({ value });
           }
+          field.component.validate(true);
+        });
 
-          if(json.error) {
-            console.error(json.error);
-          }
+        this.setFieldVisibility(true);
 
-          const response = checkResponse(json);
-          this.setState({
-            sent: true,
-            successful: isSuccessful(response),
-          }, () => {
-            this.fieldIterator((field, element) => {
-              const value = getNested(() => element.apiValue(response));
-              if(value) {
-                field.setStorage({ value });
-              }
-              field.component.validate(true);
-            });
+        this.props.formStore.checkConditionals();
 
-            this.setFieldVisibility(true);
-
-            this.props.formStore.checkConditionals();
-
-            if(this.el.lookUpCallback) {
-              this.el.lookUpCallback(response);
-            }
-          });
-        })
-        .catch(error => (this.el.lookUpCallback ? this.el.lookUpCallback(error) : null));
+        if(this.el.lookUpCallback) {
+          this.el.lookUpCallback(response);
+        }
+      });
     }
 
     render() {

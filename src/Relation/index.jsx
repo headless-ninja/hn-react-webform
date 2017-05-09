@@ -44,7 +44,7 @@ class Relation extends Component {
       },
     };
 
-    this.lookUpBase = `${props.webformSettings.cmsBaseUrl}/relation-lookup/validate-single?_format=json`;
+    this.lookUpBase = `${props.webformSettings.cmsBaseUrl}/salesforce-lookup/contact?_format=json`;
   }
 
   /**
@@ -69,12 +69,12 @@ class Relation extends Component {
       return false;
     }
 
-    const query = `&relation_number=${fields.relation_number}&postal_code=${fields.postcode}`;
+    const query = `&relation=${fields.relation_number}&postal_code=${fields.postcode}`;
 
     return {
       query,
-      checkResponse: json => (json.done ? json : false),
-      isSuccessful: response => response.totalSize > 0,
+      checkResponse: json => json.Id || false,
+      isSuccessful: response => (!!response),
     };
   }
 
