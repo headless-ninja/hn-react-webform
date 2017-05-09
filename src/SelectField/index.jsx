@@ -55,7 +55,7 @@ class SelectField extends Component {
   }
 
   render() {
-    const cssClassesWrapper = `select-wrapper ${this.getLabelPositionClass()} ${this.props.webformElement.isValid() ? 'validate-success' : 'validate-error'}`;
+    const cssClassesWrapper = `select-wrapper ${this.getLabelPositionClass()} ${this.props.webformElement.isValid() ? '' : 'validate-error'}`;
     const options = this.props.field['#options'] || {};
     const mappedOptions = options.map(option => ({
       label: option.text,
@@ -72,6 +72,7 @@ class SelectField extends Component {
           onChange={this.handleChange}
           disabled={!this.props.webformElement.state.enabled}
         />
+        <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
       </div>
     );
   }

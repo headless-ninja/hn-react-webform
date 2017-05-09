@@ -2,8 +2,10 @@
 
 .select-wrapper {
   &.display-inline {
-    display: inline-block;
-    width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
+    @media (min-width: 768px) {
+      display: inline-block;
+      width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
+    }
   }
 
   &.validate-error {
@@ -22,11 +24,33 @@
       color: var(--errorColor);
     }
   }
+}
 
-  &.validate-success {
-    /* TODO: add success styling */
-    &::after { content: ''; }
+/* Validation icon */
+
+.validation-icon {
+  display: inline-block;
+  width: calc(var(--spacingUnit) / 1.5);
+  height: calc(var(--spacingUnit) / 1.5);
+  margin-left: calc(var(--spacingUnit) / 1.5);
+}
+
+.validate-success {
+  &::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 100%;
+    border-bottom: 2px solid var(--successColor);
+    border-right: 2px solid var(--successColor);
+    transform: rotate(45deg) translateY(-4px);
+    position: relative;
+    top: -5px;
   }
+}
+
+:global .Select {
+  display: inline-block;
 }
 
 :global .Select-control {

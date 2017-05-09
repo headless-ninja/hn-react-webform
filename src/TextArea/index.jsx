@@ -38,18 +38,18 @@ class TextArea extends Component {
       'aria-required': this.props.field['#required'] ? true : null,
     };
 
-
-    return (
+    return (<div>
       <textarea
         onChange={this.props.onChange}
         value={this.props.value}
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
-        styleName={`textarea ${this.getLabelClass()}`}
+        styleName={`textarea ${this.getLabelClass()} ${this.props.webformElement.isValid() ? '' : 'validate-error'}`}
         disabled={!this.props.webformElement.state.enabled}
         {...attrs}
       />
-    );
+      <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
+    </div>);
   }
 }
 

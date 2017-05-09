@@ -23,4 +23,34 @@
   background-color: var(--inputColor);
   border-radius: var(--borderRadius);
   padding: calc(var(--spacingUnit) / 4) calc(var(--spacingUnit) / 2);
+
+  &.validate-error {
+    border-color: var(--errorColor);
+    background-color: var(--errorBgColor);
+
+    &::placeholder {
+      color: var(--errorColor);
+    }
+  }
+}
+
+/* Validation icon */
+
+.validation-icon {
+  display: inline-block;
+  width: calc(var(--spacingUnit) / 1.5);
+  height: calc(var(--spacingUnit) / 1.5);
+  margin-left: calc(var(--spacingUnit) / 1.5);
+}
+
+.validate-success {
+  &::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 100%;
+    border-bottom: 2px solid var(--successColor);
+    border-right: 2px solid var(--successColor);
+    transform: rotate(45deg) translateY(-4px);
+  }
 }
