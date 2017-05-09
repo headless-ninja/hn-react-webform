@@ -6,9 +6,14 @@ fieldset {
 }
 
 .fieldset {
+  box-sizing: border-box;
   margin-bottom: var(--spacingUnit);
   border: 1px solid var(--borderColor);
   padding: var(--spacingUnit) calc(var(--spacingUnit) / 2);
+
+  .fieldset-legend {
+    float: left;
+  }
 }
 
 .fieldset-inner {
