@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import getNested from 'get-nested';
 import PropTypes from 'prop-types';
 import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
-import FormStore from '../Webform/FormStore';
 
 class Address extends Component {
   static meta = {
@@ -13,15 +11,12 @@ class Address extends Component {
   };
 
   static propTypes = {
-    field: PropTypes.shape({
-      '#webform_key': PropTypes.string.isRequired,
-      composite_elements: PropTypes.arrayOf(PropTypes.shape()),
-    }).isRequired,
     getField: PropTypes.func.isRequired,
+    webformSettings: PropTypes.shape({
+      cmsBaseUrl: PropTypes.string.isRequired,
+    }).isRequired,
     onBlur: PropTypes.func.isRequired,
-    settings: PropTypes.shape().isRequired,
     formKeySuffix: PropTypes.string.isRequired,
-    formStore: PropTypes.instanceOf(FormStore).isRequired,
   };
 
   constructor(props) {
@@ -63,7 +58,7 @@ class Address extends Component {
       },
     };
 
-    this.lookUpBase = 'https://postcode-api.apiwise.nl/v2/addresses';
+    this.lookUpBase = `${props.webformSettings.cmsBaseUrl}/postcode-api/address?_format=json`;
   }
 
   prepareLookUp(fields) {
@@ -73,17 +68,13 @@ class Address extends Component {
       return false;
     }
 
-    const query = `?postcode=${fields.postcode}${fields.number ? `&number=${fields.number}${fields.addition || ''}` : ''}`;
+    const query = `&postcode=${fields.postcode}${fields.number ? `&number=${fields.number}${fields.addition || ''}` : ''}`;
 
     return {
       query,
       // eslint-disable-next-line no-underscore-dangle
-      checkResponse: json => getNested(() => json._embedded.addresses[0]),
-      headers: {
-        'X-Api-Key': getNested(() => this.props.field.composite_elements
-          .find(element =>
-            element['#webform_key'].includes('postcode_api_key'))['#default_value']) || this.props.formStore.settings.postcodeApiKey,
-      },
+      checkResponse: json => json,
+      isSuccessful: json => (!!json.id),
     };
   }
 
