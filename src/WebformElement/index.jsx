@@ -316,20 +316,29 @@ class WebformElement extends Component {
     return this.shouldValidate() && this.isValid();
   }
 
-  renderTextContent(selector, checkValue = false, addClass = '') {
-    const value = this.props.field[getNested(() => this.getFormElementComponent().meta.field_display[selector], selector)]; // Value in #description field
-    const displayValue = this.props.field[`${selector}_display`];
-    const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
+  renderTextContent(selector, checkValue = false, addClass = '', show = true) {
+    if(show) {
+      const value = this.props.field[getNested(() => this.getFormElementComponent().meta.field_display[selector], selector)]; // Value in #description field
+      const displayValue = this.props.field[`${selector}_display`];
+      const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
 
-    if(!value || (!!checkValue && checkValue !== displayValue)) {
-      if(!(!displayValue && checkValue === 'isUndefined')) {
+      if(!value || (!!checkValue && checkValue !== displayValue)) {
+        if(!(!displayValue && checkValue === 'isUndefined')) {
+          return false;
+        }
+      }
+
+      if(!value) {
+        // don't output if there's no value
         return false;
       }
+
+      const className = `${addClass} ${styles[cssClass] ? cssClass : ''}`;
+
+      return (<span styleName={className}>{Parser(value)}</span>);
     }
 
-    const className = `${addClass} ${styles[cssClass] ? cssClass : ''}`;
-
-    return (<span styleName={className}>{Parser(value)}</span>);
+    return false;
   }
 
   renderFieldLabel(element, show = true) {
@@ -370,6 +379,7 @@ class WebformElement extends Component {
         { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) === 'legend') }
 
         { this.renderTextContent('#description', 'before') }
+        { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-before`), getNested(() => element.class.meta.label.type) === 'legend') }
 
         { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) !== 'legend') }
 
@@ -380,7 +390,7 @@ class WebformElement extends Component {
         { this.renderTextContent('#field_suffix') }
 
         { this.renderTextContent('#description', 'after', this.getLabelClass()) }
-        { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-after`)) }
+        { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-after`), getNested(() => element.class.meta.label.type) !== 'legend') }
 
         { errors }
       </Wrapper>
