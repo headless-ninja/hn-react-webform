@@ -1,6 +1,19 @@
 @import '../styles/_variables.pcss';
 
+.label-display-inline {
+  width: var(--inputWidth);
+}
+
+.label-display-before {
+  width: var(--inputWidth);
+
+  @media (min-width: 768px) {
+    width: calc(50% + var(--inputWidth));
+  }
+}
+
 .textarea {
+  box-sizing: border-box;
   margin: 0;
   font-size: 0.9em;
   line-height: inherit;

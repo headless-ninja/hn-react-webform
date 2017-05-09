@@ -4,7 +4,7 @@ import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
 
-@CSSModules(styles)
+@CSSModules(styles, { allowMultiple: true })
 class TextArea extends Component {
   static propTypes = {
     field: PropTypes.shape({
@@ -24,6 +24,14 @@ class TextArea extends Component {
     value: null,
   };
 
+  getLabelClass() {
+    const labelClass = this.props.webformElement.getLabelClass();
+    if(styles[labelClass]) {
+      return labelClass;
+    }
+    return '';
+  }
+
   render() {
     const attrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,
@@ -37,7 +45,7 @@ class TextArea extends Component {
         value={this.props.value}
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
-        styleName='textarea'
+        styleName={`textarea ${this.getLabelClass()}`}
         disabled={!this.props.webformElement.state.enabled}
         {...attrs}
       />
