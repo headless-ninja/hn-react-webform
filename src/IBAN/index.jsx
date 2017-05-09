@@ -4,6 +4,7 @@ import iban from 'ibantools';
 import Input from '../Input';
 import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
+import WebformElement from '../WebformElement';
 
 class IBAN extends Component {
   static meta = {
@@ -15,6 +16,7 @@ class IBAN extends Component {
       '#webform_key': PropTypes.string.isRequired,
       '#ibanError': PropTypes.string,
     }).isRequired,
+    settings: PropTypes.shape().isRequired,
   };
 
   constructor(props) {
@@ -26,7 +28,7 @@ class IBAN extends Component {
       [`iban_${props.field['#webform_key']}`]: {
         rule: value => iban.isValidIBAN(value),
         hint: () =>
-          <RuleHint key={`iban_${props.field['#webform_key']}`} hint={props.field['#ibanError'] || 'Please enter a valid IBAN.'} />,
+          <RuleHint key={`iban_${props.field['#webform_key']}`} hint={WebformElement.getCustomValue(props.field, 'ibanError', props.settings) || 'Please enter a valid IBAN.'} />,
         shouldValidate: field => field.isBlurred,
       },
     });

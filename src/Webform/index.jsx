@@ -10,7 +10,7 @@ import FormStore from './FormStore';
 import Parser from '../Parser';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
-// import ThankYouMessage from '../ThankYouMessage';
+import ThankYouMessage from '../ThankYouMessage';
 import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })
@@ -63,6 +63,8 @@ class Webform extends Component {
     onSubmitFail: PropTypes.func,
     defaultValues: PropTypes.objectOf(PropTypes.string),
     hiddenData: PropTypes.objectOf(PropTypes.string),
+    noValidation: PropTypes.bool,
+    showThankYouMessage: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -75,11 +77,9 @@ class Webform extends Component {
     },
     defaultValues: {},
     hiddenData: {},
+    noValidation: true,
+    showThankYouMessage: true,
   };
-
-  static fireAnalyticsEvent() {
-    // ReactGA.event(event);
-  }
 
   constructor(props) {
     super(props);
@@ -122,7 +122,9 @@ class Webform extends Component {
       return this.updateSubmission();
     }
 
-    return console.warn('One or more fields are invalid...');
+    // console.warn('One or more fields are invalid...');
+
+    return true;
   }
 
   getFormElements() {
@@ -154,17 +156,9 @@ class Webform extends Component {
 
     if(response.status === 200 || response.status === 201) {
       this.setState({ status: Webform.formStates.SENT });
-      Webform.fireAnalyticsEvent({
-        category: Webform.analyticsEventsCategories.SUCCESSFUL,
-        action: Webform.analyticsEventsActions.FORM_SUBMISSION,
-      });
       this.props.onSubmitSuccess(this); // Trigger onSubmitSuccess hook.
     } else {
       this.setState({ status: Webform.formStates.ERROR, errors: response.errors || [] });
-      Webform.fireAnalyticsEvent({
-        category: Webform.analyticsEventsCategories.ERROR,
-        action: Webform.analyticsEventsActions.FORM_SUBMISSION,
-      });
       this.props.onSubmitFail(this); // Trigger onSubmitFail hook.
     }
   }
@@ -218,7 +212,13 @@ class Webform extends Component {
         <h1 styleName='formtitle'>{this.props.settings.title}</h1>
         { this.state.status === Webform.formStates.ERROR && errors}
         { this.state.status !== Webform.formStates.SENT &&
-        <form method='POST' onSubmit={this.onSubmit} name={this.props.form.form_id} id={this.props.form.form_id}>
+        <form
+          method='POST'
+          onSubmit={this.onSubmit}
+          name={this.props.form.form_id}
+          id={this.props.form.form_id}
+          noValidate={this.props.noValidation}
+        >
           { requiredHint }
           { formElements }
           <SubmitButton
@@ -226,9 +226,9 @@ class Webform extends Component {
             status={this.state.status}
           />
         </form>}
-        {/* { this.state.status === Webform.formStates.SENT &&*/}
-        {/* <ThankYouMessage message={this.props.form.settings.confirmation_message} /> */}
-        {/* }*/}
+        { this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT &&
+        <ThankYouMessage message={this.props.form.settings.confirmation_message} />
+         }
         {this.props.settings.tracking !== false &&
         <div>
           {/* <Script*/}

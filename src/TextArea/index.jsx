@@ -18,6 +18,11 @@ class TextArea extends Component {
     ]),
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
     onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+      required: PropTypes.bool.isRequired,
+      enabled: PropTypes.bool.isRequired,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -40,12 +45,14 @@ class TextArea extends Component {
 
     return (<div>
       <textarea
+        onBlur={this.props.onBlur}
         onChange={this.props.onChange}
         value={this.props.value}
         name={this.props.field['#webform_key']}
         id={this.props.field['#webform_key']}
         styleName={`textarea ${this.getLabelClass()} ${this.props.webformElement.isValid() ? '' : 'validate-error'}`}
-        disabled={!this.props.webformElement.state.enabled}
+        disabled={!this.props.state.enabled}
+        required={!this.props.state.required}
         {...attrs}
       />
       <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />

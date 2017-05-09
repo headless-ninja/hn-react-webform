@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import Parser from '../Parser';
 import styles from './styles.pcss';
-import WebformElement from '../WebformElement';
 
 @CSSModules(styles, { allowMultiple: true })
 class CheckboxField extends Component {
@@ -28,9 +27,12 @@ class CheckboxField extends Component {
       PropTypes.bool,
     ]).isRequired,
     id: PropTypes.number,
-    webformElement: PropTypes.instanceOf(WebformElement).isRequired,
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+      required: PropTypes.bool.isRequired,
+      enabled: PropTypes.bool.isRequired,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -74,7 +76,8 @@ class CheckboxField extends Component {
             checked={value}
             name={this.props.field['#webform_key']}
             id={this.props.id || this.props.field['#webform_key']}
-            disabled={!this.props.webformElement.state.enabled}
+            disabled={!this.props.state.enabled}
+            required={this.props.state.required}
           />
           <span styleName='indicator' />
           {Parser(this.props.field['#description'])}

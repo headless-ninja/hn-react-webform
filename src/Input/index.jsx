@@ -43,6 +43,10 @@ class Input extends Component {
     onClick: PropTypes.func,
     onKeyDown: PropTypes.func,
     parentRef: PropTypes.func,
+    state: PropTypes.shape({
+      required: PropTypes.bool.isRequired,
+      enabled: PropTypes.bool.isRequired,
+    }).isRequired,
   };
 
   static defaultProps = {
@@ -68,7 +72,7 @@ class Input extends Component {
     const fieldAttrs = this.props.field['#attributes'];
     const attrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,
-      'aria-required': this.props.field['#required'] ? true : null,
+      'aria-required': this.props.state.required ? true : null,
       autoComplete: fieldAttrs ? fieldAttrs.autoComplete : null,
     };
 
@@ -90,7 +94,6 @@ class Input extends Component {
         placeholder={this.props.field['#placeholder']}
         styleName={`input ${this.getLabelClass()} ${this.props.webformElement.isValid() ? '' : 'validate-error'}`}
         className={this.props.className ? this.props.className : ''}
-        disabled={!this.props.webformElement.state.enabled}
         min={this.props.field['#min']}
         max={this.props.field['#max']}
         step={this.props.field['#step']}
@@ -100,6 +103,8 @@ class Input extends Component {
         onClick={this.props.onClick}
         onKeyDown={this.props.onKeyDown}
         ref={this.props.parentRef}
+        disabled={!this.props.state.enabled}
+        required={this.props.state.required}
         {...attrs}
       />
       <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />

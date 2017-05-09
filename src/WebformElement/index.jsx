@@ -69,7 +69,7 @@ class WebformElement extends Component {
   }
 
   static isEmpty(field, value) {
-    if(value === '') {
+    if(value === '' || value === false) {
       return true;
     }
 
@@ -103,7 +103,8 @@ class WebformElement extends Component {
 
     Object.assign(rules, {
       [`${supportedActions.required}_${this.key}`]: {
-        rule: value => !WebformElement.isEmpty(props.field, value),
+        rule: value => !WebformElement.isEmpty(props.field, value) &&
+        (!this.getFormElementComponent({}).isEmpty || !this.getFormElementComponent().isEmpty(this.getField())),
         hint: value =>
           <RuleHint
             key={`req_${this.key}`}
@@ -180,9 +181,9 @@ class WebformElement extends Component {
     return this.props.formStore.getField(key);
   }
 
-  getFormElementComponent() {
+  getFormElementComponent(fb = false) {
     const element = components[this.props.field['#type']] || components.default;
-    return element || false;
+    return element || fb;
   }
 
   getFormElement() {
@@ -205,6 +206,7 @@ class WebformElement extends Component {
           webformElement={this}
           settings={this.props.settings}
           webformSettings={this.props.webformSettings}
+          state={this.state}
         />,
       };
     }
@@ -351,7 +353,7 @@ class WebformElement extends Component {
           styleName={`label ${this.getLabelClass()}`}
         >
           {Parser(this.props.field['#title'])}
-          {this.state[supportedActions.required] ? (<small>*</small>) : null}
+          {this.state[supportedActions.required] ? (<small>&nbsp;*</small>) : null}
         </Wrapper>
       );
     }

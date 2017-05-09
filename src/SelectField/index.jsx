@@ -22,6 +22,7 @@ class SelectField extends Component {
       })),
       '#webform_key': PropTypes.string.isRequired,
       '#multiple': PropTypes.bool,
+      '#empty_option': PropTypes.string,
     }).isRequired,
     value: PropTypes.oneOfType([
       PropTypes.string,
@@ -30,6 +31,11 @@ class SelectField extends Component {
     ]).isRequired,
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
     onChange: PropTypes.func.isRequired,
+    onBlur: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+      required: PropTypes.bool.isRequired,
+      enabled: PropTypes.bool.isRequired,
+    }).isRequired,
   };
 
   constructor(props) {
@@ -49,9 +55,10 @@ class SelectField extends Component {
   handleChange(value) {
     const newValue = value || '';
     if(newValue && newValue.value) {
-      return this.props.onChange(newValue.value, false);
+      this.props.onChange(newValue.value);
+    } else {
+      this.props.onChange(newValue);
     }
-    return this.props.onChange(newValue, false);
   }
 
   render() {
@@ -70,7 +77,12 @@ class SelectField extends Component {
           multi={this.props.field['#multiple']}
           options={mappedOptions}
           onChange={this.handleChange}
-          disabled={!this.props.webformElement.state.enabled}
+          onBlur={this.props.onBlur}
+          disabled={!this.props.state.enabled}
+          required={this.props.state.required}
+          autoBlur
+          placeholder={this.props.field['#empty_option'] || 'Selecteer...'}
+          openAfterFocus
         />
         <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
       </div>
