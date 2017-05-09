@@ -47,7 +47,7 @@ class RemoteForm extends React.Component {
     this.state = {
       baseUrl: 'https://redactie.natuurmonumenten.nl/api/v1',
       // baseUrl: 'http://dev.natuurmonumenten.nl/api/v1',
-      path: 'node/2',
+      path: 'node/2', //18
       field: 'field_form',
       visible: false,
     };
