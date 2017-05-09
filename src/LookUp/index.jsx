@@ -153,32 +153,29 @@ function composeLookUp(LookUpComponent) {
 
           if(json.error) {
             console.error(json.error);
-            return;
           }
 
           const response = checkResponse(json);
-          if(response) {
-            this.setState({
-              sent: true,
-              successful: isSuccessful(response),
-            }, () => {
-              this.fieldIterator((field, element) => {
-                const value = getNested(() => element.apiValue(response));
-                if(value) {
-                  field.setStorage({ value });
-                }
-                field.component.validate(true);
-              });
-
-              this.setFieldVisibility(true);
-
-              this.props.formStore.checkConditionals();
-
-              if(this.el.lookUpCallback) {
-                this.el.lookUpCallback(response);
+          this.setState({
+            sent: true,
+            successful: isSuccessful(response),
+          }, () => {
+            this.fieldIterator((field, element) => {
+              const value = getNested(() => element.apiValue(response));
+              if(value) {
+                field.setStorage({ value });
               }
+              field.component.validate(true);
             });
-          }
+
+            this.setFieldVisibility(true);
+
+            this.props.formStore.checkConditionals();
+
+            if(this.el.lookUpCallback) {
+              this.el.lookUpCallback(response);
+            }
+          });
         })
         .catch(error => (this.el.lookUpCallback ? this.el.lookUpCallback(error) : null));
     }

@@ -49,13 +49,13 @@ class EmailField extends Component {
 
     Object.assign(rules, {
       [`email_${props.field['#webform_key']}`]: {
-        rule: value => value.toString().trim() === '' || (!validator.isEmail(value) ? false : (this.props.getState().sent && validator.isEmail(value))),
+        rule: value => value.toString().trim() === '' || validator.isEmail(value),
         hint: value =>
           <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformElement.getCustomValue(props.field, 'emailError', props.settings) || '":value" isn\'t an Email.'} tokens={{ value }} />,
         shouldValidate: field => field.isBlurred && field.getValue().toString().trim() !== '',
       },
       [`email_neverbounce_${props.field['#webform_key']}`]: {
-        rule: value => this.props.getState().successful || value.toString().trim() === '',
+        rule: value => value.toString().trim() === '' || this.props.getState().successful,
         hint: () =>
           <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformElement.getCustomValue(props.field, 'neverBounceError', props.settings) || 'This doesn\'t seem to be a valid email address. Please check again.'} />,
         shouldValidate: field => field.isBlurred && field.getValue().toString().trim() !== '' && validator.isEmail(field.getValue()),

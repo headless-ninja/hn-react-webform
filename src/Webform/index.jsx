@@ -61,8 +61,8 @@ class Webform extends Component {
     onSubmit: PropTypes.func,
     onSubmitSuccess: PropTypes.func,
     onSubmitFail: PropTypes.func,
-    defaultValues: PropTypes.objectOf(PropTypes.string.isRequired),
-    hiddenData: PropTypes.objectOf(PropTypes.string.isRequired),
+    defaultValues: PropTypes.objectOf(PropTypes.string),
+    hiddenData: PropTypes.objectOf(PropTypes.string),
   };
 
   static defaultProps = {
