@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import getNested from 'get-nested';
 import PropTypes from 'prop-types';
+import CSSModules from 'react-css-modules';
 import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
 import RuleHint from '../RuleHint';
+import styles from './styles.pcss';
 
+@CSSModules(styles)
 class Relation extends Component {
   static meta = {
     labelVisibility: Fieldset.meta.labelVisibility,
@@ -85,7 +88,7 @@ class Relation extends Component {
         onBlur={this.props.onBlur}
       >
         {this.props.sent && !this.props.successful &&
-        <RuleHint key={`relation_${this.props.field['#webform_key']}`} hint={this.props.field['#relationError'] || 'We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.'} />
+        <RuleHint component={<p className={styles['validation-message']} />} key={`relation_${this.props.field['#webform_key']}`} hint={this.props.field['#relationError'] || 'We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.'} />
         }
       </Fieldset>
     );

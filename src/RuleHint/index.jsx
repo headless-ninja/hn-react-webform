@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
+import getNested from 'get-nested';
 import Parser from '../Parser';
-import styles from './style.pcss';
+import styles from './styles.pcss';
 
 @CSSModules(styles)
 class RuleHint extends Component {
@@ -13,11 +14,21 @@ class RuleHint extends Component {
     ]).isRequired,
     tokens: PropTypes.objectOf(PropTypes.node),
     tokenCharacter: PropTypes.node,
+    component: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        type: PropTypes.string.isRequired,
+        props: PropTypes.shape({
+          className: PropTypes.string,
+        }),
+      }),
+    ]),
   };
 
   static defaultProps = {
     tokens: {},
     tokenCharacter: ':',
+    component: 'li',
   }
 
   getHint() {
@@ -32,12 +43,13 @@ class RuleHint extends Component {
 
   render() {
     const hint = this.getHint();
+    const RuleComponent = this.props.component.type || this.props.component;
     return (
-      <li styleName='validation-message'>
+      <RuleComponent styleName='validation-message' className={getNested(() => this.props.component.props.className)}>
         <span>
           {Parser(hint)}
         </span>
-      </li>
+      </RuleComponent>
     );
   }
 }
