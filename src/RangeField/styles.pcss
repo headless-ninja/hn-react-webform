@@ -1,15 +1,27 @@
 @import '../styles/_variables.pcss';
 
 .input-wrapper {
+  position: relative;
+
   @media (min-width: 768px) {
     display: inline-block;
     float: left;
-    width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
   }
 
-  & .display-before {
-    float: none;
+  & input {
     width: 100%;
+  }
+
+  &.display-inline {
+    width: var(--inputWidth);
+  }
+
+  &.display-before {
+    width: var(--inputWidth);
+
+    @media (min-width: 768px) {
+      width: calc(50% + var(--inputWidth) + (var(--spacingUnit) / 2));
+    }
   }
 }
 
@@ -37,13 +49,7 @@
   display: inline-block;
   padding-left: 9px;
   padding-right: 9px;
-  width: var(--inputWidth);
-
-  &.display-before {
-    @media (min-width: 768px) {
-      width: calc(50% + var(--inputWidth));
-    }
-  }
+  width: 100%;
 }
 
 .range-value {
