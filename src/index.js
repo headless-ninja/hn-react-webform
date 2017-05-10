@@ -16,6 +16,7 @@ import Hidden from './Hidden';
 import RangeField from './RangeField';
 import WizardPages from './Wizard';
 import Relation from './Relation';
+import FormRow from './FormRow';
 
 const components = {
   checkbox: CheckboxField,
@@ -32,6 +33,7 @@ const components = {
   webform_address_custom: Address,
   webform_date_custom: Date,
   webform_dateofbirth: Date,
+  webform_iban: FormRow,
   webform_message: ParagraphField,
   webform_relation_custom: Relation,
   webform_relation_postcode_custom: Relation,
