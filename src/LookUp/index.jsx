@@ -163,8 +163,8 @@ function composeLookUp(LookUpComponent) {
           const value = getNested(() => element.apiValue(response));
           if(value) {
             field.setStorage({ value });
+            field.component.validate(true, value);
           }
-          field.component.validate(true);
         });
 
         this.setFieldVisibility(true);

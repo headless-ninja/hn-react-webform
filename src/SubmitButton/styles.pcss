@@ -3,7 +3,7 @@
 .button {
   cursor: pointer;
   -webkit-appearance: none;
-  margin: 0;
+  margin: var(--spacingUnit) 0 0;
   font-size: 1em;
   line-height: inherit;
   font-family: inherit;
@@ -11,7 +11,7 @@
   color: var(--buttonTextColor);
   background-color: var(--buttonColor);
   border-radius: var(--borderRadius);
-  padding: calc(var(--spacingUnit)) calc(var(--spacingUnit));
+  padding: var(--spacingUnit) var(--spacingUnit);
 
   &:hover {
     background-color: var(--buttonColorHover);
