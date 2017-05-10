@@ -11,7 +11,11 @@ fieldset {
   border: var(--fieldsetBorder);
   border-radius: var(--borderRadius);
   background-color: var(--fieldsetBgColor);
-  padding: calc(var(--spacingUnit) * 2.5) calc(var(--spacingUnit) * 2.5);
+  padding: calc(var(--spacingUnit) * 1) calc(var(--spacingUnit) * 1);
+
+  @media screen and (min-width: 768px) {
+    padding: calc(var(--spacingUnit) * 2.5) calc(var(--spacingUnit) * 2.5);
+  }
 
   & .fieldset-legend {
     float: left;
