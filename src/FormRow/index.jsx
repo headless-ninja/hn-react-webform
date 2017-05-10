@@ -1,7 +1,7 @@
 import React from 'react';
 import Fieldset from '../Fieldset';
 
-const FormRow = (props) => (
+const FormRow = props => (
   <Fieldset
     {...props}
   />
