@@ -56,9 +56,10 @@
 :global .Select-control {
   color: inherit;
   border: 1px solid var(--borderColor);
-  background-color: var(--inputColor);
+  background-color: var(--inputBgColor);
   border-radius: var(--borderRadius);
-  height: auto;
+  height: var(--inputHeight);
+  line-height: var(--inputHeight);
   width: var(--inputWidth);
   overflow: visible;
 }
@@ -70,7 +71,7 @@
 
 :global .Select-placeholder,
 :global .Select--single > .Select-control .Select-value {
-  padding: calc(var(--spacingUnit) / 4) calc(var(--spacingUnit) / 2);
+  padding: 0 calc(var(--spacingUnit) / 2);
   line-height: inherit;
   font-size: 0.9em;
 }
@@ -103,7 +104,7 @@
 
 :global .Select-option {
   padding: calc(var(--spacingUnit) / 4) calc(var(--spacingUnit) / 2);
-  background-color: var(--inputColor);
+  background-color: var(--inputBgColor);
   color: inherit;
   font-size: 0.9em;
 }
@@ -112,7 +113,7 @@
   color: inherit;
   background-color: rgba(0, 0, 0, 0.2);
 
-  /* background-color: color(var(--inputColor) blackness(+5%)); */
+  /* background-color: color(var(--inputBgColor) blackness(+5%)); */
 }
 
 :global .Select-option:last-child {

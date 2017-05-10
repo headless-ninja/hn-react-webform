@@ -8,8 +8,10 @@ fieldset {
 .fieldset {
   box-sizing: border-box;
   margin-bottom: var(--spacingUnit);
-  border: 1px solid var(--borderColor);
-  padding: var(--spacingUnit) calc(var(--spacingUnit) / 2);
+  border: var(--fieldsetBorder);
+  border-radius: var(--borderRadius);
+  background-color: var(--fieldsetBgColor);
+  padding: var(--spacingUnit) calc(var(--spacingUnit));
 
   & .fieldset-legend {
     float: left;
