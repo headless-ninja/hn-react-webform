@@ -34,11 +34,6 @@ class RadioField extends Component {
     onBlur: PropTypes.func.isRequired,
   };
 
-  onChange(e) {
-    this.props.onChange(e);
-    this.props.onBlur(e);
-  }
-
   getOptionPositionClass() {
     const optionClass = `radio-display-${this.props.field['#options_display']}`;
     if(styles[optionClass]) {
@@ -73,13 +68,14 @@ class RadioField extends Component {
               <label key={option.value} styleName={cssClassesRadio} htmlFor={labelKey}>
                 <input
                   type='radio'
-                  onChange={e => this.onChange(e)}
+                  onChange={this.props.onChange}
+                  onBlur={this.props.onBlur}
                   value={option.value}
                   name={this.props.field['#webform_key']}
                   styleName='radio'
                   id={labelKey}
                   disabled={!this.props.webformElement.state.enabled}
-                  checked={this.props.value === option.value}
+                  checked={this.props.value === option.value.toString()}
                 />
                 <span styleName='indicator' />
                 { Parser(option.text) }
