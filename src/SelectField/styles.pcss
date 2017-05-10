@@ -58,10 +58,19 @@
   border: 1px solid var(--borderColor);
   background-color: var(--inputBgColor);
   border-radius: var(--borderRadius);
-  height: var(--inputHeight);
-  line-height: var(--inputHeight);
+  height: var(--inputLineHeight);
+  line-height: var(--inputLineHeight);
   width: var(--inputWidth);
+  max-width: var(--inputWidth);
   overflow: visible;
+  margin: 0 0 calc(var(--spacingUnit) / 2);
+}
+
+:global .Select,
+:global .Select div,
+:global .Select input,
+:global .Select span {
+  line-height: calc(var(--inputLineHeight) + (var(--spacingUnit) / 2));
 }
 
 :global .is-focused:not(.is-open) > .Select-control {
@@ -88,6 +97,7 @@
 :global .Select-placeholder,
 :global .Select--single > .Select-control .Select-value {
   position: static;
+  max-width: calc(var(--inputWidth) - 25px);
 }
 
 :global .Select-placeholder {
@@ -122,6 +132,7 @@
 }
 
 :global .Select-clear-zone {
+  display: none;
   padding-right: 3px;
   padding-bottom: 3px;
 }

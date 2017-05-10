@@ -3,7 +3,7 @@
 /* Field Wrapper */
 
 .formrow {
-  margin-bottom: calc(var(--spacingUnit) / 2);
+  margin-bottom: var(--spacingUnit);
 
   &.hidden {
     display: none;
@@ -71,8 +71,9 @@ fieldset.formrow {
 .validation-message-wrapper {
   font-size: 0.8em;
   margin-top: 0;
-  margin-bottom: calc(var(--spacingUnit) / 2);
-  line-height: 1;
+  padding-bottom: calc(var(--spacingUnit) / 2);
+  line-height: 1.2em;
+  clear: both;
 
   &.label-display-inline {
     @media (min-width: 768px) {
