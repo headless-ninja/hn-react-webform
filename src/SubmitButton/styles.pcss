@@ -3,7 +3,7 @@
 .button {
   cursor: pointer;
   -webkit-appearance: none;
-  margin: 0;
+  margin: calc(var(--spacingUnit) * 1.5) 0 0 0;
   font-size: 1em;
   line-height: inherit;
   font-family: inherit;
@@ -12,6 +12,7 @@
   background-color: var(--buttonColor);
   border-radius: var(--borderRadius);
   padding: calc(var(--spacingUnit)) calc(var(--spacingUnit));
+  transition: background-color 350ms ease;
 
   &:hover {
     background-color: var(--buttonColorHover);
