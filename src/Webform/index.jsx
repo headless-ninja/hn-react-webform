@@ -4,7 +4,7 @@ import getNested from 'get-nested';
 import fetch from 'fetch-everywhere';
 import { observer } from 'mobx-react';
 import CSSModules from 'react-css-modules';
-// import Script from 'react-load-script';
+import Script from 'react-load-script';
 import GoogleTag from 'google_tag';
 import FormStore from './FormStore';
 import Parser from '../Parser';
@@ -21,6 +21,7 @@ class Webform extends Component {
     SENT: 'SENT',
     ERROR: 'ERROR',
     PENDING: 'PENDING',
+    CONVERTED: 'CONVERTED',
   };
 
   static analyticsEventsCategories = {
@@ -93,6 +94,7 @@ class Webform extends Component {
     this.formStore = new FormStore(this.key, props.settings, this.props.defaultValues);
 
     this.onSubmit = this.onSubmit.bind(this);
+    this.converted = this.converted.bind(this);
   }
 
   componentWillMount() {
@@ -121,9 +123,7 @@ class Webform extends Component {
     if(isValid) {
       return this.updateSubmission();
     }
-
     // console.warn('One or more fields are invalid...');
-
     return true;
   }
 
@@ -138,6 +138,12 @@ class Webform extends Component {
         settings={this.props.form.settings}
         webformSettings={this.props.settings}
       />);
+  }
+
+  converted() {
+    this.setState({ status: Webform.formStates.CONVERTED }, () => {
+      this.props.onSubmitSuccess(this); // Trigger onSubmitSuccess hook.
+    });
   }
 
   isValid() {
@@ -156,7 +162,6 @@ class Webform extends Component {
 
     if(response.status === 200 || response.status === 201) {
       this.setState({ status: Webform.formStates.SENT });
-      this.props.onSubmitSuccess(this); // Trigger onSubmitSuccess hook.
     } else {
       this.setState({ status: Webform.formStates.ERROR, errors: response.errors || [] });
       this.props.onSubmitFail(this); // Trigger onSubmitFail hook.
@@ -231,20 +236,18 @@ class Webform extends Component {
          }
         {this.props.settings.tracking !== false &&
         <div>
-          {/* <Script*/}
-            {/* url='//cdn-static.formisimo.com/tracking/js/tracking.js'*/}
-            {/* onLoad={() => {*/}
-            {/* }}*/}
-            {/* onError={() => {*/}
-            {/* }}*/}
-          {/* />*/}
-          {/* <Script*/}
-            {/* url='//cdn-static.formisimo.com/tracking/js/conversion.js'*/}
-            {/* onLoad={() => {*/}
-            {/* }}*/}
-            {/* onError={() => {*/}
-            {/* }}*/}
-          {/* />*/}
+          <Script
+            url='//cdn-static.formisimo.com/tracking/js/tracking.js'
+            onLoad={() => {}}
+            onError={() => {}}
+          />
+          {this.state.status === Webform.formStates.SENT &&
+          <Script
+            url='//cdn-static.formisimo.com/tracking/js/conversion.js'
+            onLoad={this.converted}
+            onError={() => {}}
+          />
+          }
         </div>
         }
       </div>
