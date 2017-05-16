@@ -10,7 +10,7 @@ const SubmitButton = ({ form, status }) => {
   return (
     <div>
       <BaseButton
-        disabled={disabled ? 'disabled' : null}
+        disabled={disabled}
         label={settings.form_submit_label}
         formSubmitAttributes={settings.form_submit_attributes}
       />

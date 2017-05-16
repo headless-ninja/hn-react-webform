@@ -17,4 +17,22 @@
   &:hover {
     background-color: var(--buttonColorHover);
   }
+
+  &.disabled {
+    background-color: var(--buttonColorDisabled);
+    cursor: default;
+
+    &:hover {
+      background-color: var(--buttonColorDisabled);
+    }
+  }
+}
+
+.secondary {
+  background-color: var(--buttonSecondaryColor);
+  color: var(--buttonSecondaryTextColor);
+
+  &:hover {
+    background-color: var(--buttonSecondaryColorHover);
+  }
 }

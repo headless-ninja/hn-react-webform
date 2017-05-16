@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import CSSModules from 'react-css-modules';
 import WizardProgress from './WizardProgress';
 import Fieldset from '../Fieldset';
+import BaseButton from '../BaseButton';
+import styles from './styles.pcss';
 
+@CSSModules(styles)
 class WizardPages extends Component {
 
   static propTypes = {
@@ -24,19 +28,25 @@ class WizardPages extends Component {
 
     return (
       <div>
-        <p>Progress: {this.state.page + 1}/{pages.length}</p>
         <WizardProgress pages={pages} currentPage={this.state.page} />
         <Fieldset {...this.props} field={currentPage} />
-        <button
-          onClick={() => this.setState({ page: this.state.page - 1 })}
-          disabled={this.state.page === 0}
-        >Previous page
-        </button>
-        <button
-          onClick={() => this.setState({ page: this.state.page + 1 })}
-          disabled={this.state.page === pages.length - 1}
-        >Next page
-        </button>
+        <div styleName='button-wrapper'>
+          <div styleName='button-prev'>
+            <BaseButton
+              onClick={() => this.setState({ page: this.state.page - 1 })}
+              disabled={this.state.page === 0}
+              label='Previous page'
+              isPrimary={false}
+            />
+          </div>
+          <div styleName='button-next'>
+            <BaseButton
+              onClick={() => this.setState({ page: this.state.page + 1 })}
+              disabled={this.state.page === pages.length - 1}
+              label='Next page'
+            />
+          </div>
+        </div>
       </div>
     );
   }

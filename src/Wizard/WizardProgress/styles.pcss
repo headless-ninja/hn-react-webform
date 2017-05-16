@@ -1,6 +1,7 @@
 @import '../../styles/_variables.pcss';
 
 .bar {
+  display: flex;
   margin: 0 0 calc(2 * var(--spacingUnit)) 0;
   padding: 0;
   width: 100%;
@@ -46,16 +47,50 @@
   }
 }
 
-@for $i from 1 to 8 {
-  /* give each step class a higher z-index than the next step */
-
-  .step-$i { z-index: calc(9 - $i); }
-}
+/* we're not looping the step numbers, because then the react-css-modules can't find the classes anymore */
 
 .step-1 {
+  z-index: 10;
+
   &::before {
     display: none;
   }
+}
+
+.step-2 {
+  z-index: 9;
+}
+
+.step-3 {
+  z-index: 8;
+}
+
+.step-4 {
+  z-index: 7;
+}
+
+.step-5 {
+  z-index: 6;
+}
+
+.step-6 {
+  z-index: 5;
+}
+
+.step-7 {
+  z-index: 4;
+}
+
+.step-8 {
+  z-index: 3;
+}
+
+.step-9 {
+  z-index: 2;
+}
+
+.step-10 {
+  z-index: 1;
 }
 
 .step-number {

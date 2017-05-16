@@ -30,7 +30,7 @@ function WizardProgress({ pages, currentPage }) {
         }
 
         return (
-          <li key={page['#webform_key']} styleName={classList}>
+          <li key={page['#webform_key']} styleName={classList} style={{ width: `${100 / pages.length}%` }}>
             <span styleName='step-number'>{i + 1}</span>
             <span styleName='step-title'>{page['#title']}</span>
           </li>
