@@ -1,10 +1,20 @@
 @import '../styles/_variables.pcss';
 
 .select-wrapper {
+  position: relative;
+  width: calc(var(--inputWidth) + 20px);
+  padding-right: 20px;
+
+  @media (min-width: 768px) {
+    width: calc(50% + var(--inputWidth) + 20px);
+  }
+
   &.display-inline {
+    width: calc(var(--inputWidth) + 20px);
+    padding-right: 20px;
+
     @media (min-width: 768px) {
       display: inline-block;
-      width: calc(50% - (var(--spacingUnit) / 2) - 0.5em);
     }
   }
 
@@ -33,8 +43,9 @@
   width: calc(var(--spacingUnit) / 1.5);
   height: calc(var(--spacingUnit) / 1.5);
   margin-left: calc(var(--spacingUnit) / 1.5);
-  top: -10px;
-  position: relative;
+  top: 10px;
+  right: 0;
+  position: absolute;
 }
 
 .validate-success {
@@ -53,6 +64,7 @@
 
 :global .Select {
   display: inline-block;
+  width: 100%;
 }
 
 :global .Select-control {
@@ -62,8 +74,8 @@
   border-radius: var(--borderRadius);
   height: var(--inputLineHeight);
   line-height: var(--inputLineHeight);
-  width: var(--inputWidth);
-  max-width: var(--inputWidth);
+  width: 100%;
+  max-width: 100%;
   overflow: visible;
   margin: 0 0 calc(var(--spacingUnit) / 2);
 }
