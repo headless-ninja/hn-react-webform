@@ -8,10 +8,11 @@ import 'react-day-picker/lib/style.css';
 import labelTranslations from './labelTranslations';
 import styles from './rdw-date-theme.pcss';
 import Fieldset from '../Fieldset';
-import Input from '../Input';
 import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
 import WebformElement from '../WebformElement';
+import Input from '../Input';
+import BaseInput from '../BaseInput';
 
 @CSSModules(styles, { allowMultiple: true })
 class Date extends Component {
@@ -46,6 +47,8 @@ class Date extends Component {
       PropTypes.string,
       PropTypes.bool,
     ]).isRequired,
+    type: PropTypes.string,
+    webformElement: PropTypes.instanceOf(WebformElement).isRequired,
     onChange: PropTypes.func.isRequired,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func.isRequired,
@@ -57,6 +60,7 @@ class Date extends Component {
   static defaultProps = {
     locale: 'nl',
     dateFormat: 'DD/MM/YYYY',
+    type: 'text',
     onFocus: () => {},
   };
 
@@ -237,18 +241,23 @@ class Date extends Component {
       <Input
         {...this.props}
         field={field}
+        type={this.props.type}
       />);
 
     if(!Fieldset.getValue(field, 'show_picker')) {
       return inputElement;
     }
 
-    const DateInput = React.cloneElement(inputElement, {
-      onChange: this.handleInputChange,
-      onFocus: this.handleInputFocus,
-      onBlur: this.handleInputBlur,
-      value,
-    });
+    const DateInput = (
+      <BaseInput
+        {...this.props}
+        field={field}
+        type={this.props.type}
+        onChange={this.handleInputChange}
+        onFocus={this.handleInputFocus}
+        onBlur={this.handleInputBlur}
+        value={value}
+      />);
 
     const cssClassesWrapper = `input-wrapper ${this.getLabelPositionClass()}`;
 
@@ -276,6 +285,7 @@ class Date extends Component {
           </div>
         </div>
         }
+        <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
       </div>
     );
   }

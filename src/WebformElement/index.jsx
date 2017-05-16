@@ -385,11 +385,7 @@ class WebformElement extends Component {
 
         { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) !== 'legend') }
 
-        { this.renderTextContent('#field_prefix') }
-
         { element.element }
-
-        { this.renderTextContent('#field_suffix') }
 
         { this.renderTextContent('#description', 'after', this.getLabelClass()) }
         { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-after`), getNested(() => element.class.meta.label.type) !== 'legend') }

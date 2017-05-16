@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
-import Input from '../Input';
+import BaseInput from '../BaseInput';
+import WebformElement from '../WebformElement';
 
 @CSSModules(styles, { allowMultiple: true })
 class RangeField extends Component {
@@ -19,6 +20,7 @@ class RangeField extends Component {
       PropTypes.bool,
     ]).isRequired,
     onChange: PropTypes.func.isRequired,
+    webformElement: PropTypes.instanceOf(WebformElement).isRequired,
   };
 
   componentDidMount() {
@@ -48,16 +50,17 @@ class RangeField extends Component {
   render() {
     const cssClassesWrapper = `input-wrapper ${this.getLabelPositionClass()}`;
 
-    return (
+    return (<div>
       <div styleName={cssClassesWrapper}>
-        <Input
+        <BaseInput
           {...this.props}
           type='range'
           styleName='range'
         />
         <span styleName={`range-value-wrapper ${this.getLabelPositionClass()}`}><span styleName='range-value' style={{ left: `${this.getPercentageValue()}%` }}>{this.props.value}</span></span>
+        <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
       </div>
-    );
+    </div>);
   }
 }
 

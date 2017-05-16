@@ -1,5 +1,23 @@
 @import '../styles/_variables.pcss';
 
+.prefix,
+.suffix {
+  display: inline-block;
+  align-self: center;
+}
+
+.prefix { margin-right: 0.5em; }
+.suffix { margin-left: 0.5em; }
+
+.input-wrap {
+  display: inline-block;
+}
+
+.input-inner-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
 .input {
   box-sizing: border-box;
   margin: 0 0 calc(var(--spacingUnit) / 2);
@@ -49,7 +67,7 @@
   width: var(--inputWidth);
 
   @media (min-width: 768px) {
-    width: calc(50% + var(--inputWidth) + (var(--spacingUnit) / 2));
+    width: calc(50% + var(--inputWidth));
   }
 }
 
