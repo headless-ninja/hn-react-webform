@@ -80,7 +80,9 @@ class CheckboxField extends Component {
             required={this.props.state.required}
           />
           <span styleName='indicator' />
-          {Parser(this.props.field['#description'])}
+          <span styleName='inner-label'>
+            {Parser(this.props.field['#description'])}
+          </span>
         </label>
       </div>
     );

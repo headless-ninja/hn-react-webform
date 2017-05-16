@@ -40,12 +40,18 @@
   }
 }
 
+.inner-label {
+  display: inline-block;
+  padding-left: calc(var(--spacingUnit) * 1.5);
+}
+
 .indicator {
   content: '';
+  float: left;
   display: inline-block;
   width: var(--spacingUnit);
   height: var(--spacingUnit);
-  margin-right: calc(var(--spacingUnit) / 2);
+  margin-right: calc(var(--spacingUnit) * 1.5 * -1);
   background-color: var(--inputBgColor);
   border: 1px solid var(--borderColor);
   border-radius: var(--borderRadius);
