@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
-import styles from './styles.pcss';
 import Webform from '../Webform';
+import BaseButton from '../BaseButton';
 
 const SubmitButton = ({ form, status }) => {
   const settings = form.settings;
@@ -10,13 +9,11 @@ const SubmitButton = ({ form, status }) => {
 
   return (
     <div>
-      <button
-        styleName='button'
-        disabled={disabled}
-        {...settings.form_submit_attributes}
-      >
-        {settings.form_submit_label}
-      </button>
+      <BaseButton
+        disabled={disabled ? 'disabled' : null}
+        label={settings.form_submit_label}
+        formSubmitAttributes={settings.form_submit_attributes}
+      />
     </div>
   );
 };
@@ -28,4 +25,4 @@ SubmitButton.propTypes = {
   status: PropTypes.string.isRequired,
 };
 
-export default CSSModules(SubmitButton, styles);
+export default SubmitButton;
