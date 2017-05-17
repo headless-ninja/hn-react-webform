@@ -15,7 +15,7 @@ const BaseButton = ({ disabled, label, formSubmitAttributes, onClick, isPrimary 
 
 BaseButton.propTypes = {
   disabled: PropTypes.bool,
-  formSubmitAttributes: PropTypes.shape({}),
+  formSubmitAttributes: PropTypes.arrayOf(React.PropTypes.string),
   label: PropTypes.string,
   isPrimary: PropTypes.bool,
   onClick: PropTypes.func,
@@ -23,7 +23,7 @@ BaseButton.propTypes = {
 
 BaseButton.defaultProps = {
   disabled: null,
-  formSubmitAttributes: {},
+  formSubmitAttributes: [],
   label: '',
   isPrimary: true,
   onClick: () => {},

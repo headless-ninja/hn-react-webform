@@ -156,7 +156,7 @@ class Date extends Component {
   }
 
   getLabelPositionClass() {
-    const labelClass = `display-${this.props.field['#title_display']}`;
+    const labelClass = this.props.webformElement.getLabelClass();
     if(styles[labelClass]) {
       return labelClass;
     }
