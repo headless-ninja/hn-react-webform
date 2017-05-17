@@ -6,7 +6,7 @@ import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
 
 @CSSModules(styles, { allowMultiple: true })
-class Input extends Component {
+class BaseInput extends Component {
   static propTypes = {
     field: PropTypes.shape({
       '#type': PropTypes.string.isRequired,
@@ -104,4 +104,4 @@ class Input extends Component {
   }
 }
 
-export default Input;
+export default BaseInput;
