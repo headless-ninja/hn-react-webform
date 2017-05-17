@@ -32,6 +32,8 @@ const components = {
   textarea: TextArea,
   webform_address_custom: Address,
   webform_checkbox_custom: CheckboxField,
+  webform_select_custom: SelectField,
+  webform_textarea_custom: TextArea,
   webform_radios_custom: RadioField,
   webform_telephone_custom: PhoneField,
   webform_textfield_custom: Input,
