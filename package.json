@@ -1,6 +1,6 @@
 {
   "name": "react-drupal-webform",
-  "version": "0.1.0-alpha",
+  "version": "0.0.0",
   "main": "lib/index.js",
   "stylelint": {
     "extends": "stylelint-config-standard",
