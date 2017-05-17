@@ -17,7 +17,6 @@ class Fieldset extends Component {
   static propTypes = {
     field: PropTypes.shape({
       composite_elements: PropTypes.array,
-      '#options': PropTypes.object,
       '#webform_key': PropTypes.string.isRequired,
     }).isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
