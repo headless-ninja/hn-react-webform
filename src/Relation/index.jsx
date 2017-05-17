@@ -88,7 +88,7 @@ class Relation extends Component {
         onBlur={this.props.onBlur}
       >
         {this.props.sent && !this.props.successful &&
-        <RuleHint component={<p className={styles['validation-message']} />} key={`relation_${this.props.field['#webform_key']}`} hint={this.props.field['#relationError'] || 'We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.'} />
+        <RuleHint component={<p className={styles['validation-message']} />} key={`relation_${this.props.field['#webform_key']}`} hint={Fieldset.getValue(this.props.field, 'relationError') || 'We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.'} />
         }
       </Fieldset>
     );
