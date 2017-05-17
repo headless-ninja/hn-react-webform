@@ -30,6 +30,7 @@ const components = {
   tel: PhoneField,
   textfield: Input,
   textarea: TextArea,
+  webform_email_custom: EmailField,
   webform_address_custom: Address,
   webform_checkbox_custom: CheckboxField,
   webform_select_custom: SelectField,
