@@ -9,12 +9,29 @@
     width: calc(50% + var(--inputWidth) + 20px);
   }
 
-  &.display-inline {
+  &.label-display-inline {
     width: calc(var(--inputWidth) + 20px);
     padding-right: 20px;
 
     @media (min-width: 768px) {
       display: inline-block;
+    }
+
+    & :global .Select-placeholder,
+    & :global .Select--single > .Select-control .Select-value {
+      max-width: calc(var(--inputWidth) - 25px);
+    }
+  }
+
+  &.label-display-before {
+    & :global .Select-placeholder,
+    & :global .Select--single > .Select-control .Select-value {
+      max-width: calc(100% - 25px);
+      white-space: normal; /* since we're working with percentual width, we need the line to wrap */
+    }
+
+    & :global .Select--single > .Select-control .Select-value {
+      height: calc((var(--spacingUnit) / 2) + var(--inputLineHeight));
     }
   }
 
@@ -97,6 +114,7 @@
   padding: 0 calc(var(--spacingUnit) / 2);
   line-height: inherit;
   font-size: 0.9em;
+  position: static;
 }
 
 :global .Select-input {
@@ -106,12 +124,6 @@
 
 :global .Select-input > input {
   padding: 0;
-}
-
-:global .Select-placeholder,
-:global .Select--single > .Select-control .Select-value {
-  position: static;
-  max-width: calc(var(--inputWidth) - 25px);
 }
 
 :global .Select-placeholder {
