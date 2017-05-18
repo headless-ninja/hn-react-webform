@@ -44,14 +44,6 @@ class SelectField extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  getLabelPositionClass() {
-    const labelClass = `display-${this.props.field['#title_display']}`;
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-    return '';
-  }
-
   handleChange(value) {
     const newValue = value || '';
     if(newValue && newValue.value) {
@@ -62,7 +54,7 @@ class SelectField extends Component {
   }
 
   render() {
-    const cssClassesWrapper = `select-wrapper ${this.getLabelPositionClass()} ${this.props.webformElement.isValid() ? '' : 'validate-error'}`;
+    const cssClassesWrapper = `select-wrapper ${this.props.webformElement.getLabelClass()} ${this.props.webformElement.isValid() ? '' : 'validate-error'}`;
     const options = this.props.field['#options'] || {};
     const mappedOptions = options.map(option => ({
       label: option.text,
