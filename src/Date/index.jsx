@@ -77,7 +77,10 @@ class Date extends Component {
           return WebformElement.isEmpty(props.field, value) || timestamp.isValid();
         },
         hint: () =>
-          <RuleHint key={`date_${props.field['#webform_key']}`} hint={WebformElement.getCustomValue(props.field, 'dateError', props.settings) || 'Please enter a valid date.'} />,
+          (<RuleHint
+            key={`date_${props.field['#webform_key']}`}
+            hint={WebformElement.getCustomValue(props.field, 'dateError', props.settings) || 'Please enter a valid date.'}
+          />),
         shouldValidate: field => field.isBlurred && !WebformElement.isEmpty(field, field.getValue()),
       },
     });
@@ -103,7 +106,9 @@ class Date extends Component {
           }
 
           return (<RuleHint
-            key={`date_range_${props.field['#webform_key']}`} hint={hint} tokens={{
+            key={`date_range_${props.field['#webform_key']}`}
+            hint={hint}
+            tokens={{
               value,
               min: result.min ? result.min.format(props.dateFormat) : false,
               max: result.max ? result.max.format(props.dateFormat) : false,

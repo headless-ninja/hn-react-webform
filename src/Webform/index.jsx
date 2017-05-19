@@ -130,14 +130,14 @@ class Webform extends Component {
   getFormElements() {
     const formElements = getNested(() => this.props.form.elements, []);
     return formElements.map(field =>
-      <WebformElement
+      (<WebformElement
         key={field['#webform_key']}
         field={field}
         formStore={this.formStore}
         webform={this}
         settings={this.props.form.settings}
         webformSettings={this.props.settings}
-      />);
+      />));
   }
 
   converted() {

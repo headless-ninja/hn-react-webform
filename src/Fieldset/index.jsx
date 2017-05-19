@@ -55,7 +55,7 @@ class Fieldset extends Component {
   getFormElements() {
     const formElements = this.props.field.composite_elements || [];
     return formElements.map(field =>
-      <WebformElement
+      (<WebformElement
         key={field['#webform_key']}
         field={field}
         formStore={this.props.formStore}
@@ -64,7 +64,7 @@ class Fieldset extends Component {
         onBlur={this.props.onBlur}
         settings={this.props.settings}
         webformSettings={this.props.webformSettings}
-      />);
+      />));
   }
 
   render() {
