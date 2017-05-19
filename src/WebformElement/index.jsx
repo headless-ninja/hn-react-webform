@@ -106,14 +106,14 @@ class WebformElement extends Component {
         rule: value => !WebformElement.isEmpty(props.field, value) &&
         (!this.getFormElementComponent({}).isEmpty || !this.getFormElementComponent().isEmpty(this.getField())),
         hint: value =>
-          <RuleHint
+          (<RuleHint
             key={`req_${this.key}`}
             hint={WebformElement.getCustomValue(props.field, 'requiredError', props.settings) || 'This field is required'}
             tokens={{
               value,
               name: props.field['#title'],
             }}
-          />,
+          />),
         shouldValidate: field => field.isBlurred,
       },
     });
