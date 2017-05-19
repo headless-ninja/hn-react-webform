@@ -15,7 +15,7 @@ const BaseButton = ({ disabled, label, formSubmitAttributes, onClick, isPrimary 
 
 BaseButton.propTypes = {
   disabled: PropTypes.bool,
-  formSubmitAttributes: PropTypes.arrayOf(React.PropTypes.string),
+  formSubmitAttributes: PropTypes.arrayOf(PropTypes.string),
   label: PropTypes.string,
   isPrimary: PropTypes.bool,
   onClick: PropTypes.func,
