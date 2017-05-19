@@ -26,10 +26,12 @@ class Fieldset extends Component {
     settings: PropTypes.shape().isRequired,
     children: PropTypes.node,
     webformSettings: PropTypes.shape().isRequired,
+    style: PropTypes.shape(),
   };
 
   static defaultProps = {
     children: [],
+    style: {},
   };
 
   /**
@@ -70,7 +72,7 @@ class Fieldset extends Component {
   render() {
     const formElements = this.getFormElements();
     return (
-      <div styleName='fieldset-inner'>
+      <div style={this.props.style} styleName='fieldset-inner'>
         {this.props.children}
         {formElements}
       </div>

@@ -19,21 +19,40 @@ class WizardPages extends Component {
     super(props);
     this.state = {
       page: 0,
+      lastPageRendered: 0,
     };
+  }
+
+  changePage(shift) {
+    const page = this.state.page + shift;
+    this.setState({
+      page,
+      lastPageRendered: (this.state.lastPageRendered > page) ? this.state.lastPageRendered : page,
+    });
   }
 
   render() {
     const pages = this.props.field.composite_elements;
-    const currentPage = pages[this.state.page];
 
     return (
       <div>
         <WizardProgress pages={pages} currentPage={this.state.page} />
-        <Fieldset {...this.props} field={currentPage} />
+        {pages.map((page, pageI) => (
+          (pageI <= this.state.lastPageRendered)
+            ? (
+              <Fieldset
+                {...this.props}
+                key={page['#webform_key']}
+                field={page}
+                style={{ display: (pageI === this.state.page ? null : 'none') }}
+              />
+            )
+            : null
+        ))}
         <div styleName='button-wrapper'>
           <div styleName='button-prev'>
             <BaseButton
-              onClick={() => this.setState({ page: this.state.page - 1 })}
+              onClick={() => this.changePage(-1)}
               disabled={this.state.page === 0}
               label='Previous page'
               isPrimary={false}
@@ -41,7 +60,7 @@ class WizardPages extends Component {
           </div>
           <div styleName='button-next'>
             <BaseButton
-              onClick={() => this.setState({ page: this.state.page + 1 })}
+              onClick={() => this.changePage(+1)}
               disabled={this.state.page === pages.length - 1}
               label='Next page'
             />
