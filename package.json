@@ -36,7 +36,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "test": "npm run lint && jest src",
-    "precommit": "npm run lint-fix && npm test"
+    "precommit": "lint-staged && npm test"
   },
   "dependencies": {
     "fetch-everywhere": "^1.0.5",
@@ -56,6 +56,12 @@
     "react-load-script": "0.0.3",
     "react-select": "^1.0.0-rc.4",
     "validator": "^7.0.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "devDependencies": {
     "@kadira/storybook": "^2.35.3",
@@ -78,6 +84,7 @@
     "husky": "^0.13.3",
     "jest-cli": "^20.0.3",
     "json-loader": "^0.5.4",
+    "lint-staged": "^3.5.0",
     "mobx-remotedev": "^0.2.6",
     "postcss-cssnext": "^2.11.0",
     "postcss-for": "^2.1.1",

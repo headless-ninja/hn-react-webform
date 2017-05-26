@@ -50,6 +50,11 @@ class WebformElement extends Component {
       }),
     }).isRequired,
     webformSettings: PropTypes.shape().isRequired,
+    webformPage: PropTypes.string,
+    form: PropTypes.shape({
+      settings: PropTypes.object.isRequired,
+    }).isRequired,
+    status: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -59,6 +64,7 @@ class WebformElement extends Component {
     },
     onBlur: () => {
     },
+    webformPage: 'none',
   };
 
   static validateRule(rule, field, force = false) {
@@ -207,6 +213,9 @@ class WebformElement extends Component {
           settings={this.props.settings}
           webformSettings={this.props.webformSettings}
           state={this.state}
+          webformPage={this.props.webformPage}
+          status={this.props.status}
+          form={this.props.form}
         />,
       };
     }

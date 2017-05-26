@@ -167,6 +167,9 @@ function composeLookUp(LookUpComponent) {
           }
         });
 
+        this.el.props.webformElement.validate(true);
+        this.props.onBlur();
+
         this.setFieldVisibility(true);
 
         this.props.formStore.checkConditionals();

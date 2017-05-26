@@ -137,6 +137,8 @@ class Webform extends Component {
         webform={this}
         settings={this.props.form.settings}
         webformSettings={this.props.settings}
+        status={this.state.status}
+        form={this.props.form}
       />));
   }
 
@@ -147,11 +149,11 @@ class Webform extends Component {
   }
 
   isValid() {
-    return this.formStore.fields.reduce((prev, field) => {
-      const component = field.component;
-      const isValid = component.validate(true);
-      return prev && isValid;
-    }, true);
+    return this.formStore.valid;
+  }
+
+  isMultipage() {
+    return getNested(() => this.props.form.elements, []).find(element => element['#webform_key'] === 'wizard_pages') !== undefined;
   }
 
   async updateSubmission() {
@@ -199,6 +201,7 @@ class Webform extends Component {
 
   render() {
     const formElements = this.getFormElements();
+    const multipage = this.isMultipage();
 
     let requiredHint = null;
     if(
@@ -226,10 +229,12 @@ class Webform extends Component {
         >
           { requiredHint }
           { formElements }
-          <SubmitButton
-            form={this.props.form}
-            status={this.state.status}
-          />
+          { multipage &&
+            <SubmitButton
+              form={this.props.form}
+              status={this.state.status}
+            />
+          }
         </form>}
         { this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT &&
         <ThankYouMessage message={this.props.form.settings.confirmation_message} />

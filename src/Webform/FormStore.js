@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { observable, computed } from 'mobx';
 import { formatConditionals } from './conditionals';
 
 class Field {
@@ -92,6 +92,30 @@ class FormStore {
 
   getFieldIndex(key) {
     return this.fields.findIndex(field => field.key === key);
+  }
+
+  @computed get valid() {
+    return !this.fields.find((field) => {
+      const component = field.component;
+      const isValid = component.validate(true);
+      return !isValid;
+    });
+  }
+
+  isValid(page) {
+    const invalid = this.fields.find(({ component }) => {
+      // Only check the current page
+      if(component.props.webformPage !== page) return false;
+
+      // Validate the component
+      const valid = component.valid;
+
+      // If an error was found, return true
+      return !valid;
+    });
+
+    // If an error was found, return false
+    return !invalid;
   }
 }
 
