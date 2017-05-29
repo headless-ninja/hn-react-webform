@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import getNested from 'get-nested';
 import fetch from 'fetch-everywhere';
-import { observer } from 'mobx-react';
+import { observer, Provider } from 'mobx-react';
 import CSSModules from 'react-css-modules';
 import Script from 'react-load-script';
 import GoogleTag from 'google_tag';
@@ -215,7 +215,7 @@ class Webform extends Component {
       <li key={error}><span styleName='element error'>{ this.state.errors[error] }</span></li>,
     );
 
-    return (
+    return (<Provider formStore={this.formStore}>
       <div styleName='webform'>
         <h1 styleName='formtitle'>{this.props.settings.title}</h1>
         { this.state.status === Webform.formStates.ERROR && errors}
@@ -229,7 +229,7 @@ class Webform extends Component {
         >
           { requiredHint }
           { formElements }
-          { multipage &&
+          { !multipage &&
             <SubmitButton
               form={this.props.form}
               status={this.state.status}
@@ -256,7 +256,7 @@ class Webform extends Component {
         </div>
         }
       </div>
-    );
+    </Provider>);
   }
 }
 

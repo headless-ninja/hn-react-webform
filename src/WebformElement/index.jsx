@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import getNested from 'get-nested';
 import CSSModules from 'react-css-modules';
-import Parser from '../Parser';
+import { observer } from 'mobx-react';
+import Parser, { template } from '../Parser';
 import { components } from '../index';
 import FormStore from '../Webform/FormStore';
 import rules from '../Webform/rules';
@@ -11,6 +12,7 @@ import RuleHint from '../RuleHint';
 import Wrapper from '../Wrapper';
 import { checkConditionals, defaultStates, supportedActions } from '../Webform/conditionals';
 
+@observer
 @CSSModules(styles, { allowMultiple: true })
 class WebformElement extends Component {
   static propTypes = {
@@ -346,7 +348,7 @@ class WebformElement extends Component {
 
       const className = `${addClass} ${styles[cssClass] ? cssClass : ''}`;
 
-      return (<span styleName={className}>{Parser(value)}</span>);
+      return (<span styleName={className}>{Parser(template(this.props.formStore, value))}</span>);
     }
 
     return false;
@@ -361,7 +363,7 @@ class WebformElement extends Component {
           component={getNested(() => element.class.meta.label, <label htmlFor={this.key} />)}
           styleName={`label ${this.getLabelClass()}`}
         >
-          {Parser(this.props.field['#title'])}
+          {Parser(template(this.props.formStore, this.props.field['#title']))}
           {this.state[supportedActions.required] ? (<small>&nbsp;*</small>) : null}
         </Wrapper>
       );
