@@ -2,15 +2,27 @@ import { observable, computed } from 'mobx';
 import Field from './Field';
 
 class Form {
+
+  /**
+   * The unique key for this form.
+   */
+  key = null;
+
+  /**
+   * The raw data provided by Drupal.
+   */
+  form;
+
   @observable settings = {};
   @observable fields = [];
   @observable formProperties = {
     hasRequiredFields: false,
   };
-  key = null;
 
-  constructor(formId, settings, defaults = {}) {
+
+  constructor(formId, { settings, form, defaults = {} }) {
     this.key = formId;
+    this.form = form;
     this.settings = settings;
     this.defaults = defaults;
   }

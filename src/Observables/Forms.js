@@ -9,7 +9,7 @@ class Forms {
     if(this.forms[formID]) return this.forms[formID];
     else if(!options) throw Error('Tried to get a form ', formID, 'but the form was not initiated.');
 
-    this.forms[formID] = new Form(formID, options.settings, options.defaultValues);
+    this.forms[formID] = new Form(formID, options);
 
     return this.getForm(formID);
   }

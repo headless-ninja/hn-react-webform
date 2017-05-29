@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import getNested from 'get-nested';
 import fetch from 'fetch-everywhere';
-import { observer } from 'mobx-react';
+import { observer, Provider } from 'mobx-react';
 import CSSModules from 'react-css-modules';
 import Script from 'react-load-script';
 import GoogleTag from 'google_tag';
-import FormStore from '../Observables/Form';
 import Forms from '../Observables/Forms';
 import Parser from '../Parser';
 import SubmitButton from '../SubmitButton';
@@ -92,10 +91,7 @@ class Webform extends Component {
     };
 
     this.key = props.form.form_id;
-    this.formStore = Forms.getForm(this.key, {
-      settings: props.settings,
-      defaultValues: this.props.defaultValues,
-    });
+    this.formStore = this.getFormstore(props);
 
     this.onSubmit = this.onSubmit.bind(this);
     this.converted = this.converted.bind(this);
@@ -116,9 +112,7 @@ class Webform extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.form.form_id !== nextProps.form.form_id) {
-      this.formStore = new FormStore(this.key, this.props.settings, this.props.defaultValues);
-    }
+    this.formStore = this.getFormstore(nextProps);
   }
 
   onSubmit(e) {
@@ -129,6 +123,14 @@ class Webform extends Component {
     }
     // console.warn('One or more fields are invalid...');
     return true;
+  }
+
+  getFormstore(props) {
+    return Forms.getForm(props.form.form_id, {
+      form: props.form,
+      settings: props.settings,
+      defaultValues: this.props.defaultValues,
+    });
   }
 
   getFormElements() {
@@ -220,46 +222,48 @@ class Webform extends Component {
     );
 
     return (
-      <div styleName='webform'>
-        <h1 styleName='formtitle'>{this.props.settings.title}</h1>
-        { this.state.status === Webform.formStates.ERROR && errors}
-        { this.state.status !== Webform.formStates.SENT &&
-        <form
-          method='POST'
-          onSubmit={this.onSubmit}
-          name={this.props.form.form_id}
-          id={this.props.form.form_id}
-          noValidate={this.props.noValidation}
-        >
-          { requiredHint }
-          { formElements }
-          { multipage &&
-            <SubmitButton
-              form={this.props.form}
-              status={this.state.status}
+      <Provider form={this.formStore}>
+        <div styleName='webform'>
+          <h1 styleName='formtitle'>{this.props.settings.title}</h1>
+          { this.state.status === Webform.formStates.ERROR && errors}
+          { this.state.status !== Webform.formStates.SENT &&
+          <form
+            method='POST'
+            onSubmit={this.onSubmit}
+            name={this.props.form.form_id}
+            id={this.props.form.form_id}
+            noValidate={this.props.noValidation}
+          >
+            { requiredHint }
+            { formElements }
+            { multipage &&
+              <SubmitButton
+                form={this.props.form}
+                status={this.state.status}
+              />
+            }
+          </form>}
+          { this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT &&
+          <ThankYouMessage message={this.props.form.settings.confirmation_message} />
+           }
+          {this.props.settings.tracking !== false &&
+          <div>
+            <Script
+              url='//cdn-static.formisimo.com/tracking/js/tracking.js'
+              onLoad={() => {}}
+              onError={() => {}}
             />
-          }
-        </form>}
-        { this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT &&
-        <ThankYouMessage message={this.props.form.settings.confirmation_message} />
-         }
-        {this.props.settings.tracking !== false &&
-        <div>
-          <Script
-            url='//cdn-static.formisimo.com/tracking/js/tracking.js'
-            onLoad={() => {}}
-            onError={() => {}}
-          />
-          {this.state.status === Webform.formStates.SENT &&
-          <Script
-            url='//cdn-static.formisimo.com/tracking/js/conversion.js'
-            onLoad={this.converted}
-            onError={() => {}}
-          />
+            {this.state.status === Webform.formStates.SENT &&
+            <Script
+              url='//cdn-static.formisimo.com/tracking/js/conversion.js'
+              onLoad={this.converted}
+              onError={() => {}}
+            />
+            }
+          </div>
           }
         </div>
-        }
-      </div>
+      </Provider>
     );
   }
 }
