@@ -6,7 +6,8 @@ import { observer } from 'mobx-react';
 import CSSModules from 'react-css-modules';
 import Script from 'react-load-script';
 import GoogleTag from 'google_tag';
-import FormStore from './FormStore';
+import FormStore from '../Observables/Form';
+import Forms from '../Observables/Forms';
 import Parser from '../Parser';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
@@ -91,7 +92,10 @@ class Webform extends Component {
     };
 
     this.key = props.form.form_id;
-    this.formStore = new FormStore(this.key, props.settings, this.props.defaultValues);
+    this.formStore = Forms.getForm(this.key, {
+      settings: props.settings,
+      defaultValues: this.props.defaultValues,
+    });
 
     this.onSubmit = this.onSubmit.bind(this);
     this.converted = this.converted.bind(this);

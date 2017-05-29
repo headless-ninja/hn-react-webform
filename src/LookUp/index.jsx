@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'fetch-everywhere';
 import getNested from 'get-nested';
-import FormStore from '../Webform/FormStore';
+import FormStore from '../Observables/Form';
 import WebformElement from '../WebformElement';
 
 function composeLookUp(LookUpComponent) {

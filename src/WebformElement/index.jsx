@@ -4,7 +4,7 @@ import getNested from 'get-nested';
 import CSSModules from 'react-css-modules';
 import Parser from '../Parser';
 import { components } from '../index';
-import FormStore from '../Webform/FormStore';
+import FormStore from '../Observables/Form';
 import rules from '../Webform/rules';
 import styles from './styles.pcss';
 import RuleHint from '../RuleHint';

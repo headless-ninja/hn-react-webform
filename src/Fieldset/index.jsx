@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import getNested from 'get-nested';
 import WebformElement from '../WebformElement';
-import FormStore from '../Webform/FormStore';
+import FormStore from '../Observables/Form';
 import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })
