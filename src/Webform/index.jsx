@@ -170,7 +170,7 @@ class Webform extends Component {
     }
   }
 
-  async submit() {
+  async submit(extraFields) {
     // eslint-disable-next-line no-undef
     const headers = new Headers({
       'Content-Type': 'application/json',
@@ -189,7 +189,7 @@ class Webform extends Component {
       method: 'POST',
       body: JSON.stringify(Object.assign({
         form_id: this.props.form.form_id,
-      }, values)),
+      }, extraFields, values)),
     })
       .then(response => response.json())
       .then(response => ({
@@ -215,7 +215,7 @@ class Webform extends Component {
       <li key={error}><span styleName='element error'>{ this.state.errors[error] }</span></li>,
     );
 
-    return (<Provider formStore={this.formStore}>
+    return (<Provider formStore={this.formStore} submit={this.submit}>
       <div styleName='webform'>
         <h1 styleName='formtitle'>{this.props.settings.title}</h1>
         { this.state.status === Webform.formStates.ERROR && errors}

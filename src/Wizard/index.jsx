@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import WizardProgress from './WizardProgress';
 import Fieldset from '../Fieldset';
 import BaseButton from '../BaseButton';
@@ -9,6 +9,7 @@ import SubmitButton from '../SubmitButton';
 import styles from './styles.pcss';
 
 @observer
+@inject('submit')
 @CSSModules(styles)
 class WizardPages extends Component {
 
@@ -25,6 +26,7 @@ class WizardPages extends Component {
       fields: PropTypes.arrayOf(PropTypes.shape()).isRequired,
       isValid: PropTypes.bool,
     }).isRequired,
+    submit: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -104,7 +106,12 @@ class WizardPages extends Component {
               : <BaseButton
                 onClick={(e) => {
                   e.preventDefault();
-                  if(this.pageIsValid(pages[this.state.page]['#webform_key'])) this.changePage(+1);
+                  if(this.pageIsValid(pages[this.state.page]['#webform_key'])) {
+                    this.changePage(+1);
+                    this.props.submit({
+                      in_draft: true,
+                    });
+                  }
                 }}
                 label='Next page'
               />
