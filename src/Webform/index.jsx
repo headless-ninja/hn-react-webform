@@ -171,7 +171,7 @@ class Webform extends Component {
     }
   }
 
-  async submit(extraFields) {
+  async submit(extraFields = {}) {
     // eslint-disable-next-line no-undef
     const headers = new Headers({
       'Content-Type': 'application/json',
@@ -184,7 +184,7 @@ class Webform extends Component {
         values[field.key] = field.value;
       }
     });
-    this.setState({ status: Webform.formStates.PENDING });
+    if(!extraFields.in_draft) this.setState({ status: Webform.formStates.PENDING });
     return fetch(`${this.props.settings.cmsBaseUrl}/api/v1/form?_format=json`, {
       headers,
       method: 'POST',
