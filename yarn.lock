@@ -4431,13 +4431,13 @@ mobx-remotedev@^0.2.6:
     remotedev "^0.2.7"
     remotedev-utils "^0.1.4"
 
+mobx@3.1.13:
+  version "3.1.13"
+  resolved "https://registry.yarnpkg.com/mobx/-/mobx-3.1.13.tgz#055b5df6b6ac93e8cac0d97086bd6a860c0dd9a3"
+
 mobx@^2.3.4:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-2.7.0.tgz#cf3d82d18c0ca7f458d8f2a240817b3dc7e54a01"
-
-mobx@^3.1.9:
-  version "3.1.11"
-  resolved "https://registry.yarnpkg.com/mobx/-/mobx-3.1.11.tgz#400b1e3c00a4249dfe36e9bca28ef36f057d4a28"
 
 moment@^2.18.1:
   version "2.18.1"
