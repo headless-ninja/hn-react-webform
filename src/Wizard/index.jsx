@@ -7,9 +7,10 @@ import Fieldset from '../Fieldset';
 import BaseButton from '../BaseButton';
 import SubmitButton from '../SubmitButton';
 import styles from './styles.pcss';
+import WebformElement from '../WebformElement';
 
-@observer
 @inject('submit')
+@observer
 @CSSModules(styles)
 class WizardPages extends Component {
 
@@ -19,14 +20,32 @@ class WizardPages extends Component {
     }).isRequired,
     form: PropTypes.shape({
       settings: PropTypes.object.isRequired,
-      field: PropTypes.arrayOf(PropTypes.shape()).isRequired,
     }).isRequired,
     status: PropTypes.string.isRequired,
     formStore: PropTypes.shape({
-      fields: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-      isValid: PropTypes.bool,
+      fields: PropTypes.shape().isRequired,
+      isValid: PropTypes.func.isRequired,
     }).isRequired,
     submit: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    settings: PropTypes.shape({
+      custom_elements: PropTypes.shape({
+        patternError: PropTypes.shape({
+          '#default_value': PropTypes.string,
+          '#options': PropTypes.objectOf(PropTypes.string),
+        }),
+      }),
+    }).isRequired,
+    webformSettings: PropTypes.shape().isRequired,
+    webformElement: PropTypes.instanceOf(WebformElement).isRequired,
+  };
+
+  static defaultProps = {
+    onChange: () => {
+    },
+    onBlur: () => {
+    },
   };
 
   constructor(props) {
@@ -85,7 +104,14 @@ class WizardPages extends Component {
             key={page['#webform_key']}
             field={page}
             style={{ display: (pageI === this.state.page ? null : 'none') }}
+            form={this.props.form}
             webformPage={page['#webform_key']}
+            webformElement={this.props.webformElement}
+            onChange={this.props.onChange}
+            onBlur={this.props.onBlur}
+            settings={this.props.settings}
+            webformSettings={this.props.webformSettings}
+            status={this.props.status}
           />
         ))}
         <div styleName='button-wrapper'>

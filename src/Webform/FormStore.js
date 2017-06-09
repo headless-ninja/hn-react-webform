@@ -103,12 +103,9 @@ class FormStore {
   }
 
   isValid(page) {
-    const invalid = this.fields.find(({ component }) => {
+    const invalid = this.fields.find(({ component, valid }) => {
       // Only check the current page
       if(component.props.webformPage !== page) return false;
-
-      // Validate the component
-      const valid = component.valid;
 
       // If an error was found, return true
       return !valid;
