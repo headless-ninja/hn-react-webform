@@ -1,4 +1,6 @@
-import { observable } from 'mobx/lib/mobx';
+
+// eslint-disable-next-line import/extensions
+import { observable } from 'mobx/lib/mobx.js';
 import { formatConditionals } from './conditionals';
 
 class Field {
