@@ -28,6 +28,10 @@ class Fieldset extends Component {
     webformSettings: PropTypes.shape().isRequired,
     style: PropTypes.shape(),
     webformPage: PropTypes.string,
+    form: PropTypes.shape({
+      settings: PropTypes.object.isRequired,
+    }).isRequired,
+    status: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -69,6 +73,8 @@ class Fieldset extends Component {
         settings={this.props.settings}
         webformSettings={this.props.webformSettings}
         webformPage={this.props.webformPage}
+        form={this.props.form}
+        status={this.props.status}
       />));
   }
 
