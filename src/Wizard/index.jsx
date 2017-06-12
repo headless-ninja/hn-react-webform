@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import { observer, inject } from 'mobx-react';
+import getNested from 'get-nested';
 import WizardProgress from './WizardProgress';
 import Fieldset from '../Fieldset';
 import BaseButton from '../BaseButton';
@@ -119,7 +120,7 @@ class WizardPages extends Component {
             <BaseButton
               onClick={(e) => { e.preventDefault(); this.changePage(-1); }}
               disabled={this.state.page === 0}
-              label='Previous page'
+              label={getNested(() => pages[this.state.page]['#prev_button_label']) || getNested(() => this.props.form.settings.wizard_prev_button_label) || 'Previous page'}
               isPrimary={false}
             />
           </div>
@@ -139,7 +140,7 @@ class WizardPages extends Component {
                     });
                   }
                 }}
-                label='Next page'
+                label={getNested(() => pages[this.state.page]['#next_button_label']) || getNested(() => this.props.form.settings.wizard_next_button_label) || 'Next page'}
               />
             }
           </div>
