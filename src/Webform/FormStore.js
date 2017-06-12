@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx/lib/mobx';
+import { observable, computed } from 'mobx';
 import { formatConditionals } from './conditionals';
 
 class Field {
