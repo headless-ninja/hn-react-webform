@@ -135,9 +135,11 @@ class WizardPages extends Component {
                   e.preventDefault();
                   if(this.pageIsValid(pages[this.state.page]['#webform_key'])) {
                     this.changePage(+1);
-                    this.props.submit({
-                      in_draft: true,
-                    });
+                    if(getNested(() => this.props.form.settings.draft_auto_save)) {
+                      this.props.submit({
+                        in_draft: true,
+                      });
+                    }
                   }
                 }}
                 label={getNested(() => pages[this.state.page]['#next_button_label']) || getNested(() => this.props.form.settings.wizard_next_button_label) || 'Next page'}
