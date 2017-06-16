@@ -120,6 +120,12 @@ class Webform extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+
+    if(typeof this.onSubmitOverwrite === 'function') {
+      const result = this.onSubmitOverwrite(e);
+      if(!result) return result;
+    }
+
     const isValid = this.isValid();
     if(isValid) {
       return this.updateSubmission();
@@ -135,7 +141,6 @@ class Webform extends Component {
         key={field['#webform_key']}
         field={field}
         formStore={this.formStore}
-        webform={this}
         settings={this.props.form.settings}
         webformSettings={this.props.settings}
         status={this.state.status}
@@ -216,7 +221,7 @@ class Webform extends Component {
       <li key={error}><span styleName='element error'>{ this.state.errors[error] }</span></li>,
     );
 
-    return (<Provider formStore={this.formStore} submit={this.submit}>
+    return (<Provider formStore={this.formStore} submit={this.submit} webform={this}>
       <div styleName='webform'>
         <h1 styleName='formtitle'>{this.props.settings.title}</h1>
         { this.state.status === Webform.formStates.ERROR && errors}

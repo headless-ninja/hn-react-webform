@@ -9,8 +9,9 @@ import BaseButton from '../BaseButton';
 import SubmitButton from '../SubmitButton';
 import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
+import Webform from '../Webform';
 
-@inject('submit')
+@inject('submit', 'webform')
 @observer
 @CSSModules(styles)
 class WizardPages extends Component {
@@ -38,6 +39,7 @@ class WizardPages extends Component {
         }),
       }),
     }).isRequired,
+    webform: PropTypes.instanceOf(Webform).isRequired,
     webformSettings: PropTypes.shape().isRequired,
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
   };
@@ -57,6 +59,17 @@ class WizardPages extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.webform.onSubmitOverwrite = () => {
+      if(this.state.page === this.props.field.composite_elements.length - 1) {
+        return true; // Execute normal onSubmit
+      }
+
+      this.navigateToNextPage();
+      return false;
+    };
+  }
+
   componentWillReceiveProps(props) {
     const pages = props.field.composite_elements;
     pages.forEach((page, pageI) => {
@@ -67,6 +80,10 @@ class WizardPages extends Component {
         this.pageIsValid(page['#webform_key']);
       }
     });
+  }
+
+  componentWillUnmount() {
+    delete this.props.webform.onSubmitOverwrite;
   }
 
   changePage(shift) {
@@ -91,6 +108,17 @@ class WizardPages extends Component {
 
     // If an error was found, return false
     return !invalid.length;
+  }
+
+  navigateToNextPage() {
+    if(this.pageIsValid(this.props.field.composite_elements[this.state.page]['#webform_key'])) {
+      this.changePage(+1);
+      if(getNested(() => this.props.form.settings.draft_auto_save)) {
+        this.props.submit({
+          in_draft: true,
+        });
+      }
+    }
   }
 
   render() {
@@ -131,18 +159,8 @@ class WizardPages extends Component {
                 status={this.props.status}
               />
               : <BaseButton
-                onClick={(e) => {
-                  e.preventDefault();
-                  if(this.pageIsValid(pages[this.state.page]['#webform_key'])) {
-                    this.changePage(+1);
-                    if(getNested(() => this.props.form.settings.draft_auto_save)) {
-                      this.props.submit({
-                        in_draft: true,
-                      });
-                    }
-                  }
-                }}
                 label={getNested(() => pages[this.state.page]['#next_button_label']) || getNested(() => this.props.form.settings.wizard_next_button_label) || 'Next page'}
+                type='submit'
               />
             }
           </div>
