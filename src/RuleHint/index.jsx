@@ -2,9 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import getNested from 'get-nested';
-import Parser from '../Parser';
+import { inject } from 'mobx-react';
+import Parser, { template } from '../Parser';
 import styles from './styles.pcss';
+import FormStore from '../Observables/Form';
 
+@inject('formStore')
 @CSSModules(styles)
 class RuleHint extends Component {
   static propTypes = {
@@ -13,7 +16,6 @@ class RuleHint extends Component {
       PropTypes.element,
     ]).isRequired,
     tokens: PropTypes.objectOf(PropTypes.node),
-    tokenCharacter: PropTypes.node,
     component: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.shape({
@@ -23,6 +25,7 @@ class RuleHint extends Component {
         }),
       }),
     ]),
+    formStore: PropTypes.instanceOf(FormStore).isRequired,
   };
 
   static defaultProps = {
@@ -32,10 +35,10 @@ class RuleHint extends Component {
   }
 
   getHint() {
-    const { tokenCharacter, tokens } = this.props;
+    const { tokens } = this.props;
     let hint = this.props.hint;
     Object.keys(tokens).forEach((token) => {
-      hint = hint.replace(new RegExp(`${tokenCharacter}${token}`, 'g'), tokens[token]);
+      hint = hint.replace(new RegExp(`{{${token}}}`, 'g'), tokens[token]);
     });
 
     return hint;
@@ -47,7 +50,7 @@ class RuleHint extends Component {
     return (
       <RuleComponent styleName='validation-message' className={getNested(() => this.props.component.props.className)}>
         <span>
-          {Parser(hint)}
+          {Parser(template(this.props.formStore, hint))}
         </span>
       </RuleComponent>
     );

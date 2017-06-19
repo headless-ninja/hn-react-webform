@@ -95,6 +95,7 @@ class Webform extends Component {
 
     this.onSubmit = this.onSubmit.bind(this);
     this.converted = this.converted.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   componentWillMount() {
@@ -117,6 +118,12 @@ class Webform extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+
+    if(typeof this.onSubmitOverwrite === 'function') {
+      const result = this.onSubmitOverwrite(e);
+      if(!result) return result;
+    }
+
     const isValid = this.isValid();
     if(isValid) {
       return this.updateSubmission();
@@ -140,7 +147,6 @@ class Webform extends Component {
         key={field['#webform_key']}
         field={field}
         formStore={this.formStore}
-        webform={this}
         settings={this.props.form.settings}
         webformSettings={this.props.settings}
         status={this.state.status}
@@ -176,7 +182,7 @@ class Webform extends Component {
     }
   }
 
-  async submit() {
+  async submit(extraFields = {}) {
     // eslint-disable-next-line no-undef
     const headers = new Headers({
       'Content-Type': 'application/json',
@@ -189,13 +195,13 @@ class Webform extends Component {
         values[field.key] = field.value;
       }
     });
-    this.setState({ status: Webform.formStates.PENDING });
+    if(!extraFields.in_draft) this.setState({ status: Webform.formStates.PENDING });
     return fetch(`${this.props.settings.cmsBaseUrl}/api/v1/form?_format=json`, {
       headers,
       method: 'POST',
       body: JSON.stringify(Object.assign({
         form_id: this.props.form.form_id,
-      }, values)),
+      }, extraFields, values)),
     })
       .then(response => response.json())
       .then(response => ({
@@ -222,7 +228,7 @@ class Webform extends Component {
     );
 
     return (
-      <Provider form={this.formStore}>
+      <Provider formStore={this.formStore} submit={this.submit} webform={this}>
         <div styleName='webform'>
           <h1 styleName='formtitle'>{this.props.settings.title}</h1>
           { this.state.status === Webform.formStates.ERROR && errors}
@@ -236,7 +242,7 @@ class Webform extends Component {
           >
             { requiredHint }
             { formElements }
-            { multipage &&
+            { !multipage &&
               <SubmitButton
                 form={this.props.form}
                 status={this.state.status}

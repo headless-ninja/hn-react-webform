@@ -1,18 +1,27 @@
 {
   "presets": [
-    ["env", {
-      "targets": {
-        "browsers": ["last 2 versions"],
-        "node": "current"
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "last 2 versions"
+          ],
+          "node": "current",
+          "uglify": true
+        }
       }
-    }],
+    ],
     "react",
     "stage-1"
   ],
   "plugins": [
     "transform-decorators-legacy",
-    ["transform-runtime", {
-      "polyfill": true
-    }]
+    [
+      "transform-runtime",
+      {
+        "polyfill": true
+      }
+    ]
   ]
 }

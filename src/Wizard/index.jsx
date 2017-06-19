@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
+import getNested from 'get-nested';
 import WizardProgress from './WizardProgress';
 import Fieldset from '../Fieldset';
 import BaseButton from '../BaseButton';
 import SubmitButton from '../SubmitButton';
 import styles from './styles.pcss';
+import WebformElement from '../WebformElement';
+import Webform from '../Webform';
 
+@inject('submit', 'webform')
 @observer
 @CSSModules(styles)
 class WizardPages extends Component {
@@ -18,13 +22,33 @@ class WizardPages extends Component {
     }).isRequired,
     form: PropTypes.shape({
       settings: PropTypes.object.isRequired,
-      field: PropTypes.arrayOf(PropTypes.shape()).isRequired,
     }).isRequired,
     status: PropTypes.string.isRequired,
     formStore: PropTypes.shape({
-      fields: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-      isValid: PropTypes.bool,
+      fields: PropTypes.shape().isRequired,
+      isValid: PropTypes.func.isRequired,
     }).isRequired,
+    submit: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    settings: PropTypes.shape({
+      custom_elements: PropTypes.shape({
+        patternError: PropTypes.shape({
+          '#default_value': PropTypes.string,
+          '#options': PropTypes.objectOf(PropTypes.string),
+        }),
+      }),
+    }).isRequired,
+    webform: PropTypes.instanceOf(Webform).isRequired,
+    webformSettings: PropTypes.shape().isRequired,
+    webformElement: PropTypes.instanceOf(WebformElement).isRequired,
+  };
+
+  static defaultProps = {
+    onChange: () => {
+    },
+    onBlur: () => {
+    },
   };
 
   constructor(props) {
@@ -32,6 +56,17 @@ class WizardPages extends Component {
     this.state = {
       page: 0,
       lastPageRendered: 0,
+    };
+  }
+
+  componentDidMount() {
+    this.props.webform.onSubmitOverwrite = () => {
+      if(this.state.page === this.props.field.composite_elements.length - 1) {
+        return true; // Execute normal onSubmit
+      }
+
+      this.navigateToNextPage();
+      return false;
     };
   }
 
@@ -45,6 +80,10 @@ class WizardPages extends Component {
         this.pageIsValid(page['#webform_key']);
       }
     });
+  }
+
+  componentWillUnmount() {
+    delete this.props.webform.onSubmitOverwrite;
   }
 
   changePage(shift) {
@@ -71,6 +110,17 @@ class WizardPages extends Component {
     return !invalid.length;
   }
 
+  navigateToNextPage() {
+    if(this.pageIsValid(this.props.field.composite_elements[this.state.page]['#webform_key'])) {
+      this.changePage(+1);
+      if(getNested(() => this.props.form.settings.draft_auto_save)) {
+        this.props.submit({
+          in_draft: true,
+        });
+      }
+    }
+  }
+
   render() {
     const pages = this.props.field.composite_elements;
 
@@ -83,7 +133,14 @@ class WizardPages extends Component {
             key={page['#webform_key']}
             field={page}
             style={{ display: (pageI === this.state.page ? null : 'none') }}
+            form={this.props.form}
             webformPage={page['#webform_key']}
+            webformElement={this.props.webformElement}
+            onChange={this.props.onChange}
+            onBlur={this.props.onBlur}
+            settings={this.props.settings}
+            webformSettings={this.props.webformSettings}
+            status={this.props.status}
           />
         ))}
         <div styleName='button-wrapper'>
@@ -91,7 +148,7 @@ class WizardPages extends Component {
             <BaseButton
               onClick={(e) => { e.preventDefault(); this.changePage(-1); }}
               disabled={this.state.page === 0}
-              label='Previous page'
+              label={getNested(() => pages[this.state.page]['#prev_button_label']) || getNested(() => this.props.form.settings.wizard_prev_button_label) || 'Previous page'}
               isPrimary={false}
             />
           </div>
@@ -102,11 +159,8 @@ class WizardPages extends Component {
                 status={this.props.status}
               />
               : <BaseButton
-                onClick={(e) => {
-                  e.preventDefault();
-                  if(this.pageIsValid(pages[this.state.page]['#webform_key'])) this.changePage(+1);
-                }}
-                label='Next page'
+                label={getNested(() => pages[this.state.page]['#next_button_label']) || getNested(() => this.props.form.settings.wizard_next_button_label) || 'Next page'}
+                type='submit'
               />
             }
           </div>
