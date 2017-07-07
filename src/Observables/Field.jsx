@@ -19,6 +19,11 @@ class Field {
   conditionals;
 
   /**
+   * @var {Field}
+   */
+  parent;
+
+  /**
    * @deprecated
    * Better not use the component at all. All logic should be in this file
    */
@@ -42,7 +47,7 @@ class Field {
 
   @observable lookupSuccessful = true;
 
-  constructor(formStore, element) {
+  constructor(formStore, element, parent) {
     if(!element['#webform_key']) {
       throw new Error('Element key is required');
     }
@@ -52,6 +57,7 @@ class Field {
     this.element = element;
     this.componentClass = components[element['#type']] || components.default;
     this.conditionals = formatConditionals(element['#states']);
+    this.parent = parent;
 
     extendObservable(rules, {
       [`${supportedActions.required}_${this.key}`]: {
@@ -142,7 +148,7 @@ class Field {
   }
 
   @computed get visible() {
-    return (typeof this.conditionalLogicResults.visible === 'undefined') ? true : this.conditionalLogicResults.visible;
+    return (this.parent ? this.parent.visible : true) && (typeof this.conditionalLogicResults.visible === 'undefined') ? true : this.conditionalLogicResults.visible;
   }
 
   @computed get required() {

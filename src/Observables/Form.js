@@ -46,13 +46,13 @@ class Form {
   }
 
   @action.bound
-  createField(element) {
-    const field = new Field(this, element);
+  createField(element, parent) {
+    const field = new Field(this, element, parent);
     this.fields.push(field);
 
     // If it has children, create them too.
     if(element.composite_elements) {
-      element.composite_elements.forEach(e => this.createField(e));
+      element.composite_elements.forEach(e => this.createField(e, field));
     }
   }
 

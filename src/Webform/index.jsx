@@ -198,7 +198,7 @@ class Webform extends Component {
 
     const values = Object.assign({}, this.props.hiddenData);
     this.formStore.fields.forEach((field) => {
-      if(field.value.toString().trim() !== '') {
+      if(field.visible && !field.isEmpty) {
         values[field.key] = field.value;
       }
     });
