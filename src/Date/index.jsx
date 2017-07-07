@@ -78,20 +78,20 @@ class Date extends Component {
       [`date_${props.field['#webform_key']}`]: {
         rule: (value) => {
           const timestamp = moment(value, props.dateFormat, true);
-          return WebformElement.isEmpty(props.field, value) || timestamp.isValid();
+          return WebformUtils.isEmpty(props.field, value) || timestamp.isValid();
         },
         hint: () =>
           (<RuleHint
             key={`date_${props.field['#webform_key']}`}
             hint={WebformUtils.getCustomValue(props.field, 'dateError', props.settings) || 'Please enter a valid date.'}
           />),
-        shouldValidate: field => field.isBlurred && !WebformElement.isEmpty(field, field.getValue()),
+        shouldValidate: field => field.isBlurred && !WebformUtils.isEmpty(field, field.getValue()),
       },
     });
 
     extendObservable(rules, {
       [`date_range_${props.field['#webform_key']}`]: {
-        rule: value => WebformElement.isEmpty(props.field, value) || this.calculateDateRange(value).valid,
+        rule: value => WebformUtils.isEmpty(props.field, value) || this.calculateDateRange(value).valid,
         hint: (value) => {
           const result = this.calculateDateRange(value);
           let hint;
@@ -119,7 +119,7 @@ class Date extends Component {
             }}
           />);
         },
-        shouldValidate: field => field.isBlurred && !WebformElement.isEmpty(field, field.getValue()),
+        shouldValidate: field => field.isBlurred && !WebformUtils.isEmpty(field, field.getValue()),
       },
     });
 

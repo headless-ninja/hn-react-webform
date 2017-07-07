@@ -8,7 +8,6 @@ import styles from './styles.pcss';
 import Input from '../Input';
 import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
-import WebformElement from '../WebformElement';
 import composeLookUp from '../LookUp';
 import WebformUtils from '../WebformUtils';
 import FormStore from '../Observables/Form';
@@ -83,7 +82,7 @@ class EmailField extends Component {
     if(
       !fields.email ||
       !emailField.field ||
-      WebformElement.isEmpty(emailField.field.props, fields.email) ||
+      WebformUtils.isEmpty(emailField.field.props, fields.email) ||
       !validator.isEmail(fields.email)
     ) {
       return false;

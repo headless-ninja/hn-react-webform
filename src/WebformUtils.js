@@ -21,6 +21,25 @@ class WebformUtils {
     return true;
   }
 
+  /**
+   * @deprecated
+   * @param field
+   * @param value
+   * @returns {boolean}
+   */
+  static isEmpty(field, value) {
+    if(value === '' || value === false) {
+      return true;
+    }
+
+    if(field && field['#mask']) {
+      const mask = field['#mask'].replace(/9|a|A/g, '_');
+      return value === mask;
+    }
+
+    return false;
+  }
+
 }
 
 export default WebformUtils;
