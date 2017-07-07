@@ -15,7 +15,8 @@ class WebformUtils {
   }
 
   static validateRule(rule, field, force = false) {
-    if(force || !rule.shouldValidate || rule.shouldValidate(field)) {
+    if(!rule) return true;
+    else if(force || !rule.shouldValidate || rule.shouldValidate(field)) {
       return rule.rule(field.getValue());
     }
     return true;

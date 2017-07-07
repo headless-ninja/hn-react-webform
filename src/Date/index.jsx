@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import CSSModules from 'react-css-modules';
 import DayPicker from 'react-day-picker';
-import { extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import 'react-day-picker/lib/style.css';
@@ -22,8 +21,8 @@ import WebformUtils from '../WebformUtils';
 class Date extends Component {
   static meta = {
     validations: [
-      el => rules[`date_${el.key}`],
-      el => rules[`date_range_${el.key}`],
+      el => `date_${el.key}`,
+      el => `date_range_${el.key}`,
     ],
   };
 
@@ -74,53 +73,49 @@ class Date extends Component {
     this.min = Fieldset.getValue(props.field, 'min');
     this.max = Fieldset.getValue(props.field, 'max');
 
-    extendObservable(rules, {
-      [`date_${props.field['#webform_key']}`]: {
-        rule: (value) => {
-          const timestamp = moment(value, props.dateFormat, true);
-          return WebformUtils.isEmpty(props.field, value) || timestamp.isValid();
-        },
-        hint: () =>
-          (<RuleHint
-            key={`date_${props.field['#webform_key']}`}
-            hint={WebformUtils.getCustomValue(props.field, 'dateError', props.settings) || 'Please enter a valid date.'}
-          />),
-        shouldValidate: field => field.isBlurred && !WebformUtils.isEmpty(field, field.getValue()),
+    rules.set(`date_${props.field['#webform_key']}`, {
+      rule: (value) => {
+        const timestamp = moment(value, props.dateFormat, true);
+        return WebformUtils.isEmpty(props.field, value) || timestamp.isValid();
       },
+      hint: () =>
+        (<RuleHint
+          key={`date_${props.field['#webform_key']}`}
+          hint={WebformUtils.getCustomValue(props.field, 'dateError', props.settings) || 'Please enter a valid date.'}
+        />),
+      shouldValidate: field => field.isBlurred && !WebformUtils.isEmpty(field, field.getValue()),
     });
 
-    extendObservable(rules, {
-      [`date_range_${props.field['#webform_key']}`]: {
-        rule: value => WebformUtils.isEmpty(props.field, value) || this.calculateDateRange(value).valid,
-        hint: (value) => {
-          const result = this.calculateDateRange(value);
-          let hint;
+    rules.set(`date_range_${props.field['#webform_key']}`, {
+      rule: value => WebformUtils.isEmpty(props.field, value) || this.calculateDateRange(value).valid,
+      hint: (value) => {
+        const result = this.calculateDateRange(value);
+        let hint;
 
-          switch(result.type) {
-            case 'before':
-              hint = WebformUtils.getCustomValue(props.field, 'dateBeforeError', props.settings) || 'Please enter a date before :max';
-              break;
-            case 'after':
-              hint = WebformUtils.getCustomValue(props.field, 'dateAfterError', props.settings) || 'Please enter a date after :min';
-              break;
-            default:
-            case 'range':
-              hint = WebformUtils.getCustomValue(props.field, 'dateRangeError', props.settings) || 'Please enter a date between :min and :max';
-              break;
-          }
+        switch(result.type) {
+          case 'before':
+            hint = WebformUtils.getCustomValue(props.field, 'dateBeforeError', props.settings) || 'Please enter a date before :max';
+            break;
+          case 'after':
+            hint = WebformUtils.getCustomValue(props.field, 'dateAfterError', props.settings) || 'Please enter a date after :min';
+            break;
+          default:
+          case 'range':
+            hint = WebformUtils.getCustomValue(props.field, 'dateRangeError', props.settings) || 'Please enter a date between :min and :max';
+            break;
+        }
 
-          return (<RuleHint
-            key={`date_range_${props.field['#webform_key']}`}
-            hint={hint}
-            tokens={{
-              value,
-              min: result.min ? result.min.format(props.dateFormat) : false,
-              max: result.max ? result.max.format(props.dateFormat) : false,
-            }}
-          />);
-        },
-        shouldValidate: field => field.isBlurred && !WebformUtils.isEmpty(field, field.getValue()),
+        return (<RuleHint
+          key={`date_range_${props.field['#webform_key']}`}
+          hint={hint}
+          tokens={{
+            value,
+            min: result.min ? result.min.format(props.dateFormat) : false,
+            max: result.max ? result.max.format(props.dateFormat) : false,
+          }}
+        />);
       },
+      shouldValidate: field => field.isBlurred && !WebformUtils.isEmpty(field, field.getValue()),
     });
 
     this.clickedInside = false;

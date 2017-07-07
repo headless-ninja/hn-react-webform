@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import validator from 'validator';
-import { extendObservable } from 'mobx';
 import { observer } from 'mobx-react';
 import styles from './styles.pcss';
 import Input from '../Input';
@@ -17,8 +16,8 @@ import FormStore from '../Observables/Form';
 class EmailField extends Component {
   static meta = {
     validations: [
-      el => rules[`email_${el.key}`],
-      el => rules[`email_neverbounce_${el.key}`],
+      el => `email_${el.key}`,
+      el => `email_neverbounce_${el.key}`,
     ],
   };
 
@@ -52,19 +51,17 @@ class EmailField extends Component {
 
     const field = props.formStore.getField(props.field['#webform_key']);
 
-    extendObservable(rules, {
-      [`email_${props.field['#webform_key']}`]: {
-        rule: () => field.isEmpty || validator.isEmail(field.value),
-        hint: value =>
-          <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'emailError', props.settings) || '":value" isn\'t an Email.'} tokens={{ value }} />,
-        shouldValidate: () => field.isBlurred && !field.isEmpty,
-      },
-      [`email_neverbounce_${props.field['#webform_key']}`]: {
-        rule: () => field.isEmpty || field.lookupSuccessful,
-        hint: () =>
-          <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'neverBounceError', props.settings) || 'This doesn\'t seem to be a valid email address. Please check again.'} />,
-        shouldValidate: () => field.isBlurred && !field.isEmpty && validator.isEmail(field.value),
-      },
+    rules.set(`email_${props.field['#webform_key']}`, {
+      rule: () => field.isEmpty || validator.isEmail(field.value),
+      hint: value =>
+        <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'emailError', props.settings) || '":value" isn\'t an Email.'} tokens={{ value }} />,
+      shouldValidate: () => field.isBlurred && !field.isEmpty,
+    });
+    rules.set(`email_neverbounce_${props.field['#webform_key']}`, {
+      rule: () => field.isEmpty || field.lookupSuccessful,
+      hint: () =>
+        <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'neverBounceError', props.settings) || 'This doesn\'t seem to be a valid email address. Please check again.'} />,
+      shouldValidate: () => field.isBlurred && !field.isEmpty && validator.isEmail(field.value),
     });
 
     this.lookUpBase = `${props.webformSettings.cmsBaseUrl}/neverbounce/validate-single?_format=json`;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { observable, computed, extendObservable } from 'mobx';
+import { observable, computed } from 'mobx';
 import getNested from 'get-nested';
 import RuleHint from '../RuleHint';
 import rules from '../Webform/rules';
@@ -76,35 +76,31 @@ class Field {
       this.page = this.parent.page;
     }
 
-    extendObservable(rules, {
-      [`${supportedActions.required}_${this.key}`]: {
-        rule: () => !this.isEmpty &&
-        (!this.componentClass.isEmpty || !this.componentClass.isEmpty(this)),
-        hint: value =>
-          (<RuleHint
-            key={`req_${this.key}`}
-            hint={WebformUtils.getCustomValue(this.element, 'requiredError', this.formStore.settings) || 'This field is required'}
-            tokens={{
-              value,
-              name: this.element['#title'],
-            }}
-          />),
-        shouldValidate: field => field.isBlurred,
-      },
+    rules.set(`${supportedActions.required}_${this.key}`, {
+      rule: () => !this.isEmpty &&
+      (!this.componentClass.isEmpty || !this.componentClass.isEmpty(this)),
+      hint: value =>
+        (<RuleHint
+          key={`req_${this.key}`}
+          hint={WebformUtils.getCustomValue(this.element, 'requiredError', this.formStore.settings) || 'This field is required'}
+          tokens={{
+            value,
+            name: this.element['#title'],
+          }}
+        />),
+      shouldValidate: field => field.isBlurred,
     });
 
     const pattern = this.element['#pattern'];
     if(pattern) {
-      extendObservable(rules, {
-        [`pattern_${this.key}`]: {
-          rule: (value = '') => new RegExp(pattern).test(value) || this.isEmpty,
-          hint: (value) => {
-            const patternError = WebformUtils.getCustomValue(this.element, 'patternError', this.formStore.settings);
-            const populatedPatternError = getNested(() => this.formStore.settings.custom_elements.patternError['#options'][patternError], this.element['#patternError'] || 'The value :value doesn\'t match the right pattern');
-            return <RuleHint key={`pattern_${this.key}`} hint={populatedPatternError} tokens={{ value }} />;
-          },
-          shouldValidate: field => field.isBlurred && WebformUtils.validateRule(rules[`${supportedActions.required}_${this.key}`], field),
+      rules.set(`pattern_${this.key}`, {
+        rule: (value = '') => new RegExp(pattern).test(value) || this.isEmpty,
+        hint: (value) => {
+          const patternError = WebformUtils.getCustomValue(this.element, 'patternError', this.formStore.settings);
+          const populatedPatternError = getNested(() => this.formStore.settings.custom_elements.patternError['#options'][patternError], this.element['#patternError'] || 'The value :value doesn\'t match the right pattern');
+          return <RuleHint key={`pattern_${this.key}`} hint={populatedPatternError} tokens={{ value }} />;
         },
+        shouldValidate: field => field.isBlurred && WebformUtils.validateRule(rules.get(`${supportedActions.required}_${this.key}`), field),
       });
     }
   }
@@ -123,12 +119,18 @@ class Field {
       this.element['#pattern'] ? `pattern_${this.key}` : null,
     ];
 
-    const populatedValidations = validations.map(validation => rules[validation] || null);
+    const populatedValidations = validations.map(validation => rules.get(validation) || null);
 
-    populatedValidations.push(...getNested(() => this.componentClass.meta.validations
-      .map(validation => validation(this) || null), []));
+    const customValidationKeys = getNested(() => this.componentClass.meta.validations, [])
+      .map(validation => validation(this) || null);
 
-    return populatedValidations.filter(v => v !== null);
+    populatedValidations.push(...customValidationKeys.map(k => rules.get(k)).filter(k => k));
+
+    // rules.keys().filter(ruleKey => customValidationKeys.includes(ruleKey)).forEach((ruleKey) => {
+    //   if(rules.get(ruleKey)) populatedValidations.push(rules.get(ruleKey));
+    // });
+
+    return populatedValidations;
   }
 
   /**
