@@ -21,12 +21,22 @@ class Form {
    */
   @observable fields = [];
 
+  @observable page = 'no-page';
+
   /**
    * All visible fields in this form.
    * @type {Array.<Field>}
    */
   @computed get visibleFields() {
     return this.fields.filter(field => field.visible);
+  }
+
+  /**
+   * All visible fields in this form of the current page.
+   * @type {Array.<Field>}
+   */
+  @computed get visibleFieldsOfCurrentPage() {
+    return this.fields.filter(field => field.page === this.page);
   }
 
 
@@ -43,6 +53,10 @@ class Form {
       const field = this.getField(key);
       if(field) field.value = defaultValues[key];
     });
+
+    // Start at the first page
+    const page = this.fields.find(f => f.page !== 'no-page');
+    if(page) this.page = page.page;
   }
 
   @action.bound

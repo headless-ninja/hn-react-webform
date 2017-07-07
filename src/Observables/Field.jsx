@@ -22,6 +22,13 @@ class Field {
    * @var {Field}
    */
   parent;
+  /**
+   *
+   * @type {Array.<Field>}
+   */
+  parents = [];
+
+  page = 'no-page';
 
   /**
    * @deprecated
@@ -58,6 +65,14 @@ class Field {
     this.componentClass = components[element['#type']] || components.default;
     this.conditionals = formatConditionals(element['#states']);
     this.parent = parent;
+    if(parent) {
+      this.parents = [parent, ...this.parent.parents];
+    }
+    if(element['#type'] === 'webform_wizard_page') {
+      this.page = this.key;
+    } else if(parent) {
+      this.page = this.parent.page;
+    }
 
     extendObservable(rules, {
       [`${supportedActions.required}_${this.key}`]: {
