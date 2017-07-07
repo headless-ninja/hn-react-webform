@@ -81,6 +81,18 @@ function composeLookUp(LookUpComponent) {
       }
     }
 
+    componentDidMount() {
+      this.setFieldVisibility(true);
+    }
+
+    setFieldVisibility() {
+      this.fieldIterator((field, element) => {
+        if(element.hideField) {
+          field.lookupHide = true;
+        }
+      });
+    }
+
     /**
      * @param elementKey
      * @returns {Boolean | {field: Field, element}}

@@ -54,6 +54,8 @@ class Field {
 
   @observable lookupSuccessful = true;
 
+  @observable lookupHide = false;
+
   constructor(formStore, element, parent) {
     if(!element['#webform_key']) {
       throw new Error('Element key is required');
@@ -163,6 +165,7 @@ class Field {
   }
 
   @computed get visible() {
+    if(this.lookupHide && !this.lookupSent) return false;
     return (this.parent ? this.parent.visible : true) && (typeof this.conditionalLogicResults.visible === 'undefined') ? true : this.conditionalLogicResults.visible;
   }
 
