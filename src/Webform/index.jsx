@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import getNested from 'get-nested';
 import fetch from 'fetch-everywhere';
 import { observer, Provider } from 'mobx-react';
-import DevTools from 'mobx-react-devtools';
 import CSSModules from 'react-css-modules';
 import Script from 'react-load-script';
 import GoogleTag from 'google_tag';
@@ -237,7 +236,6 @@ class Webform extends Component {
     return (
       <Provider formStore={this.formStore} submit={this.submit} webform={this}>
         <div styleName='webform'>
-          <DevTools />
           <h1 styleName='formtitle'>{this.props.settings.title}</h1>
           { this.state.status === Webform.formStates.ERROR && errors}
           { this.state.status !== Webform.formStates.SENT &&
