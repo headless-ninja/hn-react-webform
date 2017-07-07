@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
+import { observer } from 'mobx-react';
 import Parser from '../Parser';
 import styles from './styles.pcss';
 import BaseInput from '../BaseInput';
 import WebformElement from '../WebformElement';
 
+@observer
 @CSSModules(styles, { allowMultiple: true })
 class Input extends Component {
   static propTypes = {

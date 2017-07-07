@@ -33,6 +33,9 @@ export const support = {
   logic: supportedLogic,
 };
 
+/**
+ * @deprecated We don't use state anymore! Use store.
+ */
 export function defaultStates(field) {
   return {
     [supportedActions.visible]: true,
@@ -173,15 +176,17 @@ function formatNewStates(newStates) {
   return formattedStates;
 }
 
-export function checkConditionals(formStore, fieldKey = false) {
+export function checkConditionals(formStore, fieldKey) {
   if(!fieldKey) {
-    return false;
+    console.error('Conditionals were checked without a fieldKey!');
+    return {};
   }
 
   const field = formStore.getField(fieldKey);
 
   if(!field || !field.conditionals) {
-    return false;
+    // When the form is still being built, not all fields are available.
+    return {};
   }
 
   const newStates = {};
@@ -210,9 +215,10 @@ export function checkConditionals(formStore, fieldKey = false) {
 
       const dependency = formStore.getField(condition.key);
       if(!dependency) {
+        console.error(`Cant find dependency ${condition.key} in the conditionals of ${fieldKey}`);
         return false;
       }
-      const dependencyValue = dependency.getValue();
+      const dependencyValue = dependency.value;
 
       // See what the action of the condition should be.
       switch(condition.condition) {

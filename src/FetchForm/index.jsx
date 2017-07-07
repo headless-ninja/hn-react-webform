@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'fetch-everywhere';
+import { observer } from 'mobx-react';
 import Webform from '../Webform';
 
 const LOAD_STATES = {
@@ -9,6 +10,8 @@ const LOAD_STATES = {
   ERROR: 2,
 };
 
+
+@observer
 class FetchForm extends Component {
   static propTypes = {
     baseUrl: PropTypes.string.isRequired,

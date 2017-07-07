@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
 
+@observer
 class Address extends Component {
   static meta = {
     wrapper: <fieldset />,
     label: <legend />,
     labelVisibility: Fieldset.meta.labelVisibility,
+    hasValue: false,
   };
 
   static propTypes = {
@@ -64,7 +67,7 @@ class Address extends Component {
   prepareLookUp(fields) {
     const postCodeField = this.props.getField('postcode').field;
 
-    if(!fields.postcode || !postCodeField || !postCodeField.component.isValid()) {
+    if(!fields.postcode || !postCodeField || !postCodeField.valid) {
       return false;
     }
 

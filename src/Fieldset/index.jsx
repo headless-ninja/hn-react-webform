@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import getNested from 'get-nested';
+import { observer } from 'mobx-react';
 import WebformElement from '../WebformElement';
 import FormStore from '../Observables/Form';
 import styles from './styles.pcss';
 
+@observer
 @CSSModules(styles, { allowMultiple: true })
 class Fieldset extends Component {
   static meta = {
     wrapper: <fieldset className={styles.fieldset} />,
     label: <legend data-extendClassName={styles['fieldset-legend']} />,
     labelVisibility: 'invisible',
+    hasValue: false,
   };
 
   static propTypes = {

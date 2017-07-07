@@ -95,15 +95,11 @@ class WizardPages extends Component {
   }
 
   pageIsValid(page) {
-    const invalid = this.props.formStore.fields.filter(({ component }) => {
+    const invalid = this.props.formStore.fields.filter((field) => {
       // Only check the current page
-      if(component.props.webformPage !== page) return false;
+      if(field.page !== page) return false;
 
-      // Validate the component
-      const valid = component.validate(true);
-
-      // If an error was found, return true
-      return !valid;
+      return !field.valid;
     });
 
     // If an error was found, return false

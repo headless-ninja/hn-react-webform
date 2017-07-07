@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import getNested from 'get-nested';
 import fetch from 'fetch-everywhere';
 import { observer, Provider } from 'mobx-react';
+import DevTools from 'mobx-react-devtools';
 import CSSModules from 'react-css-modules';
 import Script from 'react-load-script';
 import GoogleTag from 'google_tag';
@@ -91,6 +92,10 @@ class Webform extends Component {
     };
 
     this.key = props.form.form_id;
+
+    /**
+     * @var {Form}
+     */
     this.formStore = this.getFormstore(props);
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -98,13 +103,7 @@ class Webform extends Component {
     this.submit = this.submit.bind(this);
   }
 
-  componentWillMount() {
-    this.formStore.fields = [];
-  }
-
   componentDidMount() {
-    this.formStore.checkConditionals();
-
     const GTM = getNested(() => this.props.settings.tracking.gtm_id) || this.props.form.settings.nm_gtm_id;
 
     if(GTM) {
@@ -119,16 +118,24 @@ class Webform extends Component {
   onSubmit(e) {
     e.preventDefault();
 
+    // If the 'onSubmit' is being overwritten, use that function.
+    // If it returns false, don't submit, otherwise continue.
     if(typeof this.onSubmitOverwrite === 'function') {
       const result = this.onSubmitOverwrite(e);
       if(!result) return result;
     }
 
+    // Make sure that all errors are visible by marking all visible fields as blurred.
+    this.formStore.fields.forEach((field) => {
+      if(field.visible) field.isBlurred = true;
+    });
+
     const isValid = this.isValid();
     if(isValid) {
       return this.updateSubmission();
     }
-    // console.warn('One or more fields are invalid...');
+    console.warn('The user tried to submit a form, but not all fields are valid.');
+
     return true;
   }
 
@@ -217,7 +224,7 @@ class Webform extends Component {
 
     let requiredHint = null;
     if(
-      this.formStore.formProperties.hasRequiredFields &&
+      this.formStore.visibleFields.find(field => field.required) &&
       this.props.form.settings.nm_required_hint
     ) {
       requiredHint = <span>{ Parser(this.props.form.settings.nm_required_hint) }</span>;
@@ -230,6 +237,7 @@ class Webform extends Component {
     return (
       <Provider formStore={this.formStore} submit={this.submit} webform={this}>
         <div styleName='webform'>
+          <DevTools />
           <h1 styleName='formtitle'>{this.props.settings.title}</h1>
           { this.state.status === Webform.formStates.ERROR && errors}
           { this.state.status !== Webform.formStates.SENT &&

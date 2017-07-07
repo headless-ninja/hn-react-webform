@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, action } from 'mobx';
 import Field from './Field';
 
 class Form {
@@ -14,67 +14,75 @@ class Form {
   form;
 
   @observable settings = {};
+
+  /**
+   * All fields in this form.
+   * @type {Array.<Field>}
+   */
   @observable fields = [];
-  @observable formProperties = {
-    hasRequiredFields: false,
-  };
+
+  /**
+   * All visible fields in this form.
+   * @type {Array.<Field>}
+   */
+  @computed get visibleFields() {
+    return this.fields.filter(field => field.visible);
+  }
 
 
-  constructor(formId, { settings, form, defaults = {} }) {
+  constructor(formId, { settings, form, defaultValues = {} }) {
     this.key = formId;
     this.form = form;
     this.settings = settings;
-    this.defaults = defaults;
+
+    // Create all fields.
+    this.form.elements.forEach(element => this.createField(element));
+
+    // Set all default values.
+    Object.keys(defaultValues).forEach((key) => {
+      const field = this.getField(key);
+      if(field) field.value = defaultValues[key];
+    });
   }
 
-  checkConditionals(excluded = []) {
-    this.fields.forEach(field => field.component.checkConditionals(excluded));
-  }
-
-  createField(component, key, props, valid) {
-    const existingFieldIndex = this.getFieldIndex(key);
-
-    let defaultValue;
-    if(typeof this.defaults[key] !== 'undefined') {
-      defaultValue = this.defaults[key];
-    }
-
-    const field = new Field(component, key, props, valid, defaultValue);
-    if(existingFieldIndex > -1) {
-      return field;
-    }
+  @action.bound
+  createField(element) {
+    const field = new Field(this, element);
     this.fields.push(field);
-    return field;
+
+    // If it has children, create them too.
+    if(element.composite_elements) {
+      element.composite_elements.forEach(e => this.createField(e));
+    }
   }
 
+  /**
+   * @param key
+   * @returns {Field}
+   */
   getField(key) {
     return this.fields.find(field => field.key === key);
   }
 
-  getFieldIndex(key) {
-    return this.fields.findIndex(field => field.key === key);
-  }
-
   @computed get valid() {
-    return !this.fields.find((field) => {
-      const component = field.component;
-      const isValid = component.validate(true);
-      return !isValid;
-    });
+    return !this.fields.find(field => field.visible && !field.valid);
   }
 
   isValid(page) {
-    const invalid = this.fields.find(({ component, valid }) => {
+    const invalid = this.fields.find((field) => {
       // Only check the current page
-      if(component.props.webformPage !== page) return false;
+      if(!field.component || field.component.props.webformPage !== page) return false;
 
       // If an error was found, return true
-      return !valid;
+      return !field.valid;
     });
 
     // If an error was found, return false
     return !invalid;
   }
+
+  @observable isSubmitting = false;
+
 }
 
 export default Form;

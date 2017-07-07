@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import iban from 'ibantools';
+import { extendObservable } from 'mobx';
+import { observer } from 'mobx-react';
 import Input from '../Input';
 import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
-import WebformElement from '../WebformElement';
+import WebformUtils from '../WebformUtils';
 
+@observer
 class IBAN extends Component {
   static meta = {
     validations: [el => rules[`iban_${el.key}`]],
@@ -24,11 +27,11 @@ class IBAN extends Component {
 
     delete rules[`pattern_${props.field['#webform_key']}`]; // IBAN has own validation, pattern is only used in back end.
 
-    Object.assign(rules, {
+    extendObservable(rules, {
       [`iban_${props.field['#webform_key']}`]: {
         rule: value => iban.isValidIBAN(value),
         hint: () =>
-          <RuleHint key={`iban_${props.field['#webform_key']}`} hint={WebformElement.getCustomValue(props.field, 'ibanError', props.settings) || 'Please enter a valid IBAN.'} />,
+          <RuleHint key={`iban_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'ibanError', props.settings) || 'Please enter a valid IBAN.'} />,
         shouldValidate: field => field.isBlurred,
       },
     });

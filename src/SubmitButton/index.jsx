@@ -17,6 +17,7 @@ const SubmitButton = ({ form, formStore, status, ...props }) => {
         label={template(formStore, settings.form_submit_label)}
         formSubmitAttributes={settings.form_submit_attributes}
         {...props}
+        type='submit'
       />
     </div>
   );

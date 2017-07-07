@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import validator from 'validator';
+import { extendObservable } from 'mobx';
+import { observer } from 'mobx-react';
 import styles from './styles.pcss';
 import Input from '../Input';
 import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
 import WebformElement from '../WebformElement';
 import composeLookUp from '../LookUp';
+import WebformUtils from '../WebformUtils';
+import FormStore from '../Observables/Form';
 
+@observer
 @CSSModules(styles)
 class EmailField extends Component {
   static meta = {
@@ -27,12 +32,11 @@ class EmailField extends Component {
     webformSettings: PropTypes.shape({
       cmsBaseUrl: PropTypes.string.isRequired,
     }).isRequired,
-    getState: PropTypes.func.isRequired,
     getField: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
     settings: PropTypes.shape().isRequired,
-    sent: PropTypes.bool.isRequired,
+    formStore: PropTypes.instanceOf(FormStore).isRequired,
   };
 
   constructor(props) {
@@ -47,18 +51,20 @@ class EmailField extends Component {
       },
     };
 
-    Object.assign(rules, {
+    const field = props.formStore.getField(props.field['#webform_key']);
+
+    extendObservable(rules, {
       [`email_${props.field['#webform_key']}`]: {
-        rule: value => value.toString().trim() === '' || validator.isEmail(value),
+        rule: () => field.isEmpty || validator.isEmail(field.value),
         hint: value =>
-          <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformElement.getCustomValue(props.field, 'emailError', props.settings) || '":value" isn\'t an Email.'} tokens={{ value }} />,
-        shouldValidate: field => field.isBlurred && field.getValue().toString().trim() !== '',
+          <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'emailError', props.settings) || '":value" isn\'t an Email.'} tokens={{ value }} />,
+        shouldValidate: () => field.isBlurred && !field.isEmpty,
       },
       [`email_neverbounce_${props.field['#webform_key']}`]: {
-        rule: value => value.toString().trim() === '' || this.props.getState().successful,
+        rule: () => field.isEmpty || field.lookupSuccessful,
         hint: () =>
-          <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformElement.getCustomValue(props.field, 'neverBounceError', props.settings) || 'This doesn\'t seem to be a valid email address. Please check again.'} />,
-        shouldValidate: field => field.isBlurred && field.getValue().toString().trim() !== '' && validator.isEmail(field.getValue()),
+          <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'neverBounceError', props.settings) || 'This doesn\'t seem to be a valid email address. Please check again.'} />,
+        shouldValidate: () => field.isBlurred && !field.isEmpty && validator.isEmail(field.value),
       },
     });
 
@@ -69,9 +75,6 @@ class EmailField extends Component {
 
   onChange(e) {
     this.props.onChange(e);
-    if(this.props.sent) {
-      this.props.onBlur(e);
-    }
   }
 
   prepareLookUp(fields) {

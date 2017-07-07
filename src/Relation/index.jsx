@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import getNested from 'get-nested';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
+import { observer } from 'mobx-react';
 import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
 import RuleHint from '../RuleHint';
 import styles from './styles.pcss';
+import FormStore from '../Observables/Form';
 
+@observer
 @CSSModules(styles)
 class Relation extends Component {
   static meta = {
@@ -24,9 +27,8 @@ class Relation extends Component {
     }).isRequired,
     fieldIterator: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
-    sent: PropTypes.bool.isRequired,
-    successful: PropTypes.bool.isRequired,
     formKeySuffix: PropTypes.string.isRequired,
+    formStore: PropTypes.instanceOf(FormStore).isRequired,
   };
 
   constructor(props) {
@@ -61,7 +63,7 @@ class Relation extends Component {
   prepareLookUp(fields) {
     let performLookUp = true;
     this.props.fieldIterator((field, element) => {
-      if(element.required && (!fields[element.elementKey] || !field.component.isValid(true))) {
+      if(field.required && (!fields[element.elementKey] || !field.valid)) {
         performLookUp = false;
         return false;
       }
@@ -82,12 +84,13 @@ class Relation extends Component {
   }
 
   render() {
+    const field = this.props.formStore.getField(this.lookUpFields.relation_number.formKey);
     return (
       <Fieldset
         {...this.props}
         onBlur={this.props.onBlur}
       >
-        {this.props.sent && !this.props.successful &&
+        {field.lookupSent && !field.lookupSuccessful &&
         <RuleHint component={<p className={styles['validation-message']} />} key={`relation_${this.props.field['#webform_key']}`} hint={Fieldset.getValue(this.props.field, 'relationError') || 'We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.'} />
         }
       </Fieldset>

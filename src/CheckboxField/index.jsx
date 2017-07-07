@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
+import { observer } from 'mobx-react';
 import Parser from '../Parser';
 import styles from './styles.pcss';
 
+@observer
 @CSSModules(styles, { allowMultiple: true })
 class CheckboxField extends Component {
   static meta = {
