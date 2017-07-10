@@ -7,6 +7,7 @@ import Parser, { template } from '../Parser';
 import FormStore from '../Observables/Form';
 import styles from './styles.pcss';
 import Wrapper from '../Wrapper';
+import Hidden from '../Hidden';
 import { supportedActions } from '../Webform/conditionals';
 
 @observer
@@ -32,6 +33,7 @@ class WebformElement extends Component {
       '#title_display': PropTypes.string,
       '#options_display': PropTypes.string,
       '#admin': PropTypes.bool,
+      composite_elements: PropTypes.array,
     }).isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
     parent: PropTypes.oneOfType([
@@ -210,7 +212,25 @@ class WebformElement extends Component {
   }
 
   shouldRender() {
-    return !this.props.field['#admin'];
+    // If it is an admin only field, don't render.
+    if(this.props.field['#admin']) {
+      return false;
+    }
+
+    // Check if it is an composite element
+    const children = (this.props.field.composite_elements || []).filter(e => !e['#admin']);
+
+    // If it is, check if there is any child that's visible or of type Hidden.
+    if(children.length && !children
+        .map(c => this.getField(c['#webform_key']))
+        .find(f => f.visible || f.componentClass === Hidden)
+    ) {
+      // If there isn't any, don't render.
+      return false;
+    }
+
+    // If all tests are passed, render.
+    return true;
   }
 
   isSuccess() {
