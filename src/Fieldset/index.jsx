@@ -2,16 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import getNested from 'get-nested';
+import { observer } from 'mobx-react';
 import WebformElement from '../WebformElement';
-import FormStore from '../Webform/FormStore';
+import FormStore from '../Observables/Form';
 import styles from './styles.pcss';
 
+@observer
 @CSSModules(styles, { allowMultiple: true })
 class Fieldset extends Component {
   static meta = {
     wrapper: <fieldset className={styles.fieldset} />,
     label: <legend data-extendClassName={styles['fieldset-legend']} />,
     labelVisibility: 'invisible',
+    hasValue: false,
   };
 
   static propTypes = {
@@ -28,6 +31,10 @@ class Fieldset extends Component {
     webformSettings: PropTypes.shape().isRequired,
     style: PropTypes.shape(),
     webformPage: PropTypes.string,
+    form: PropTypes.shape({
+      settings: PropTypes.object.isRequired,
+    }).isRequired,
+    status: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -69,6 +76,8 @@ class Fieldset extends Component {
         settings={this.props.settings}
         webformSettings={this.props.webformSettings}
         webformPage={this.props.webformPage}
+        form={this.props.form}
+        status={this.props.status}
       />));
   }
 

@@ -5,7 +5,7 @@ import getNested from 'get-nested';
 import { inject } from 'mobx-react';
 import Parser, { template } from '../Parser';
 import styles from './styles.pcss';
-import FormStore from '../Webform/FormStore';
+import FormStore from '../Observables/Form';
 
 @inject('formStore')
 @CSSModules(styles)

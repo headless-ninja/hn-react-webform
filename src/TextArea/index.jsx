@@ -14,7 +14,7 @@ class TextArea extends Component {
     value: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
-      PropTypes.boolean,
+      PropTypes.bool,
     ]),
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
     onChange: PropTypes.func.isRequired,

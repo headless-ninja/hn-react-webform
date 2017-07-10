@@ -6,7 +6,7 @@ import { observer, Provider } from 'mobx-react';
 import CSSModules from 'react-css-modules';
 import Script from 'react-load-script';
 import GoogleTag from 'google_tag';
-import FormStore from './FormStore';
+import Forms from '../Observables/Forms';
 import Parser from '../Parser';
 import SubmitButton from '../SubmitButton';
 import WebformElement from '../WebformElement';
@@ -91,19 +91,18 @@ class Webform extends Component {
     };
 
     this.key = props.form.form_id;
-    this.formStore = new FormStore(this.key, props.settings, this.props.defaultValues);
+
+    /**
+     * @var {Form}
+     */
+    this.formStore = this.getFormstore(props);
 
     this.onSubmit = this.onSubmit.bind(this);
     this.converted = this.converted.bind(this);
-  }
-
-  componentWillMount() {
-    this.formStore.fields = [];
+    this.submit = this.submit.bind(this);
   }
 
   componentDidMount() {
-    this.formStore.checkConditionals();
-
     const GTM = getNested(() => this.props.settings.tracking.gtm_id) || this.props.form.settings.nm_gtm_id;
 
     if(GTM) {
@@ -112,19 +111,39 @@ class Webform extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.form.form_id !== nextProps.form.form_id) {
-      this.formStore = new FormStore(this.key, this.props.settings, this.props.defaultValues);
-    }
+    this.formStore = this.getFormstore(nextProps);
   }
 
   onSubmit(e) {
     e.preventDefault();
+
+    // If the 'onSubmit' is being overwritten, use that function.
+    // If it returns false, don't submit, otherwise continue.
+    if(typeof this.onSubmitOverwrite === 'function') {
+      const result = this.onSubmitOverwrite(e);
+      if(!result) return result;
+    }
+
+    // Make sure that all errors are visible by marking all visible fields as blurred.
+    this.formStore.fields.forEach((field) => {
+      if(field.visible) field.isBlurred = true;
+    });
+
     const isValid = this.isValid();
     if(isValid) {
       return this.updateSubmission();
     }
-    // console.warn('One or more fields are invalid...');
+    console.warn('The user tried to submit a form, but not all fields are valid.');
+
     return true;
+  }
+
+  getFormstore(props) {
+    return Forms.getForm(props.form.form_id, {
+      form: props.form,
+      settings: props.settings,
+      defaultValues: this.props.defaultValues,
+    });
   }
 
   getFormElements() {
@@ -134,7 +153,6 @@ class Webform extends Component {
         key={field['#webform_key']}
         field={field}
         formStore={this.formStore}
-        webform={this}
         settings={this.props.form.settings}
         webformSettings={this.props.settings}
         status={this.state.status}
@@ -143,9 +161,7 @@ class Webform extends Component {
   }
 
   converted() {
-    this.setState({ status: Webform.formStates.CONVERTED }, () => {
-      this.props.onSubmitSuccess(this); // Trigger onSubmitSuccess hook.
-    });
+    this.props.onSubmitSuccess(this); // Trigger onSubmitSuccess hook.
   }
 
   isValid() {
@@ -170,7 +186,7 @@ class Webform extends Component {
     }
   }
 
-  async submit(extraFields) {
+  async submit(extraFields = {}) {
     // eslint-disable-next-line no-undef
     const headers = new Headers({
       'Content-Type': 'application/json',
@@ -179,11 +195,11 @@ class Webform extends Component {
 
     const values = Object.assign({}, this.props.hiddenData);
     this.formStore.fields.forEach((field) => {
-      if(field.value.toString().trim() !== '') {
+      if(field.visible && !field.isEmpty) {
         values[field.key] = field.value;
       }
     });
-    this.setState({ status: Webform.formStates.PENDING });
+    if(!extraFields.in_draft) this.setState({ status: Webform.formStates.PENDING });
     return fetch(`${this.props.settings.cmsBaseUrl}/api/v1/form?_format=json`, {
       headers,
       method: 'POST',
@@ -205,7 +221,7 @@ class Webform extends Component {
 
     let requiredHint = null;
     if(
-      this.formStore.formProperties.hasRequiredFields &&
+      this.formStore.visibleFields.find(field => field.required) &&
       this.props.form.settings.nm_required_hint
     ) {
       requiredHint = <span>{ Parser(this.props.form.settings.nm_required_hint) }</span>;
@@ -215,48 +231,50 @@ class Webform extends Component {
       <li key={error}><span styleName='element error'>{ this.state.errors[error] }</span></li>,
     );
 
-    return (<Provider formStore={this.formStore} submit={this.submit}>
-      <div styleName='webform'>
-        <h1 styleName='formtitle'>{this.props.settings.title}</h1>
-        { this.state.status === Webform.formStates.ERROR && errors}
-        { this.state.status !== Webform.formStates.SENT &&
-        <form
-          method='POST'
-          onSubmit={this.onSubmit}
-          name={this.props.form.form_id}
-          id={this.props.form.form_id}
-          noValidate={this.props.noValidation}
-        >
-          { requiredHint }
-          { formElements }
-          { !multipage &&
-            <SubmitButton
-              form={this.props.form}
-              status={this.state.status}
+    return (
+      <Provider formStore={this.formStore} submit={this.submit} webform={this}>
+        <div styleName='webform'>
+          <h1 styleName='formtitle'>{this.props.settings.title}</h1>
+          { this.state.status === Webform.formStates.ERROR && errors}
+          { this.state.status !== Webform.formStates.SENT &&
+          <form
+            method='POST'
+            onSubmit={this.onSubmit}
+            name={this.props.form.form_id}
+            id={this.props.form.form_id}
+            noValidate={this.props.noValidation}
+          >
+            { requiredHint }
+            { formElements }
+            { !multipage &&
+              <SubmitButton
+                form={this.props.form}
+                status={this.state.status}
+              />
+            }
+          </form>}
+          { this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT &&
+          <ThankYouMessage message={this.props.form.settings.confirmation_message} />
+           }
+          {this.props.settings.tracking !== false &&
+          <div>
+            <Script
+              url='//cdn-static.formisimo.com/tracking/js/tracking.js'
+              onLoad={() => {}}
+              onError={() => {}}
             />
-          }
-        </form>}
-        { this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT &&
-        <ThankYouMessage message={this.props.form.settings.confirmation_message} />
-         }
-        {this.props.settings.tracking !== false &&
-        <div>
-          <Script
-            url='//cdn-static.formisimo.com/tracking/js/tracking.js'
-            onLoad={() => {}}
-            onError={() => {}}
-          />
-          {this.state.status === Webform.formStates.SENT &&
-          <Script
-            url='//cdn-static.formisimo.com/tracking/js/conversion.js'
-            onLoad={this.converted}
-            onError={() => {}}
-          />
+            {this.state.status === Webform.formStates.SENT &&
+            <Script
+              url='//cdn-static.formisimo.com/tracking/js/conversion.js'
+              onLoad={this.converted}
+              onError={() => {}}
+            />
+            }
+          </div>
           }
         </div>
-        }
-      </div>
-    </Provider>);
+      </Provider>
+    );
   }
 }
 

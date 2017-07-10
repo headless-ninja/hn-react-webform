@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import { inject } from 'mobx-react';
-import FormStore from '../Webform/FormStore';
+import FormStore from '../Observables/Form';
 import Parser, { template } from '../Parser';
 import styles from './styles.pcss';
 

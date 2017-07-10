@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'fetch-everywhere';
 import getNested from 'get-nested';
-import FormStore from '../Webform/FormStore';
-import WebformElement from '../WebformElement';
+import FormStore from '../Observables/Form';
 
 function composeLookUp(LookUpComponent) {
   return class extends Component {
@@ -43,8 +42,6 @@ function composeLookUp(LookUpComponent) {
 
       this.state = {
         query: '',
-        sent: false,
-        successful: true,
       };
 
       this.onBlur = this.onBlur.bind(this);
@@ -52,10 +49,6 @@ function composeLookUp(LookUpComponent) {
       this.getField = this.getField.bind(this);
       this.getState = this.getState.bind(this);
       this.fieldIterator = this.fieldIterator.bind(this);
-    }
-
-    componentDidMount() {
-      this.setFieldVisibility(false);
     }
 
     onBlur(e) {
@@ -66,8 +59,8 @@ function composeLookUp(LookUpComponent) {
 
       const fields = {};
       this.fieldIterator((field, element) => {
-        const value = field.getValue();
-        if(!WebformElement.isEmpty(field.props, value)) {
+        const value = field.value;
+        if(!field.empty) {
           fields[element.elementKey] = value;
         }
       });
@@ -88,14 +81,22 @@ function composeLookUp(LookUpComponent) {
       }
     }
 
-    setFieldVisibility(set) {
+    componentDidMount() {
+      this.setFieldVisibility(true);
+    }
+
+    setFieldVisibility() {
       this.fieldIterator((field, element) => {
         if(element.hideField) {
-          field.component.setState({ visible: set === null ? !field.component.state.visible : set });
+          field.lookupHide = true;
         }
       });
     }
 
+    /**
+     * @param elementKey
+     * @returns {Boolean | {field: Field, element}}
+     */
     getField(elementKey) {
       if(!this.lookUpFields) {
         return false;
@@ -151,33 +152,32 @@ function composeLookUp(LookUpComponent) {
       isSuccessful = () => true,
     }) {
       if(this.state.query !== query) {
+        console.warn('A lookup query was returned, but we already fired another one. Ignoring this result.', query, jsonResponse);
         return;
       }
 
       const response = checkResponse(jsonResponse);
-      this.setState({
-        sent: true,
-        successful: isSuccessful(response),
-      }, () => {
-        this.fieldIterator((field, element) => {
-          const value = getNested(() => element.apiValue(response));
-          if(value) {
-            field.setStorage({ value });
-            field.component.validate(true, value);
-          }
-        });
 
-        this.el.props.webformElement.validate(true);
-        this.props.onBlur();
-
-        this.setFieldVisibility(true);
-
-        this.props.formStore.checkConditionals();
-
-        if(this.el.lookUpCallback) {
-          this.el.lookUpCallback(response);
+      // Let every field know the lookup was sent, and if it was successful
+      Object.keys(this.lookUpFields).forEach((elementKey) => {
+        const { field } = this.getField(elementKey);
+        if(field) {
+          field.lookupSent = true;
+          field.lookupSuccessful = isSuccessful(response);
         }
       });
+
+      this.fieldIterator((field, element) => {
+        const value = getNested(() => element.apiValue(response));
+        if(value) {
+          field.value = value;
+          field.isBlurred = true;
+        }
+      });
+
+      if(this.el.lookUpCallback) {
+        this.el.lookUpCallback(response);
+      }
     }
 
     render() {

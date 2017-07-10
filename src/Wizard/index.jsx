@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import { observer, inject } from 'mobx-react';
+import getNested from 'get-nested';
 import WizardProgress from './WizardProgress';
 import Fieldset from '../Fieldset';
 import BaseButton from '../BaseButton';
 import SubmitButton from '../SubmitButton';
 import styles from './styles.pcss';
+import WebformElement from '../WebformElement';
+import Webform from '../Webform';
+import FormStore from '../Observables/Form';
 
+@inject('submit', 'webform')
 @observer
-@inject('submit')
 @CSSModules(styles)
 class WizardPages extends Component {
 
@@ -19,101 +23,114 @@ class WizardPages extends Component {
     }).isRequired,
     form: PropTypes.shape({
       settings: PropTypes.object.isRequired,
-      field: PropTypes.arrayOf(PropTypes.shape()).isRequired,
     }).isRequired,
     status: PropTypes.string.isRequired,
-    formStore: PropTypes.shape({
-      fields: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-      isValid: PropTypes.bool,
-    }).isRequired,
+    formStore: PropTypes.instanceOf(FormStore).isRequired,
     submit: PropTypes.func.isRequired,
+    onChange: PropTypes.func,
+    onBlur: PropTypes.func,
+    settings: PropTypes.shape({
+      custom_elements: PropTypes.shape({
+        patternError: PropTypes.shape({
+          '#default_value': PropTypes.string,
+          '#options': PropTypes.objectOf(PropTypes.string),
+        }),
+      }),
+    }).isRequired,
+    webform: PropTypes.instanceOf(Webform).isRequired,
+    webformSettings: PropTypes.shape().isRequired,
+    webformElement: PropTypes.instanceOf(WebformElement).isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      page: 0,
-      lastPageRendered: 0,
+  static defaultProps = {
+    onChange: () => {
+    },
+    onBlur: () => {
+    },
+  };
+
+  componentDidMount() {
+    this.props.webform.onSubmitOverwrite = () => {
+      if(this.props.formStore.page === this.props.field.composite_elements[this.props.field.composite_elements.length - 1]['#webform_key']) {
+        return true; // Execute normal onSubmit
+      }
+
+      this.navigateToNextPage();
+      return false;
     };
   }
 
-  componentWillReceiveProps(props) {
-    const pages = props.field.composite_elements;
-    pages.forEach((page, pageI) => {
-      if(!props.formStore.isValid(page['#webform_key']) && pageI < this.state.page) {
-        this.setState({
-          page: pageI,
-        });
-        this.pageIsValid(page['#webform_key']);
-      }
-    });
+  componentWillUnmount() {
+    delete this.props.webform.onSubmitOverwrite;
   }
 
   changePage(shift) {
-    const page = this.state.page + shift;
-    this.setState({
-      page,
-      lastPageRendered: (this.state.lastPageRendered > page) ? this.state.lastPageRendered : page,
-    });
+    const pages = this.props.field.composite_elements;
+    const pageI = pages.indexOf(pages.find(p => this.props.formStore.page === p['#webform_key']));
+    const newPageI = pageI + shift;
+    this.props.formStore.page = this.props.field.composite_elements[newPageI]['#webform_key'];
   }
 
-  pageIsValid(page) {
-    const invalid = this.props.formStore.fields.filter(({ component }) => {
-      // Only check the current page
-      if(component.props.webformPage !== page) return false;
+  navigateToNextPage() {
+    // Check if all fields are valid.
+    if(!this.props.formStore.visibleFieldsOfCurrentPage.find((field) => {
+      // Also mark them as blurred, so they show the errors.
+      field.isBlurred = true;
+      return !field.valid;
+    })) {
+      // If all valid, change the page.
+      this.changePage(+1);
 
-      // Validate the component
-      const valid = component.validate(true);
-
-      // If an error was found, return true
-      return !valid;
-    });
-
-    // If an error was found, return false
-    return !invalid.length;
+      // If draft_auto_save is on, submit the page.
+      if(getNested(() => this.props.form.settings.draft_auto_save)) {
+        this.props.submit({
+          in_draft: true,
+        });
+      }
+    }
   }
 
   render() {
     const pages = this.props.field.composite_elements;
+    const pageI = pages.indexOf(pages.find(p => this.props.formStore.page === p['#webform_key']));
 
     return (
       <div>
-        <WizardProgress pages={pages} currentPage={this.state.page} />
-        {pages.map((page, pageI) => (
+        <WizardProgress pages={pages} currentPage={pageI} />
+        {pages.map(page => (
           <Fieldset
             {...this.props}
             key={page['#webform_key']}
             field={page}
-            style={{ display: (pageI === this.state.page ? null : 'none') }}
+            style={{ display: (page['#webform_key'] === this.props.formStore.page ? null : 'none') }}
+            form={this.props.form}
             webformPage={page['#webform_key']}
+            webformElement={this.props.webformElement}
+            onChange={this.props.onChange}
+            onBlur={this.props.onBlur}
+            settings={this.props.settings}
+            webformSettings={this.props.webformSettings}
+            status={this.props.status}
           />
         ))}
         <div styleName='button-wrapper'>
           <div styleName='button-prev'>
             <BaseButton
               onClick={(e) => { e.preventDefault(); this.changePage(-1); }}
-              disabled={this.state.page === 0}
-              label='Previous page'
+              disabled={this.props.formStore.page === pages[0]['#webform_key']}
+              label={getNested(() => pages[pageI]['#prev_button_label']) || getNested(() => this.props.form.settings.wizard_prev_button_label) || 'Previous page'}
               isPrimary={false}
             />
           </div>
           <div styleName='button-next'>
-            {(this.state.page === pages.length - 1)
+            {(this.props.formStore.page === pages[pages.length - 1]['#webform_key'])
               ? <SubmitButton
                 form={this.props.form}
                 status={this.props.status}
               />
               : <BaseButton
-                onClick={(e) => {
-                  e.preventDefault();
-                  if(this.pageIsValid(pages[this.state.page]['#webform_key'])) {
-                    this.changePage(+1);
-                    this.props.submit({
-                      in_draft: true,
-                    });
-                  }
-                }}
-                label='Next page'
+                label={getNested(() => pages[pageI]['#next_button_label']) || getNested(() => this.props.form.settings.wizard_next_button_label) || 'Next page'}
+                type='submit'
               />
             }
           </div>

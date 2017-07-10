@@ -5,6 +5,7 @@ import getNested from 'get-nested';
 import Parser from '../Parser';
 import WebformElement from '../WebformElement';
 import styles from './styles.pcss';
+import Field from '../Observables/Field';
 
 @CSSModules(styles, { allowMultiple: true })
 class RadioField extends Component {
@@ -32,6 +33,7 @@ class RadioField extends Component {
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
+    state: PropTypes.instanceOf(Field).isRequired,
   };
 
   getOptionPositionClass() {
@@ -74,7 +76,7 @@ class RadioField extends Component {
                   name={this.props.field['#webform_key']}
                   styleName='radio'
                   id={labelKey}
-                  disabled={!this.props.webformElement.state.enabled}
+                  disabled={!this.props.state.enabled}
                   checked={this.props.value === option.value.toString()}
                 />
                 <span styleName='indicator' />

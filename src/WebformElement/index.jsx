@@ -4,13 +4,10 @@ import getNested from 'get-nested';
 import CSSModules from 'react-css-modules';
 import { observer } from 'mobx-react';
 import Parser, { template } from '../Parser';
-import { components } from '../index';
-import FormStore from '../Webform/FormStore';
-import rules from '../Webform/rules';
+import FormStore from '../Observables/Form';
 import styles from './styles.pcss';
-import RuleHint from '../RuleHint';
 import Wrapper from '../Wrapper';
-import { checkConditionals, defaultStates, supportedActions } from '../Webform/conditionals';
+import { supportedActions } from '../Webform/conditionals';
 
 @observer
 @CSSModules(styles, { allowMultiple: true })
@@ -69,38 +66,6 @@ class WebformElement extends Component {
     webformPage: 'none',
   };
 
-  static validateRule(rule, field, force = false) {
-    if(force || !rule.shouldValidate || rule.shouldValidate(field)) {
-      return rule.rule(field.getValue());
-    }
-    return true;
-  }
-
-  static isEmpty(field, value) {
-    if(value === '' || value === false) {
-      return true;
-    }
-
-    if(field['#mask']) {
-      const mask = field['#mask'].replace(/9|a|A/g, '_');
-      return value === mask;
-    }
-
-    return false;
-  }
-
-  static getCustomValue(field, key, settings) {
-    if(key.startsWith('#')) {
-      throw new Error('Please use the field without leading hash.');
-    }
-
-    if(field[`#override_${key}`]) {
-      return field[`#${key}`];
-    }
-
-    return getNested(() => settings.custom_elements[key]['#default_value'], null);
-  }
-
   constructor(props) {
     super(props);
 
@@ -109,69 +74,32 @@ class WebformElement extends Component {
     this.onChange = this.onChange.bind(this);
     this.onBlur = this.onBlur.bind(this);
 
-    Object.assign(rules, {
-      [`${supportedActions.required}_${this.key}`]: {
-        rule: value => !WebformElement.isEmpty(props.field, value) &&
-        (!this.getFormElementComponent({}).isEmpty || !this.getFormElementComponent().isEmpty(this.getField())),
-        hint: value =>
-          (<RuleHint
-            key={`req_${this.key}`}
-            hint={WebformElement.getCustomValue(props.field, 'requiredError', props.settings) || 'This field is required'}
-            tokens={{
-              value,
-              name: props.field['#title'],
-            }}
-          />),
-        shouldValidate: field => field.isBlurred,
-      },
-    });
-
-    const pattern = props.field['#pattern'];
-    if(pattern) {
-      Object.assign(rules, {
-        [`pattern_${this.key}`]: {
-          rule: (value = '') => new RegExp(pattern).test(value) || WebformElement.isEmpty(props.field, value),
-          hint: (value) => {
-            const patternError = WebformElement.getCustomValue(props.field, 'patternError', props.settings);
-            const populatedPatternError = getNested(() => props.settings.custom_elements.patternError['#options'][patternError], props.field['#patternError'] || 'The value :value doesn\'t match the right pattern');
-            return <RuleHint key={`pattern_${this.key}`} hint={populatedPatternError} tokens={{ value }} />;
-          },
-          shouldValidate: field => field.isBlurred && WebformElement.validateRule(rules[`${supportedActions.required}_${this.key}`], field),
-        },
-      });
-    }
-
+    /**
+     * @deprecated Don't use state! Use the store.
+     */
     this.state = {
-      errors: [],
+      // errors: [],
     };
+    /**
+     * @deprecated
+     */
+    this.setState = this.setState;
 
-    Object.assign(this.state, defaultStates(props.field));
-  }
-
-  componentWillMount() {
-    if(this.shouldRender()) {
-      this.props.formStore.createField(this, this.key, this.props.field, this.validate());
-
-      if(this.state[supportedActions.required]) {
-        this.props.formStore.formProperties.hasRequiredFields = true;
-      }
-    }
-  }
-
-  componentDidMount() {
-    this.setState({ validations: this.getValidations() });
+    // Object.assign(this.state, defaultStates(props.field));
   }
 
   onChange(e) {
-    // update store value for field
-    const value = (e && e.target) ? e.target.value : e; // Check if 'e' is event, or direct value
     const field = this.getField();
-    if(!field) {
-      return false;
+
+    // First, check if this field has a value (e.g. fieldsets don't)
+    const meta = field.componentClass.meta || {};
+    const hasValue = meta.hasValue;
+    if(typeof hasValue === 'undefined' || hasValue) {
+      // Get the value
+      const value = (e && e.target) ? e.target.value : e; // Check if 'e' is event, or direct value
+
+      field.value = value;
     }
-    field.setStorage({ value });
-    this.validate();
-    this.props.formStore.checkConditionals([field.key]);
 
     this.props.onChange(e);
 
@@ -179,19 +107,24 @@ class WebformElement extends Component {
   }
 
   onBlur(e) {
-    this.getField().setStorage({ isBlurred: true });
-    this.validate();
+    const field = this.getField();
+
+    // First, check if this field has a value (e.g. fieldsets don't)
+    const meta = field.componentClass.meta || {};
+    const hasValue = meta.hasValue;
+    if(typeof hasValue === 'undefined' || hasValue) {
+      // Update the field storage to set it to blurred.
+      field.isBlurred = true;
+    }
 
     this.props.onBlur(e);
   }
 
+  /**
+   * @returns {Field}
+   */
   getField(key = this.key) {
     return this.props.formStore.getField(key);
-  }
-
-  getFormElementComponent(fb = false) {
-    const element = components[this.props.field['#type']] || components.default;
-    return element || fb;
   }
 
   getFormElement() {
@@ -199,7 +132,7 @@ class WebformElement extends Component {
       return false;
     }
 
-    const ElementComponent = this.getFormElementComponent();
+    const ElementComponent = this.getField().componentClass;
     if(ElementComponent) {
       return {
         class: ElementComponent,
@@ -214,7 +147,7 @@ class WebformElement extends Component {
           webformElement={this}
           settings={this.props.settings}
           webformSettings={this.props.webformSettings}
-          state={this.state}
+          state={this.getField()}
           webformPage={this.props.webformPage}
           status={this.props.status}
           form={this.props.form}
@@ -222,22 +155,6 @@ class WebformElement extends Component {
       };
     }
     return false;
-  }
-
-  getValidations() {
-    const validations = [
-      getNested(() => this.state[supportedActions.required]) ? `${supportedActions.required}_${this.key}` : null,
-      getNested(() => this.props.field['#pattern']) ? `pattern_${this.key}` : null,
-    ];
-
-    const populatedValidations = validations.map(validation => rules[validation] || null);
-
-    populatedValidations.push(...getNested(() => this.getFormElementComponent().meta.validations
-      .map(validation => validation(this) || null), []));
-
-    const filteredValidations = populatedValidations.filter(v => v !== null);
-
-    return filteredValidations;
   }
 
   getValue(key = this.key) {
@@ -254,62 +171,33 @@ class WebformElement extends Component {
       return labelClass;
     }
 
-    const elementClass = this.getFormElementComponent();
+    const elementClass = this.getField().componentClass;
     return `label-display-${getNested(() => elementClass.meta.labelVisibility, 'inline')}`;
   }
 
-  checkConditionals(excluded = []) {
-    const newState = checkConditionals(this.props.formStore, this.key, this.state);
-    if(newState && !excluded.includes(this.key)) {
-      this.setState(newState, () => {
-        this.setState({ validations: this.getValidations() }, () => {
-          this.validate();
-        });
-      });
-    }
-  }
-
+  /**
+   * @deprecated
+   * Just use this.getField().valid
+   *
+   * @param key
+   * @returns {boolean}
+   */
   isValid(key = this.key) {
     const field = this.getField(key);
     if(!field) {
       return true;
     }
-    return field.getStorage('valid');
+    return field.valid;
   }
 
   isVisible() {
     return this.state[supportedActions.visible] && getNested(() => this.props.parent.isVisible(), true);
   }
 
-  validate(force = false) {
-    const validations = this.state.validations;
-    const field = this.getField();
-
-    // Field is always valid, if there is none, OR the field is invisible, OR a parent is invisible.
-    if(!field || !this.isVisible()) {
-      return true;
-    }
-
-    const fails = validations ? validations.filter(validation => !WebformElement.validateRule(validation, field, force)) : [];
-
-    const errors = fails.map(rule => rule.hint(this.getValue()));
-    const valid = errors.length === 0;
-
-    // if(!valid) {
-    //   const log = valid ? console.info : console.warn;
-    //   log(this.key, '=> is', valid ? 'valid' : 'invalid');
-    // }
-
-    field.setStorage({
-      valid,
-      isBlurred: force ? true : field.isBlurred,
-    });
-
-    this.setState({ errors });
-
-    return valid;
-  }
-
+  /**
+   * @deprecated
+   * Just use this.getField().isBlurred
+   */
   shouldValidate(force = false) {
     if(force) {
       return true;
@@ -326,12 +214,12 @@ class WebformElement extends Component {
   }
 
   isSuccess() {
-    return this.shouldValidate() && this.isValid();
+    return this.getField().isBlurred && this.isValid();
   }
 
   renderTextContent(selector, checkValue = false, addClass = '', show = true) {
     if(show) {
-      const value = this.props.field[getNested(() => this.getFormElementComponent().meta.field_display[selector], selector)]; // Value in #description field
+      const value = this.props.field[getNested(() => this.getField().componentClass.meta.field_display[selector], selector)]; // Value in #description field
       const displayValue = this.props.field[`${selector}_display`];
       const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
 
@@ -364,7 +252,7 @@ class WebformElement extends Component {
           styleName={`label ${this.getLabelClass()}`}
         >
           {Parser(template(this.props.formStore, this.props.field['#title']))}
-          {this.state[supportedActions.required] ? (<small>&nbsp;*</small>) : null}
+          {this.getField().required ? (<small>&nbsp;*</small>) : null}
         </Wrapper>
       );
     }
@@ -379,15 +267,15 @@ class WebformElement extends Component {
 
     const element = this.getFormElement();
 
-    const errors = this.state.errors.length > 0 ? (
-      <ul role='alert' styleName={`${this.getLabelClass()} validation-message-wrapper`}> {this.state.errors} </ul>)
+    const errors = this.getField().errors.length > 0 ? (
+      <ul role='alert' styleName={`${this.getLabelClass()} validation-message-wrapper`}> {this.getField().errors} </ul>)
       : null;
 
     return (
       <Wrapper
         component={getNested(() => element.class.meta.wrapper, <div />)}
         styleName='formrow'
-        {...!this.state[supportedActions.visible] ? { hidden: true } : {}}
+        {...!this.getField().visible ? { hidden: true } : {}}
       >
         { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) === 'legend') }
 
