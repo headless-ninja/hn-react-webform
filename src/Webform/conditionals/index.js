@@ -224,7 +224,7 @@ export function checkConditionals(formStore, fieldKey) {
       switch(condition.condition) {
         case supportedConditions.empty:
         case supportedConditions.filled: {
-          const isEmpty = dependencyValue.toString().trim() === '';
+          const isEmpty = dependency.isEmpty;
           const check = condition.condition === supportedConditions.empty ? isEmpty : !isEmpty;
           conditionalOutcome = check;
           break;
