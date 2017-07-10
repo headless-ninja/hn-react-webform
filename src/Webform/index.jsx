@@ -161,9 +161,7 @@ class Webform extends Component {
   }
 
   converted() {
-    this.setState({ status: Webform.formStates.CONVERTED }, () => {
-      this.props.onSubmitSuccess(this); // Trigger onSubmitSuccess hook.
-    });
+    this.props.onSubmitSuccess(this); // Trigger onSubmitSuccess hook.
   }
 
   isValid() {
