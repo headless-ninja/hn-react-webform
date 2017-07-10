@@ -228,7 +228,7 @@ class Webform extends Component {
     }
 
     const errors = Object.keys(this.state.errors).map(error =>
-      <li key={error}><span styleName='element error'>{ this.state.errors[error] }</span></li>,
+      <li key={error}><span styleName='element error'>{ Parser(this.state.errors[error]) }</span></li>,
     );
 
     return (
