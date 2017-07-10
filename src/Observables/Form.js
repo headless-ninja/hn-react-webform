@@ -36,7 +36,7 @@ class Form {
    * @type {Array.<Field>}
    */
   @computed get visibleFieldsOfCurrentPage() {
-    return this.fields.filter(field => field.page === this.page);
+    return this.visibleFields.filter(field => field.page === this.page);
   }
 
 
