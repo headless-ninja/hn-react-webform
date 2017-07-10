@@ -125,8 +125,8 @@ class Webform extends Component {
     }
 
     // Make sure that all errors are visible by marking all visible fields as blurred.
-    this.formStore.fields.forEach((field) => {
-      if(field.visible) field.isBlurred = true;
+    this.formStore.visibleFields.forEach((field) => {
+      field.isBlurred = true;
     });
 
     const isValid = this.isValid();
@@ -194,10 +194,8 @@ class Webform extends Component {
     });
 
     const values = Object.assign({}, this.props.hiddenData);
-    this.formStore.fields.forEach((field) => {
-      if(field.visible && !field.isEmpty) {
-        values[field.key] = field.value;
-      }
+    this.formStore.visibleFields.filter(field => !field.isEmpty).forEach((field) => {
+      values[field.key] = field.value;
     });
     if(!extraFields.in_draft) this.setState({ status: Webform.formStates.PENDING });
     return fetch(`${this.props.settings.cmsBaseUrl}/api/v1/form?_format=json`, {
