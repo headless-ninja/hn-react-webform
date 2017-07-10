@@ -72,12 +72,11 @@ class WizardPages extends Component {
   }
 
   navigateToNextPage() {
+    // Make sure all errors are shown of visible fields.
+    this.props.formStore.visibleFieldsOfCurrentPage.forEach(field => field.isBlurred = true);
+
     // Check if all fields are valid.
-    if(!this.props.formStore.visibleFieldsOfCurrentPage.find((field) => {
-      // Also mark them as blurred, so they show the errors.
-      field.isBlurred = true;
-      return !field.valid;
-    })) {
+    if(this.props.formStore.visibleFieldsOfCurrentPage.every(field => field.valid)) {
       // If all valid, change the page.
       this.changePage(+1);
 
