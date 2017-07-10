@@ -82,7 +82,7 @@ class Field {
       hint: value =>
         (<RuleHint
           key={`req_${this.key}`}
-          hint={WebformUtils.getCustomValue(this.element, 'requiredError', this.formStore.settings) || 'This field is required'}
+          hint={WebformUtils.getCustomValue(this.element, 'requiredError', this.formStore.form.settings) || 'This field is required'}
           tokens={{
             value,
             name: this.element['#title'],
@@ -96,8 +96,8 @@ class Field {
       rules.set(`pattern_${this.key}`, {
         rule: (value = '') => new RegExp(pattern).test(value) || this.isEmpty,
         hint: (value) => {
-          const patternError = WebformUtils.getCustomValue(this.element, 'patternError', this.formStore.settings);
-          const populatedPatternError = getNested(() => this.formStore.settings.custom_elements.patternError['#options'][patternError], this.element['#patternError'] || 'The value :value doesn\'t match the right pattern');
+          const patternError = WebformUtils.getCustomValue(this.element, 'patternError', this.formStore.form.settings);
+          const populatedPatternError = getNested(() => this.formStore.form.settings.custom_elements.patternError['#options'][patternError], this.element['#patternError'] || 'The value :value doesn\'t match the right pattern');
           return <RuleHint key={`pattern_${this.key}`} hint={populatedPatternError} tokens={{ value }} />;
         },
         shouldValidate: field => field.isBlurred && WebformUtils.validateRule(rules.get(`${supportedActions.required}_${this.key}`), field),
