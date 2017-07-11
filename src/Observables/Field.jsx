@@ -61,6 +61,8 @@ class Field {
       throw new Error('Element key is required');
     }
 
+    this.value = element['#value'] || element['#default_value'] || '';
+
     this.formStore = formStore;
     this.key = element['#webform_key'];
     this.element = element;
