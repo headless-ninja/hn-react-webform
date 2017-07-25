@@ -210,10 +210,7 @@ class Webform extends Component {
       }, extraFields, values)),
     })
       .then(response => response.json())
-      .then(response => ({
-        status: response.status || 400,
-        errors: response.message || false,
-      }))
+      .then(({ status = 400, errors = false, ...response }) => ({ status, errors, ...response }))
       .catch(console.error);
   }
 
