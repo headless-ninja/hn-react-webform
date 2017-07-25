@@ -161,7 +161,10 @@ class Webform extends Component {
   }
 
   converted() {
-    this.props.onSubmitSuccess(this); // Trigger onSubmitSuccess hook.
+    this.props.onSubmitSuccess({
+      webform: this,
+      response: this.response,
+    }); // Trigger onSubmitSuccess hook.
   }
 
   isValid() {
@@ -179,6 +182,7 @@ class Webform extends Component {
     }
 
     if(response.status === 200 || response.status === 201) {
+      this.response = response;
       this.setState({ status: Webform.formStates.SENT });
     } else {
       this.setState({ status: Webform.formStates.ERROR, errors: response.errors || [] });
