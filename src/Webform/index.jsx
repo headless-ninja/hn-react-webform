@@ -161,7 +161,10 @@ class Webform extends Component {
   }
 
   converted() {
-    this.props.onSubmitSuccess(this); // Trigger onSubmitSuccess hook.
+    this.props.onSubmitSuccess({
+      webform: this,
+      response: this.response,
+    }); // Trigger onSubmitSuccess hook.
   }
 
   isValid() {
@@ -179,6 +182,7 @@ class Webform extends Component {
     }
 
     if(response.status === 200 || response.status === 201) {
+      this.response = response;
       this.setState({ status: Webform.formStates.SENT });
     } else {
       this.setState({ status: Webform.formStates.ERROR, errors: response.errors || [] });
@@ -206,10 +210,7 @@ class Webform extends Component {
       }, extraFields, values)),
     })
       .then(response => response.json())
-      .then(response => ({
-        status: response.status || 400,
-        errors: response.message || false,
-      }))
+      .then(({ status = 400, errors = false, ...response }) => ({ status, errors, ...response }))
       .catch(console.error);
   }
 
