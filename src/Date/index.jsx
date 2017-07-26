@@ -62,7 +62,7 @@ class Date extends Component {
 
   static defaultProps = {
     locale: 'nl',
-    dateFormat: 'YYYY-MM-DD',
+    dateFormat: 'DD-MM-YYYY',
     type: 'text',
     onFocus: () => {},
   };
