@@ -7,14 +7,14 @@ fieldset {
 
 .fieldset {
   box-sizing: border-box;
-  margin-bottom: calc(var(--spacingUnit) * 1.5);
+  margin-bottom: calc(var(--spacingUnitFieldset) * 1.5);
   border: var(--fieldsetBorder);
   border-radius: var(--borderRadius);
   background-color: var(--fieldsetBgColor);
-  padding: calc(var(--spacingUnit) * 1) calc(var(--spacingUnit) * 1);
+  padding: calc(var(--spacingUnitFieldset) * 1) calc(var(--spacingUnitFieldset) * 1);
 
   @media screen and (min-width: 768px) {
-    padding: calc(var(--spacingUnit) * 2.5) calc(var(--spacingUnit) * 2.5);
+    padding: calc(var(--spacingUnitFieldset) * 2.5) calc(var(--spacingUnitFieldset) * 2.5);
   }
 
   & .fieldset-legend {
@@ -32,5 +32,5 @@ fieldset {
   width: 100%;
   float: left;
   padding: 0;
-  margin-bottom: calc(var(--spacingUnit) / 2);
+  margin-bottom: calc(var(--spacingUnitFieldset) / 2);
 }

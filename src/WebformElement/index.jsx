@@ -272,7 +272,7 @@ class WebformElement extends Component {
           styleName={`label ${this.getLabelClass()}`}
         >
           {Parser(template(this.props.formStore, this.props.field['#title']))}
-          {this.getField().required ? (<small>&nbsp;*</small>) : null}
+          {this.getField().required ? (<small styleName='required-marker'>&nbsp;*</small>) : null}
         </Wrapper>
       );
     }
