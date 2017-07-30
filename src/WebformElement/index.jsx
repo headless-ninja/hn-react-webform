@@ -263,7 +263,7 @@ class WebformElement extends Component {
   }
 
   renderFieldLabel(element, show = true) {
-    /* if the label is a legend, it is supposed to be the first child of the fieldset wrapper.*/
+    /* If the label is a legend, it is supposed to be the first child of the fieldset wrapper. */
 
     if(this.props.field['#title'] && show) {
       return (
