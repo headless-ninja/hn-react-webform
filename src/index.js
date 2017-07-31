@@ -17,6 +17,7 @@ import RangeField from './RangeField';
 import WizardPages from './Wizard';
 import Relation from './Relation';
 import FormRow from './FormRow';
+import Parser from './Parser';
 
 const components = {
   checkbox: CheckboxField,
@@ -49,4 +50,4 @@ const components = {
 };
 
 export default Webform;
-export { components, FetchForm };
+export { components, FetchForm, Parser };
