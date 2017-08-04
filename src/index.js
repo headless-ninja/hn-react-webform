@@ -18,6 +18,7 @@ import WizardPages from './Wizard';
 import Relation from './Relation';
 import FormRow from './FormRow';
 import Parser from './Parser';
+import Number from './Number';
 
 const components = {
   checkbox: CheckboxField,
@@ -46,6 +47,7 @@ const components = {
   webform_relation_custom: Relation,
   webform_relation_postcode_custom: Relation,
   webform_wizard_pages: WizardPages,
+  webform_number_custom: Number,
   default: Fieldset,
 };
 
