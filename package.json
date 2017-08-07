@@ -36,7 +36,7 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "test": "npm run lint && jest src",
-    "precommit": "lint-staged && npm test"
+    "precommit": "lint-staged && jest src"
   },
   "dependencies": {
     "fetch-everywhere": "^1.0.5",
