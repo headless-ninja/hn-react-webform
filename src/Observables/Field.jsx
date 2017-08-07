@@ -161,6 +161,11 @@ class Field {
       return true;
     }
 
+    // Check if there is a static 'validate' function on the component class.
+    if(typeof field.componentClass.validate === 'function') {
+      return field.componentClass.validate(this);
+    }
+
     const fails = validations ? validations.filter(validation => !WebformUtils.validateRule(validation, field)) : [];
 
     const errors = fails.map(rule => rule.hint(this.value));

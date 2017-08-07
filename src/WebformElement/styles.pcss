@@ -33,7 +33,7 @@ fieldset.formrow {
 
   @media (min-width: 768px) {
     float: left;
-    width: 50%;
+    width: var(--inlineLabelWidth);
     padding-right: calc(var(--spacingUnit) / 2);
   }
 
@@ -46,6 +46,12 @@ fieldset.formrow {
     float: none;
     width: 100%;
   }
+}
+
+.required-marker {
+  color: var(--requiredColor);
+  font-size: 0.8em;
+  vertical-align: top;
 }
 
 /* Validation wrapper */
@@ -78,7 +84,7 @@ fieldset.formrow {
   &.label-display-inline {
     @media (min-width: 768px) {
       padding-left: calc(var(--spacingUnit) / 2);
-      margin-left: 50%;
+      margin-left: var(--inlineLabelWidth);
       float: left;
     }
   }
