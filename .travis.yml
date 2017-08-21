@@ -7,6 +7,10 @@ script:
 - yarn build
 - yarn build-storybook
 
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
+
 after_success:
 - yarn semantic-release
 
