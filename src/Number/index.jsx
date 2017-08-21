@@ -14,17 +14,17 @@ class Number extends Component {
     const numberError = WebformUtils.getCustomValue(field.element, 'numberError', field.formStore.form.settings);
 
     if(field.element['#step']) {
-      const dec = (`${field.element['#step']}.`).split('.')[1].length + 1;
+      const dec = (`${field.element['#step']}.`).split('.')[1].length;
       if((field.value * (10 ** dec)) % (field.element['#step'] * (10 ** dec) !== 0)) {
         return [numberError];
       }
     }
 
-    if(field.element['#min'] && parseInt(field.value, 10) < parseInt(field.element['#min'], 10)) {
+    if(field.element['#min'] && parseFloat(field.value) < parseFloat(field.element['#min'])) {
       return [numberError];
     }
 
-    if(field.element['#max'] && parseInt(field.value, 10) > parseInt(field.element['#max'], 10)) {
+    if(field.element['#max'] && parseFloat(field.value) > parseFloat(field.element['#max'])) {
       return [numberError];
     }
 
