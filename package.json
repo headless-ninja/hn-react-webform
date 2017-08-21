@@ -2,6 +2,7 @@
   "name": "hn-react-webform",
   "version": "0.0.0",
   "main": "lib/index.js",
+  "repository": "https://github.com/burst-digital/react-drupal-webform",
   "stylelint": {
     "extends": "stylelint-config-standard",
     "rules": {
@@ -94,6 +95,7 @@
     "react-dom": "^15.5.4",
     "react-remarkable": "^1.1.1",
     "rimraf": "^2.6.1",
+    "semantic-release": "^7.0.2",
     "storybook-readme": "^2.0.2",
     "style-loader": "^0.17.0",
     "stylelint": "^7.10.1",
