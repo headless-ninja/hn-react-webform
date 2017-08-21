@@ -3,9 +3,12 @@ node_js:
 - node
 
 script:
-- npm test
-- npm run build
-- npm run build-storybook
+- yarn test
+- yarn build
+- yarn build-storybook
+
+after_success:
+- yarn semantic-release
 
 deploy:
   skip_cleanup: true
