@@ -18,6 +18,7 @@ function composeLookUp(LookUpComponent) {
         })),
       }).isRequired,
       onBlur: PropTypes.func.isRequired,
+      onChange: PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -44,11 +45,20 @@ function composeLookUp(LookUpComponent) {
         query: '',
       };
 
+      this.onChange = this.onChange.bind(this);
       this.onBlur = this.onBlur.bind(this);
       this.onMount = this.onMount.bind(this);
       this.getField = this.getField.bind(this);
       this.getState = this.getState.bind(this);
       this.fieldIterator = this.fieldIterator.bind(this);
+    }
+
+    onChange(e) {
+      const triggerElement = Object.values(this.lookUpFields).find(element => element.formKey === e.target.name);
+      if(triggerElement && !triggerElement.triggerLookup) {
+        this.setManualOverride(true);
+      }
+      this.props.onChange(e);
     }
 
     onBlur(e) {
@@ -83,6 +93,7 @@ function composeLookUp(LookUpComponent) {
 
     componentDidMount() {
       this.setFieldVisibility(true);
+      this.setManualOverride(false);
     }
 
     setFieldVisibility() {
@@ -91,6 +102,13 @@ function composeLookUp(LookUpComponent) {
           field.lookupHide = true;
         }
       });
+    }
+
+    setManualOverride(override) {
+      const { field } = this.getField('manualOverride');
+      if(field) {
+        field.value = override.toString();
+      }
     }
 
     /**
@@ -102,6 +120,9 @@ function composeLookUp(LookUpComponent) {
         return false;
       }
       const element = this.lookUpFields[elementKey];
+      if(!element) {
+        return false;
+      }
       element.elementKey = elementKey;
       const field = this.props.formStore.getField(element.formKey);
       return {
@@ -157,13 +178,14 @@ function composeLookUp(LookUpComponent) {
       }
 
       const response = checkResponse(jsonResponse);
+      const successful = isSuccessful(response);
 
       // Let every field know the lookup was sent, and if it was successful
       Object.keys(this.lookUpFields).forEach((elementKey) => {
         const { field } = this.getField(elementKey);
         if(field) {
           field.lookupSent = true;
-          field.lookupSuccessful = isSuccessful(response);
+          field.lookupSuccessful = successful;
         }
       });
 
@@ -174,6 +196,8 @@ function composeLookUp(LookUpComponent) {
           field.isBlurred = true;
         }
       });
+
+      this.setManualOverride(!successful); // If successful, set to false since values are overridden
 
       if(this.el.lookUpCallback) {
         this.el.lookUpCallback(response);
@@ -186,6 +210,7 @@ function composeLookUp(LookUpComponent) {
           {...this.props}
           {...this.state}
           onBlur={this.onBlur}
+          onChange={this.onChange}
           ref={this.onMount}
           formKeySuffix={this.formKeySuffix}
           fieldIterator={this.fieldIterator}

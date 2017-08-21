@@ -19,6 +19,7 @@ class Address extends Component {
       cmsBaseUrl: PropTypes.string.isRequired,
     }).isRequired,
     onBlur: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     formKeySuffix: PropTypes.string.isRequired,
   };
 
@@ -59,6 +60,10 @@ class Address extends Component {
         formKey: `address_location_lng${props.formKeySuffix}`,
         apiValue: address => address.geo.center.wgs84.coordinates[0],
       },
+      manualOverride: {
+        formKey: `address_manual_override${props.formKeySuffix}`,
+        apiValue: () => false,
+      },
     };
 
     this.lookUpBase = `${props.webformSettings.cmsBaseUrl}/postcode-api/address?_format=json`;
@@ -86,6 +91,7 @@ class Address extends Component {
       <Fieldset
         {...this.props}
         onBlur={this.props.onBlur}
+        onChange={this.props.onChange}
       />
     );
   }

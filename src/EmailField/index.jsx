@@ -65,12 +65,6 @@ class EmailField extends Component {
     });
 
     this.lookUpBase = `${props.webformSettings.cmsBaseUrl}/neverbounce/validate-single?_format=json`;
-
-    this.onChange = this.onChange.bind(this);
-  }
-
-  onChange(e) {
-    this.props.onChange(e);
   }
 
   prepareLookUp(fields) {
@@ -102,7 +96,7 @@ class EmailField extends Component {
         styleName='email'
         autoComplete='email'
         onBlur={this.props.onBlur}
-        onChange={this.onChange}
+        onChange={this.props.onChange}
       />
     );
   }
