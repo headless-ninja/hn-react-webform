@@ -2,7 +2,7 @@
   "name": "hn-react-webform",
   "version": "0.0.0",
   "main": "lib/index.js",
-  "repository": "https://github.com/burst-digital/react-drupal-webform",
+  "repository": "https://github.com/burst-digital/hn-react-webform",
   "stylelint": {
     "extends": "stylelint-config-standard",
     "rules": {
