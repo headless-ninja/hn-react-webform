@@ -4,6 +4,8 @@
 [![bitHound Overall Score](https://www.bithound.io/github/burst-digital/react-drupal-webform/badges/score.svg)](https://www.bithound.io/github/burst-digital/react-drupal-webform)
 
 # React-Drupal-Webform
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/burst-digital/react-drupal-webform.svg)](https://greenkeeper.io/)
 With this awesome React component, you can render complete Drupal Webforms in React. With validation, easy custom styling and a modern, clean interface.
 
 ## Installation
