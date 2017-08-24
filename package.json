@@ -38,7 +38,8 @@
     "build-storybook": "build-storybook",
     "test": "npm run lint && jest src",
     "precommit": "lint-staged && jest src",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && node utils/prepublish.js && npm publish && semantic-release post",
+    "postinstall": "node utils/postinstall.js"
   },
   "dependencies": {
     "fetch-everywhere": "^1.0.5",
