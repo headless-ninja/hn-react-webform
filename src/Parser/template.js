@@ -1,5 +1,3 @@
-import getNested from 'get-nested';
-
 const regex = /{{(\w+)}}/g;
 
 function parseTemplate(formStore, text) {
@@ -9,7 +7,7 @@ function parseTemplate(formStore, text) {
     return text;
   }
 
-  return text.replace(regex, (found, variable) => getNested(() => formStore.getField(variable).value || ''));
+  return text.replace(regex, (found, variable) => formStore.tokens[variable]);
 }
 
 export default parseTemplate;

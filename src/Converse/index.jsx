@@ -20,6 +20,15 @@ class Converse extends Component {
     onChange: PropTypes.func.isRequired,
   };
 
+  static getTokens(formStore, field) {
+    if(field.visible) {
+      return {
+        payment_amount: field.componentClass.calculateCurrentAmount(formStore, field.element),
+      };
+    }
+    return {};
+  }
+
   static calculateCurrentAmount(formStore, field) {
     const parser = new FormulaParser();
     Object.entries(formStore.values).forEach(([key, value]) => {
