@@ -78,6 +78,16 @@ class Form {
     return this.fields.find(field => field.key === key);
   }
 
+  @computed get values() {
+    const values = {};
+
+    this.visibleFields.filter(field => !field.isEmpty).forEach((field) => {
+      values[field.key] = field.value;
+    });
+
+    return values;
+  }
+
   @computed get valid() {
     return !this.fields.find(field => field.visible && !field.valid);
   }
@@ -93,6 +103,17 @@ class Form {
 
     // If an error was found, return false
     return !invalid;
+  }
+
+  @computed get tokens() {
+    const tokens = {};
+    this.fields.forEach((field) => {
+      tokens[field.key] = field.value;
+      if(typeof field.componentClass.getTokens === 'function') {
+        Object.assign(tokens, field.componentClass.getTokens(this, field));
+      }
+    });
+    return tokens;
   }
 
   @observable isSubmitting = false;

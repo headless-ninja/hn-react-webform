@@ -19,6 +19,7 @@ import Relation from './Relation';
 import FormRow from './FormRow';
 import Parser from './Parser';
 import Number from './Number';
+import Converse from './Converse';
 
 const components = {
   checkbox: CheckboxField,
@@ -48,6 +49,7 @@ const components = {
   webform_relation_postcode_custom: Relation,
   webform_wizard_pages: WizardPages,
   webform_number_custom: Number,
+  webform_converse_payment: Converse,
   default: Fieldset,
 };
 

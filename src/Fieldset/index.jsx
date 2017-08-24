@@ -35,12 +35,14 @@ class Fieldset extends Component {
       settings: PropTypes.object.isRequired,
     }).isRequired,
     status: PropTypes.string.isRequired,
+    childrenAdjacent: PropTypes.bool,
   };
 
   static defaultProps = {
     children: [],
     style: {},
     webformPage: null,
+    childrenAdjacent: false,
   };
 
   /**
@@ -85,8 +87,9 @@ class Fieldset extends Component {
     const formElements = this.getFormElements();
     return (
       <div style={this.props.style} styleName='fieldset-inner'>
-        {this.props.children}
+        {!this.props.childrenAdjacent && this.props.children}
         {formElements}
+        {this.props.childrenAdjacent && this.props.children}
       </div>
     );
   }

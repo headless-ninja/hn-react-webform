@@ -197,10 +197,7 @@ class Webform extends Component {
       'X-CSRF-Token': this.props.form.token,
     });
 
-    const values = Object.assign({}, this.props.hiddenData);
-    this.formStore.visibleFields.filter(field => !field.isEmpty).forEach((field) => {
-      values[field.key] = field.value;
-    });
+    const values = Object.assign({}, this.props.hiddenData, this.formStore.values);
     if(!extraFields.in_draft) this.setState({ status: Webform.formStates.PENDING });
     return fetch(`${this.props.settings.cmsBaseUrl}/api/v1/form?_format=json`, {
       headers,
