@@ -53,17 +53,17 @@ function composeLookUp(LookUpComponent) {
       this.fieldIterator = this.fieldIterator.bind(this);
     }
 
+    componentDidMount() {
+      this.setFieldVisibility(true);
+      this.setManualOverride(false);
+    }
+
     onMount(el) {
       if(el) {
         this.el = el;
         this.lookUpBase = el.lookUpBase;
         this.lookUpFields = el.lookUpFields || {};
       }
-    }
-
-    componentDidMount() {
-      this.setFieldVisibility(true);
-      this.setManualOverride(false);
     }
 
     onBlur(e) {
