@@ -53,6 +53,19 @@ function composeLookUp(LookUpComponent) {
       this.fieldIterator = this.fieldIterator.bind(this);
     }
 
+    onMount(el) {
+      if(el) {
+        this.el = el;
+        this.lookUpBase = el.lookUpBase;
+        this.lookUpFields = el.lookUpFields || {};
+      }
+    }
+
+    componentDidMount() {
+      this.setFieldVisibility(true);
+      this.setManualOverride(false);
+    }
+
     onBlur(e) {
       const triggerElement = Object.values(this.lookUpFields).find(element => element.formKey === e.target.name);
       if(!triggerElement || !triggerElement.triggerLookup) {
@@ -73,19 +86,6 @@ function composeLookUp(LookUpComponent) {
       }
 
       this.props.onBlur(e);
-    }
-
-    onMount(el) {
-      if(el) {
-        this.el = el;
-        this.lookUpBase = el.lookUpBase;
-        this.lookUpFields = el.lookUpFields || {};
-      }
-    }
-
-    componentDidMount() {
-      this.setFieldVisibility(true);
-      this.setManualOverride(false);
     }
 
     onChange(e) {
