@@ -53,14 +53,6 @@ function composeLookUp(LookUpComponent) {
       this.fieldIterator = this.fieldIterator.bind(this);
     }
 
-    onChange(e) {
-      const triggerElement = Object.values(this.lookUpFields).find(element => element.formKey === e.target.name);
-      if(triggerElement && !triggerElement.triggerLookup) {
-        this.setManualOverride(true);
-      }
-      this.props.onChange(e);
-    }
-
     onBlur(e) {
       const triggerElement = Object.values(this.lookUpFields).find(element => element.formKey === e.target.name);
       if(!triggerElement || !triggerElement.triggerLookup) {
@@ -94,6 +86,14 @@ function composeLookUp(LookUpComponent) {
     componentDidMount() {
       this.setFieldVisibility(true);
       this.setManualOverride(false);
+    }
+
+    onChange(e) {
+      const triggerElement = Object.values(this.lookUpFields).find(element => element.formKey === e.target.name);
+      if(triggerElement && !triggerElement.triggerLookup) {
+        this.setManualOverride(true);
+      }
+      this.props.onChange(e);
     }
 
     setFieldVisibility() {
