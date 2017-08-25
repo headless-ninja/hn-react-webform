@@ -22,8 +22,12 @@ class Converse extends Component {
 
   static getTokens(formStore, field) {
     if(field.visible) {
+      const amount = field.componentClass.calculateCurrentAmount(formStore, field);
+      const formattedAmount = parseFloat(amount).toFixed(2);
       return {
-        payment_amount: field.componentClass.calculateCurrentAmount(formStore, field.element),
+        payment_amount: formattedAmount,
+        payment_amount_number: formattedAmount.slice(0, -3),
+        payment_amount_decimals: formattedAmount.slice(-2),
       };
     }
     return {};
@@ -34,7 +38,10 @@ class Converse extends Component {
     Object.entries(formStore.values).forEach(([key, value]) => {
       parser.setVariable(key, value);
     });
-    const amount = parser.parse(Fieldset.getValue(field, 'payment_amount')).result;
+    const amount = parser.parse(Fieldset.getValue(field.element, 'payment_amount')).result;
+    if(isNaN(amount) || amount === null) {
+      return 0;
+    }
     return amount < 0 ? 0 : amount;
   }
 
