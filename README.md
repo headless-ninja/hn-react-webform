@@ -1,27 +1,27 @@
 :warning: This repository is still in development phase and is in active development. Don't expect anything to work yet!
 
-[![Build Status](https://travis-ci.org/burst-digital/react-drupal-webform.svg?branch=master)](https://travis-ci.org/burst-digital/react-drupal-webform)
-[![bitHound Overall Score](https://www.bithound.io/github/burst-digital/react-drupal-webform/badges/score.svg)](https://www.bithound.io/github/burst-digital/react-drupal-webform)
-
-# React-Drupal-Webform
-
+[![Build Status](https://travis-ci.org/burst-digital/hn-react-webform.svg?branch=master)](https://travis-ci.org/burst-digital/hn-react-webform)
+[![bitHound Overall Score](https://www.bithound.io/github/burst-digital/hn-react-webform/badges/score.svg)](https://www.bithound.io/github/burst-digital/hn-react-webform)
 [![Greenkeeper badge](https://badges.greenkeeper.io/burst-digital/react-drupal-webform.svg)](https://greenkeeper.io/)
+
+# HN-React-Webform
+
 With this awesome React component, you can render complete Drupal Webforms in React. With validation, easy custom styling and a modern, clean interface.
 
 ## Installation
 
-First, install *react-drupal-webform* in your project:
+First, install *hn-react-webform* in your project:
 ```bash
-$ npm install react-drupal-webform
+$ npm install hn-react-webform
 # or
-$ yarn add react-drupal-webform
+$ yarn add hn-react-webform
 ```
 Then, import the component:
 ```javascript
 // ES6
-import Webform from 'react-drupal-webform';
+import Webform from 'hn-react-webform';
 // ES5
-var Webform = require('react-drupal-webform').default;
+var Webform = require('hn-react-webform').default;
 ```
 This project uses *CSS Modules*, *CSS.next* and *ES7* to ease styling. Your web-bundler (like Webpack) needs to support *CSS Modules* to correctly parse all styling. 
 # Contributing
