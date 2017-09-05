@@ -180,6 +180,10 @@ function composeLookUp(LookUpComponent) {
       const response = checkResponse(jsonResponse);
       const successful = isSuccessful(response);
 
+      const lookUpField = this.props.formStore.getField(this.props.field['#webform_key']);
+      lookUpField.lookupSent = true;
+      lookUpField.lookupSuccessful = successful;
+
       // Let every field know the lookup was sent, and if it was successful
       Object.keys(this.lookUpFields).forEach((elementKey) => {
         const { field } = this.getField(elementKey);

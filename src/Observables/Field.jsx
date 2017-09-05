@@ -158,7 +158,7 @@ class Field {
 
     // Field is always valid, if there is none, OR the field is invisible, OR a parent is invisible.
     if(!field || !this.visible) {
-      return true;
+      return [];
     }
 
     const errors = [];

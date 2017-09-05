@@ -7,19 +7,23 @@ import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
 import RuleHint from '../RuleHint';
 import styles from './styles.pcss';
+import rules from '../Webform/rules';
 import FormStore from '../Observables/Form';
+import WebformUtils from '../WebformUtils';
 
 @observer
 @CSSModules(styles)
 class Relation extends Component {
   static meta = {
     labelVisibility: Fieldset.meta.labelVisibility,
+    validations: [el => `relation_membership_${el.key}`],
   };
 
   static propTypes = {
     field: PropTypes.shape({
       '#webform_key': PropTypes.string.isRequired,
       '#relationError': PropTypes.string,
+      '#membership_validation': PropTypes.number,
       composite_elements: PropTypes.arrayOf(PropTypes.shape()),
     }).isRequired,
     webformSettings: PropTypes.shape({
@@ -29,6 +33,7 @@ class Relation extends Component {
     onBlur: PropTypes.func.isRequired,
     formKeySuffix: PropTypes.string.isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
+    settings: PropTypes.shape().isRequired,
   };
 
   constructor(props) {
@@ -50,6 +55,14 @@ class Relation extends Component {
     };
 
     this.lookUpBase = `${props.webformSettings.cmsBaseUrl}/salesforce-lookup/contact?_format=json`;
+
+    const field = props.formStore.getField(props.field['#webform_key']);
+
+    rules.set(`relation_membership_${props.field['#webform_key']}`, {
+      rule: () => field.isEmpty || !field.element['#membership_validation'] || !field.lookupSent || (field.lookupSent && field.lookupSuccessful),
+      hint: () => null,
+      shouldValidate: () => field.isBlurred && !field.isEmpty,
+    });
   }
 
   /**
@@ -78,7 +91,7 @@ class Relation extends Component {
 
     return {
       query,
-      checkResponse: json => json.Id || false,
+      checkResponse: json => (json.Id && (!this.props.field['#membership_validation'] || json.Aantal_lidmaatschappen__c.toString() === '1')) || false,
       isSuccessful: response => (!!response),
     };
   }
@@ -91,7 +104,7 @@ class Relation extends Component {
         onBlur={this.props.onBlur}
       >
         {field.lookupSent && !field.lookupSuccessful &&
-        <RuleHint component={<p className={styles['validation-message']} />} key={`relation_${this.props.field['#webform_key']}`} hint={Fieldset.getValue(this.props.field, 'relationError') || 'We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.'} />
+        <RuleHint component={<p className={styles['validation-message']} />} key={`relation_${this.props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(this.props.field, 'relationError', this.props.settings) || 'We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.'} />
         }
       </Fieldset>
     );
