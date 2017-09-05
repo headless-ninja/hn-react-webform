@@ -22,17 +22,32 @@ import Number from './Number';
 import Converse from './Converse';
 
 const components = {
+
+  // Webform core elements
   checkbox: CheckboxField,
+  date: Date,
   email: EmailField,
   fieldset: Fieldset,
   hidden: Hidden,
-  iban: IBAN,
   radios: RadioField,
   range: RangeField,
   select: SelectField,
   tel: PhoneField,
   textfield: Input,
   textarea: TextArea,
+  number: Number,
+  webform_wizard_pages: WizardPages,
+  webform_message: ParagraphField,
+
+  // Custom elements
+  dutch_address: Address,
+  date_of_birth: Date,
+  iban: IBAN,
+  natuurmonumenten_relation: Relation,
+  natuurmonumenten_relation_address: Relation,
+  webform_converse_payment: Converse,
+
+  // Legacy elements
   webform_email_custom: EmailField,
   webform_address_custom: Address,
   webform_checkbox_custom: CheckboxField,
@@ -44,12 +59,11 @@ const components = {
   webform_date_custom: Date,
   webform_dateofbirth: Date,
   webform_iban: FormRow,
-  webform_message: ParagraphField,
   webform_relation_custom: Relation,
   webform_relation_postcode_custom: Relation,
-  webform_wizard_pages: WizardPages,
   webform_number_custom: Number,
-  webform_converse_payment: Converse,
+
+  // Fallback
   default: Fieldset,
 };
 

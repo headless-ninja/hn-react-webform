@@ -57,7 +57,7 @@ class Relation extends Component {
    * @returns {bool|string} Returns false if not full address field (i.e. postcode only) or string of address webform key.
    */
   fullAddressLookUp() {
-    return getNested(() => this.props.field.composite_elements.find(element => element['#type'] === 'webform_address_custom')['#webform_key']);
+    return getNested(() => this.props.field.composite_elements.find(element => element['#type'] === 'webform_address_custom' || element['#type'] === 'dutch_address')['#webform_key']);
   }
 
   prepareLookUp(fields) {
