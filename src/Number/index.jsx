@@ -14,8 +14,8 @@ class Number extends Component {
     const numberError = WebformUtils.getCustomValue(field.element, 'numberError', field.formStore.form.settings);
 
     if(field.element['#step']) {
-      const dec = (`${field.element['#step']}.`).split('.')[1].length;
-      if((field.value * (10 ** dec)) % (field.element['#step'] * (10 ** dec) !== 0)) {
+      const dec = Math.max(...[field.element['#step'], field.value].map(n => `${n}.`.split('.')[1].length));
+      if(Math.round(field.value * (10 ** dec)) % Math.round(field.element['#step'] * (10 ** dec)) !== 0) {
         return [numberError];
       }
     }
