@@ -18,7 +18,6 @@ function composeLookUp(LookUpComponent) {
         })),
       }).isRequired,
       onBlur: PropTypes.func.isRequired,
-      onChange: PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -93,7 +92,6 @@ function composeLookUp(LookUpComponent) {
       if(triggerElement && !triggerElement.triggerLookup) {
         this.setManualOverride(true);
       }
-      this.props.onChange(e);
     }
 
     setFieldVisibility() {
@@ -179,6 +177,10 @@ function composeLookUp(LookUpComponent) {
 
       const response = checkResponse(jsonResponse);
       const successful = isSuccessful(response);
+
+      const lookUpField = this.props.formStore.getField(this.props.field['#webform_key']);
+      lookUpField.lookupSent = true;
+      lookUpField.lookupSuccessful = successful;
 
       // Let every field know the lookup was sent, and if it was successful
       Object.keys(this.lookUpFields).forEach((elementKey) => {

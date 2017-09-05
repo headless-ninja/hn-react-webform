@@ -288,8 +288,9 @@ class WebformElement extends Component {
     const element = this.getFormElement();
     if(!element) return null;
 
-    const errors = this.getField().errors.length > 0 ? (
-      <ul role='alert' styleName={`${this.getLabelClass()} validation-message-wrapper`}> {this.getField().errors} </ul>)
+    const errors = this.getField().errors.filter(error => error);
+    const errorList = errors.length > 0 ? (
+      <ul role='alert' styleName={`${this.getLabelClass()} validation-message-wrapper`}> {errors} </ul>)
       : null;
 
     return (
@@ -310,7 +311,7 @@ class WebformElement extends Component {
         { this.renderTextContent('#description', 'after', this.getLabelClass()) }
         { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-after`), getNested(() => element.class.meta.label.type) !== 'legend') }
 
-        { errors }
+        { errorList }
       </Wrapper>
     );
   }

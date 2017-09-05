@@ -158,17 +158,19 @@ class Field {
 
     // Field is always valid, if there is none, OR the field is invisible, OR a parent is invisible.
     if(!field || !this.visible) {
-      return true;
+      return [];
     }
+
+    const errors = [];
 
     // Check if there is a static 'validate' function on the component class.
     if(typeof field.componentClass.validate === 'function') {
-      return field.componentClass.validate(this);
+      errors.push(...field.componentClass.validate(this));
     }
 
     const fails = validations ? validations.filter(validation => !WebformUtils.validateRule(validation, field)) : [];
 
-    const errors = fails.map(rule => rule.hint(this.value));
+    errors.push(...fails.map(rule => rule.hint(this.value)));
 
     return errors;
   }
