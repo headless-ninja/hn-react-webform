@@ -62,7 +62,7 @@ class Form {
   @action.bound
   createField(element, parent) {
     const field = new Field(this, element, parent);
-    this.fields.push(field);
+    if(field.componentClass) this.fields.push(field);
 
     // If it has children, create them too.
     if(element.composite_elements) {

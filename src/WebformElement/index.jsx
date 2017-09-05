@@ -134,7 +134,7 @@ class WebformElement extends Component {
       return false;
     }
 
-    const ElementComponent = this.getField().componentClass;
+    const ElementComponent = getNested(() => this.getField().componentClass);
     if(ElementComponent) {
       return {
         class: ElementComponent,
@@ -286,6 +286,7 @@ class WebformElement extends Component {
     }
 
     const element = this.getFormElement();
+    if(!element) return null;
 
     const errors = this.getField().errors.length > 0 ? (
       <ul role='alert' styleName={`${this.getLabelClass()} validation-message-wrapper`}> {this.getField().errors} </ul>)

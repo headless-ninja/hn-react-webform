@@ -62,9 +62,6 @@ const components = {
   webform_relation_custom: Relation,
   webform_relation_postcode_custom: Relation,
   webform_number_custom: Number,
-
-  // Fallback
-  default: Fieldset,
 };
 
 export default Webform;
