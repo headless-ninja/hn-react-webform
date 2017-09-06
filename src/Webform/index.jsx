@@ -246,7 +246,7 @@ class Webform extends Component {
       <Provider formStore={this.formStore} submit={this.submit} webform={this}>
         <div styleName='webform'>
           <h1 styleName='formtitle'>{this.props.settings.title}</h1>
-          { errors }
+          { this.state.status !== Webform.formStates.SENT && errors }
           { this.state.status !== Webform.formStates.SENT &&
             <form
               method='POST'
