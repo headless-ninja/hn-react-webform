@@ -18,6 +18,7 @@ function composeLookUp(LookUpComponent) {
         })),
       }).isRequired,
       onBlur: PropTypes.func.isRequired,
+      onChange: PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -92,6 +93,7 @@ function composeLookUp(LookUpComponent) {
       if(triggerElement && !triggerElement.triggerLookup) {
         this.setManualOverride(true);
       }
+      this.props.onChange(e);
     }
 
     setFieldVisibility() {
