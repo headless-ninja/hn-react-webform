@@ -10,6 +10,7 @@ FormRow.meta = {
   wrapper: <fieldset />,
   label: <legend />,
   labelVisibility: Fieldset.meta.labelVisibility,
+  hasValue: false,
 };
 
 export default FormRow;

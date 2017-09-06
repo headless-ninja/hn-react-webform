@@ -42,6 +42,7 @@ const components = {
   // Custom elements
   dutch_address: Address,
   date_of_birth: Date,
+  iban_wrapper: FormRow,
   iban: IBAN,
   natuurmonumenten_relation: Relation,
   natuurmonumenten_relation_address: Relation,
