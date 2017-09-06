@@ -17,6 +17,7 @@ class Relation extends Component {
   static meta = {
     labelVisibility: Fieldset.meta.labelVisibility,
     validations: [el => `relation_membership_${el.key}`],
+    hasValue: false,
   };
 
   static propTypes = {
