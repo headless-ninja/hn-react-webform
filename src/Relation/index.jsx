@@ -60,9 +60,9 @@ class Relation extends Component {
     const field = props.formStore.getField(props.field['#webform_key']);
 
     rules.set(`relation_membership_${props.field['#webform_key']}`, {
-      rule: () => field.isEmpty || !field.element['#membership_validation'] || !field.lookupSent || (field.lookupSent && field.lookupSuccessful),
+      rule: () => !field.element['#membership_validation'] || !field.lookupSent || (field.lookupSent && field.lookupSuccessful),
       hint: () => null,
-      shouldValidate: () => field.isBlurred && !field.isEmpty,
+      shouldValidate: () => !Object.values(this.lookUpFields).find(child => !this.props.formStore.getField(child.formKey).isBlurred),
     });
   }
 
