@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import getNested from 'get-nested';
 import fetch from 'fetch-everywhere';
+import getNested from 'get-nested';
+import GoogleTag from 'google_tag';
 import { observer, Provider } from 'mobx-react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import Script from 'react-load-script';
-import GoogleTag from 'google_tag';
 import Forms from '../Observables/Forms';
 import Parser from '../Parser';
 import SubmitButton from '../SubmitButton';
-import WebformElement from '../WebformElement';
 import ThankYouMessage from '../ThankYouMessage';
+import WebformElement from '../WebformElement';
 import styles from './styles.pcss';
 
 @CSSModules(styles, { allowMultiple: true })
@@ -69,9 +69,12 @@ class Webform extends Component {
   };
 
   static defaultProps = {
-    onSubmit: () => {},
-    onSubmitSuccess: () => {},
-    onSubmitFail: () => {},
+    onSubmit: () => {
+    },
+    onSubmitSuccess: () => {
+    },
+    onSubmitFail: () => {
+    },
     nm_gtm_id: false,
     settings: {
       tracking: false,
@@ -121,7 +124,9 @@ class Webform extends Component {
     // If it returns false, don't submit, otherwise continue.
     if(typeof this.onSubmitOverwrite === 'function') {
       const result = this.onSubmitOverwrite(e);
-      if(!result) return result;
+      if(!result) {
+        return result;
+      }
     }
 
     // Make sure that all errors are visible by marking all visible fields as blurred.
@@ -185,7 +190,10 @@ class Webform extends Component {
       this.response = response;
       this.setState({ status: Webform.formStates.SENT });
     } else {
-      this.setState({ status: Webform.formStates.ERROR, errors: response.errors || [] });
+      this.setState({
+        status: Webform.formStates.ERROR,
+        errors: response.message || [],
+      });
       this.props.onSubmitFail(this); // Trigger onSubmitFail hook.
     }
   }
@@ -198,7 +206,9 @@ class Webform extends Component {
     });
 
     const values = Object.assign({}, this.props.hiddenData, this.formStore.values);
-    if(!extraFields.in_draft) this.setState({ status: Webform.formStates.PENDING });
+    if(!extraFields.in_draft) {
+      this.setState({ status: Webform.formStates.PENDING });
+    }
     return fetch(`${this.props.settings.cmsBaseUrl}/api/v1/form?_format=json`, {
       headers,
       method: 'POST',
@@ -207,7 +217,6 @@ class Webform extends Component {
       }, extraFields, values)),
     })
       .then(response => response.json())
-      .then(({ status = 400, errors = false, ...response }) => ({ status, errors, ...response }))
       .catch(console.error);
   }
 
@@ -220,35 +229,42 @@ class Webform extends Component {
       this.formStore.visibleFields.find(field => field.required) &&
       this.props.form.settings.nm_required_hint
     ) {
-      requiredHint = <span>{ Parser(this.props.form.settings.nm_required_hint) }</span>;
+      requiredHint = <span>{Parser(this.props.form.settings.nm_required_hint)}</span>;
     }
-
-    const errors = Object.keys(this.state.errors).map(error =>
-      <li key={error}><span styleName='element error'>{ Parser(this.state.errors[error]) }</span></li>,
+    const errors = (
+      <ul styleName='list'>
+        {Object.entries(this.state.errors).map(([key, error]) => (
+          <li styleName='list-item' key={key}>
+            <span styleName='element error'>{key.replace(/]\[/g, '.')}: <em>{Parser(error)}</em></span>
+          </li>
+          ),
+        )}
+      </ul>
     );
 
     return (
       <Provider formStore={this.formStore} submit={this.submit} webform={this}>
         <div styleName='webform'>
           <h1 styleName='formtitle'>{this.props.settings.title}</h1>
-          { this.state.status === Webform.formStates.ERROR && errors}
+          { errors }
           { this.state.status !== Webform.formStates.SENT &&
-          <form
-            method='POST'
-            onSubmit={this.onSubmit}
-            name={this.props.form.form_id}
-            id={this.props.form.form_id}
-            noValidate={this.props.noValidation}
-          >
-            { requiredHint }
-            { formElements }
-            { !multipage &&
-              <SubmitButton
-                form={this.props.form}
-                status={this.state.status}
-              />
-            }
-          </form>}
+            <form
+              method='POST'
+              onSubmit={this.onSubmit}
+              name={this.props.form.form_id}
+              id={this.props.form.form_id}
+              noValidate={this.props.noValidation}
+            >
+              { requiredHint }
+              { formElements }
+              { !multipage &&
+                <SubmitButton
+                  form={this.props.form}
+                  status={this.state.status}
+                />
+              }
+            </form>
+          }
           { this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT &&
           <ThankYouMessage message={this.props.form.settings.confirmation_message} />
            }
