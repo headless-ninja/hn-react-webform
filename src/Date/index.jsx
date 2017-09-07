@@ -240,16 +240,16 @@ class Date extends Component {
     const { value, field } = this.props;
 
     field['#mask'] = Fieldset.getValue(field, 'mask');
-
-    const inputElement = (
-      <Input
-        {...this.props}
-        field={field}
-        type={this.props.type}
-      />);
+    if(field['#mask'] === false) field['#mask'] = '99/99/9999';
 
     if(!Fieldset.getValue(field, 'show_picker')) {
-      return inputElement;
+      return (
+        <Input
+          {...this.props}
+          field={field}
+          type={this.props.type}
+        />
+      );
     }
 
     const DateInput = (
