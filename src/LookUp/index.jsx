@@ -123,12 +123,18 @@ function composeLookUp(LookUpComponent) {
       if(!element) {
         return false;
       }
-      element.elementKey = elementKey;
       const field = this.props.formStore.getField(element.formKey);
       return {
         element,
         field,
       };
+    }
+
+    getFields() {
+      if(!this.lookUpFields) {
+        return [];
+      }
+      return Object.values(this.lookUpFields).map(element => this.props.formStore.getField(element.formKey));
     }
 
     getState() {
@@ -220,6 +226,7 @@ function composeLookUp(LookUpComponent) {
           fieldIterator={this.fieldIterator}
           getField={this.getField}
           getState={this.getState}
+          fields={this.getFields()}
         />
       );
     }
