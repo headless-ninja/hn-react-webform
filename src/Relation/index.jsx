@@ -27,10 +27,10 @@ class Relation extends Component {
       '#membership_validation': PropTypes.number,
       composite_elements: PropTypes.arrayOf(PropTypes.shape()),
     }).isRequired,
+    fields: PropTypes.arrayOf(PropTypes.shape()).isRequired,
     webformSettings: PropTypes.shape({
       cmsBaseUrl: PropTypes.string.isRequired,
     }).isRequired,
-    fieldIterator: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
     formKeySuffix: PropTypes.string.isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
@@ -42,12 +42,14 @@ class Relation extends Component {
 
     this.lookUpFields = {
       relation_number: {
+        elementKey: 'relation_number',
         formKey: `relation_number${props.formKeySuffix}`,
         triggerLookup: true,
         apiValue: () => false,
         required: true,
       },
       postcode: {
+        elementKey: 'postcode',
         formKey: `address_postcode${this.fullAddressLookUp() ? `-${this.fullAddressLookUp()}` : props.formKeySuffix}`,
         triggerLookup: true,
         apiValue: () => false,
@@ -60,9 +62,12 @@ class Relation extends Component {
     const field = props.formStore.getField(props.field['#webform_key']);
 
     rules.set(`relation_membership_${props.field['#webform_key']}`, {
-      rule: () => field.isEmpty || !field.element['#membership_validation'] || !field.lookupSent || (field.lookupSent && field.lookupSuccessful),
+      rule: () => !field.element['#membership_validation'] || !field.lookupSent || (field.lookupSent && field.lookupSuccessful),
       hint: () => null,
-      shouldValidate: () => field.isBlurred && !field.isEmpty,
+      shouldValidate: () => props.fields.reduce((shouldValidate, item) =>
+        shouldValidate && !item.isEmpty && item.isBlurred && item.valid,
+        true,
+      ),
     });
   }
 
@@ -75,14 +80,10 @@ class Relation extends Component {
   }
 
   prepareLookUp(fields) {
-    let performLookUp = true;
-    this.props.fieldIterator((field, element) => {
-      if(field.required && (!fields[element.elementKey] || !field.valid)) {
-        performLookUp = false;
-        return false;
-      }
-      return true;
-    });
+    const performLookUp = this.props.fields.reduce((shouldValidate, item) =>
+      shouldValidate && !item.isEmpty && item.isBlurred && item.valid,
+      true,
+    );
 
     if(!performLookUp) {
       return false;

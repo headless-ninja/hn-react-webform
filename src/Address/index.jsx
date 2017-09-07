@@ -28,39 +28,47 @@ class Address extends Component {
 
     this.lookUpFields = {
       street: {
+        elementKey: 'street',
         formKey: `address_street${props.formKeySuffix}`,
         apiValue: address => address.street,
         hideField: true,
       },
       postcode: {
+        elementKey: 'postcode',
         formKey: `address_postcode${props.formKeySuffix}`,
         apiValue: () => false,
         triggerLookup: true,
       },
       number: {
+        elementKey: 'number',
         formKey: `address_number${props.formKeySuffix}`,
         apiValue: () => false,
         triggerLookup: true,
       },
       addition: {
+        elementKey: 'addition',
         formKey: `address_number_add${props.formKeySuffix}`,
         apiValue: () => false,
         triggerLookup: true,
       },
       city: {
+        elementKey: 'city',
         formKey: `address_city${props.formKeySuffix}`,
         apiValue: address => address.city.label,
         hideField: true,
       },
       locationLat: {
+        elementKey: 'locationLat',
         formKey: `address_location_lat${props.formKeySuffix}`,
         apiValue: address => address.geo.center.wgs84.coordinates[1],
       },
       locationLng: {
+        elementKey: 'locationLng',
         formKey: `address_location_lng${props.formKeySuffix}`,
         apiValue: address => address.geo.center.wgs84.coordinates[0],
       },
       manualOverride: {
+        elementKey: 'manualOverride',
         formKey: `address_manual_override${props.formKeySuffix}`,
         apiValue: () => false,
       },

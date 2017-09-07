@@ -38,7 +38,7 @@ class Converse extends Component {
     Object.entries(formStore.values).forEach(([key, value]) => {
       parser.setVariable(key, value);
     });
-    const amount = parser.parse(Fieldset.getValue(field.element, 'payment_amount')).result;
+    const amount = parser.parse(field.element['#payment_amount']).result;
     if(isNaN(amount) || amount === null) {
       return 0;
     }
