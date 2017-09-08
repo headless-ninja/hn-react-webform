@@ -56,17 +56,22 @@ class Date extends Component {
     onChange: PropTypes.func.isRequired,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func.isRequired,
-    dateFormat: PropTypes.string,
     settings: PropTypes.shape().isRequired,
     locale: PropTypes.string,
   };
 
   static defaultProps = {
     locale: 'nl',
-    dateFormat: 'DD/MM/YYYY',
     type: 'text',
     onFocus: () => {},
   };
+
+  static rewriteValue(value) {
+    const date = moment(value, Date.dateFormat, true);
+    return date.format('YYYY/MM/DD');
+  }
+
+  static dateFormat = 'DD/MM/YYYY';
 
   constructor(props) {
     super(props);
@@ -76,7 +81,7 @@ class Date extends Component {
 
     rules.set(`date_${props.field['#webform_key']}`, {
       rule: (value) => {
-        const timestamp = moment(value, props.dateFormat, true);
+        const timestamp = moment(value, Date.dateFormat, true);
         return WebformUtils.isEmpty(props.field, value) || timestamp.isValid();
       },
       hint: () =>
@@ -111,8 +116,8 @@ class Date extends Component {
           hint={hint}
           tokens={{
             value,
-            min: result.min ? result.min.format(props.dateFormat) : false,
-            max: result.max ? result.max.format(props.dateFormat) : false,
+            min: result.min ? result.min.format(Date.dateFormat) : false,
+            max: result.max ? result.max.format(Date.dateFormat) : false,
           }}
         />);
       },
@@ -123,7 +128,7 @@ class Date extends Component {
 
     this.state = {
       showOverlay: false,
-      selectedDay: moment(props.value, props.dateFormat, true).isValid() ? moment(props.value, props.dateFormat).toDate() : null,
+      selectedDay: moment(props.value, Date.dateFormat, true).isValid() ? moment(props.value, Date.dateFormat).toDate() : null,
     };
 
     this.calculateDisabledDates = this.calculateDisabledDates.bind(this);
@@ -143,7 +148,7 @@ class Date extends Component {
     this[ref] = el;
   }
 
-  getDateRange(result = {}, dateFormat = this.props.dateFormat) {
+  getDateRange(result = {}, dateFormat = Date.dateFormat) {
     const minMoment = moment(this.min, dateFormat, true);
     const maxMoment = moment(this.max, dateFormat, true);
 
@@ -175,8 +180,7 @@ class Date extends Component {
       valid: true,
     });
 
-    const { dateFormat } = this.props;
-    const timestamp = moment(value, dateFormat, true);
+    const timestamp = moment(value, Date.dateFormat, true);
 
     if(this.min && this.max) {
       result.type = 'range';
@@ -193,7 +197,7 @@ class Date extends Component {
   }
 
   calculateDisabledDates(day) {
-    const result = this.calculateDateRange(moment(day).format(this.props.dateFormat));
+    const result = this.calculateDateRange(moment(day).format(Date.dateFormat));
     return !result.valid;
   }
 
@@ -214,8 +218,8 @@ class Date extends Component {
 
   handleInputChange(e) {
     const value = e.target.value;
-    const momentDay = moment(value, this.props.dateFormat, true);
-    const newValue = momentDay.isValid() ? momentDay.format(this.props.dateFormat) : value;
+    const momentDay = moment(value, Date.dateFormat, true);
+    const newValue = momentDay.isValid() ? momentDay.format(Date.dateFormat) : value;
     const selectedDay = momentDay.isValid() ? momentDay.toDate() : null;
     this.props.onChange(newValue);
     this.setState({ selectedDay },
@@ -231,7 +235,7 @@ class Date extends Component {
   }
 
   handleDayClick(selectedDay) {
-    this.props.onChange(moment(selectedDay).format(this.props.dateFormat));
+    this.props.onChange(moment(selectedDay).format(Date.dateFormat));
     this.setState({
       selectedDay,
       showOverlay: false,
