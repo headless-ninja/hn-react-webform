@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { observer } from 'mobx-react';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import DayPicker from 'react-day-picker';
-import { observer } from 'mobx-react';
-import MomentLocaleUtils from 'react-day-picker/moment';
 import 'react-day-picker/lib/style.css';
+import MomentLocaleUtils from 'react-day-picker/moment';
+import BaseInput from '../BaseInput';
+import Fieldset from '../Fieldset';
+import Input from '../Input';
+import RuleHint from '../RuleHint';
+import rules from '../Webform/rules';
+import WebformElement from '../WebformElement';
+import WebformUtils from '../WebformUtils';
 import labelTranslations from './labelTranslations';
 import styles from './rdw-date-theme.pcss';
-import Fieldset from '../Fieldset';
-import rules from '../Webform/rules';
-import RuleHint from '../RuleHint';
-import WebformElement from '../WebformElement';
-import Input from '../Input';
-import BaseInput from '../BaseInput';
-import WebformUtils from '../WebformUtils';
 
 @observer
 @CSSModules(styles, { allowMultiple: true })
@@ -41,6 +41,7 @@ class Date extends Component {
       '#dateBeforeError': PropTypes.string,
       '#dateAfterError': PropTypes.string,
       '#title_display': PropTypes.string,
+      '#datepicker': PropTypes.bool,
       composite_elements: PropTypes.oneOfType([
         PropTypes.array,
         PropTypes.object,
@@ -70,8 +71,8 @@ class Date extends Component {
   constructor(props) {
     super(props);
 
-    this.min = Fieldset.getValue(props.field, 'min');
-    this.max = Fieldset.getValue(props.field, 'max');
+    this.min = props.field['#min'];
+    this.max = props.field['#max'];
 
     rules.set(`date_${props.field['#webform_key']}`, {
       rule: (value) => {
@@ -148,12 +149,14 @@ class Date extends Component {
 
     result.min = minMoment;
     if(!minMoment.isValid()) {
-      result.min = moment().add(this.min, 'days');
+      const [amount, unit] = this.min.split(' ');
+      result.min = moment().add(amount, unit);
     }
 
     result.max = maxMoment;
     if(!maxMoment.isValid()) {
-      result.max = moment().add(this.max, 'days');
+      const [amount, unit] = this.max.split(' ');
+      result.max = moment().add(amount, unit);
     }
 
     return result;
@@ -240,9 +243,11 @@ class Date extends Component {
     const { value, field } = this.props;
 
     field['#mask'] = Fieldset.getValue(field, 'mask');
-    if(field['#mask'] === false) field['#mask'] = '99/99/9999';
+    if(field['#mask'] === false) {
+      field['#mask'] = '99/99/9999';
+    }
 
-    if(!Fieldset.getValue(field, 'show_picker')) {
+    if(!field['#datepicker']) {
       return (
         <Input
           {...this.props}
