@@ -223,7 +223,7 @@ class WebformElement extends Component {
     // If it is, check if there is any child that's visible or of type Hidden.
     if(children.length && !children
         .map(c => this.getField(c['#webform_key']))
-        .find(f => f.visible && f.componentClass !== Hidden)
+        .find(f => f && f.visible && f.componentClass !== Hidden)
     ) {
       // If there isn't any, don't render.
       return false;

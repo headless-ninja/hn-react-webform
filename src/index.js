@@ -37,6 +37,7 @@ const components = {
   textarea: TextArea,
   number: Number,
   webform_wizard_pages: WizardPages,
+  webform_wizard_page: Fieldset,
   webform_message: ParagraphField,
 
   // Custom elements
