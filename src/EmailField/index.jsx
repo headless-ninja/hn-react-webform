@@ -42,7 +42,7 @@ class EmailField extends Component {
 
     this.lookUpFields = {
       email: {
-        elementKEy: 'email',
+        elementKey: 'email',
         formKey: props.field['#webform_key'],
         triggerLookup: true,
         apiValue: () => false,
