@@ -29,9 +29,12 @@ class Input extends Component {
       '#min': PropTypes.string,
       '#max': PropTypes.string,
       '#step': PropTypes.string,
-      '#attributes': PropTypes.shape({
-        autoComplete: PropTypes.string,
-      }),
+      '#attributes': PropTypes.oneOfType([
+        PropTypes.shape({
+          autoComplete: PropTypes.string,
+        }),
+        PropTypes.array,
+      ]),
     }).isRequired,
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
   };
