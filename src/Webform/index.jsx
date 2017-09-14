@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import Script from 'react-load-script';
+import { site } from 'hn-react';
 import Forms from '../Observables/Forms';
 import Parser from '../Parser';
 import SubmitButton from '../SubmitButton';
@@ -36,7 +37,6 @@ class Webform extends Component {
   static propTypes = {
     settings: PropTypes.shape({
       title: PropTypes.string,
-      cmsBaseUrl: PropTypes.string.isRequired,
       tracking: PropTypes.oneOfType([
         PropTypes.shape({
           gtm_id: PropTypes.oneOfType([
@@ -209,7 +209,7 @@ class Webform extends Component {
     if(!extraFields.in_draft) {
       this.setState({ status: Webform.formStates.PENDING });
     }
-    return fetch(`${this.props.settings.cmsBaseUrl}/api/v1/form?_format=json`, {
+    return fetch(`${site.url}/hn-webform-submission?_format=json`, {
       headers,
       method: 'POST',
       body: JSON.stringify(Object.assign({
