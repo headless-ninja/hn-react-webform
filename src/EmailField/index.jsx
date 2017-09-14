@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import validator from 'validator';
 import { observer } from 'mobx-react';
+import { site } from 'hn-react';
 import styles from './styles.pcss';
 import Input from '../Input';
 import rules from '../Webform/rules';
@@ -26,9 +27,6 @@ class EmailField extends Component {
       '#webform_key': PropTypes.string.isRequired,
       '#emailError': PropTypes.string,
       '#neverBounceEmail': PropTypes.string,
-    }).isRequired,
-    webformSettings: PropTypes.shape({
-      cmsBaseUrl: PropTypes.string.isRequired,
     }).isRequired,
     getField: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
@@ -65,7 +63,7 @@ class EmailField extends Component {
       shouldValidate: () => field.isBlurred && !field.isEmpty && validator.isEmail(field.value),
     });
 
-    this.lookUpBase = `${props.webformSettings.cmsBaseUrl}/neverbounce/validate-single?_format=json`;
+    this.lookUpBase = `${site.url}/neverbounce/validate-single?_format=json`;
   }
 
   prepareLookUp(fields) {

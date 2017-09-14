@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
+import { site } from 'hn-react';
 import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
 
@@ -15,9 +16,6 @@ class Address extends Component {
 
   static propTypes = {
     getField: PropTypes.func.isRequired,
-    webformSettings: PropTypes.shape({
-      cmsBaseUrl: PropTypes.string.isRequired,
-    }).isRequired,
     onBlur: PropTypes.func.isRequired,
     onChange: PropTypes.func.isRequired,
     formKeySuffix: PropTypes.string.isRequired,
@@ -74,7 +72,7 @@ class Address extends Component {
       },
     };
 
-    this.lookUpBase = `${props.webformSettings.cmsBaseUrl}/postcode-api/address?_format=json`;
+    this.lookUpBase = `${site.url}/postcode-api/address?_format=json`;
   }
 
   prepareLookUp(fields) {

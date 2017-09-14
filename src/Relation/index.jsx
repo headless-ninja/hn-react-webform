@@ -3,6 +3,7 @@ import getNested from 'get-nested';
 import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import { observer } from 'mobx-react';
+import { site } from 'hn-react';
 import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
 import RuleHint from '../RuleHint';
@@ -28,9 +29,6 @@ class Relation extends Component {
       composite_elements: PropTypes.arrayOf(PropTypes.shape()),
     }).isRequired,
     fields: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-    webformSettings: PropTypes.shape({
-      cmsBaseUrl: PropTypes.string.isRequired,
-    }).isRequired,
     onBlur: PropTypes.func.isRequired,
     formKeySuffix: PropTypes.string.isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
@@ -57,7 +55,7 @@ class Relation extends Component {
       },
     };
 
-    this.lookUpBase = `${props.webformSettings.cmsBaseUrl}/salesforce-lookup/contact?_format=json`;
+    this.lookUpBase = `${site.url}/salesforce-lookup/contact?_format=json`;
 
     const field = props.formStore.getField(props.field['#webform_key']);
 
