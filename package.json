@@ -53,7 +53,6 @@
     "mobx-react": "^4.1.8",
     "moment": "^2.18.1",
     "prop-types": "^15.5.10",
-    "react": "^15.5.4",
     "react-css-modules": "^4.3.0",
     "react-day-picker": "^5.5.1",
     "react-html-parser": "^1.0.3",
@@ -96,6 +95,7 @@
     "postcss-for": "^2.1.1",
     "postcss-import": "^10.0.0",
     "raw-loader": "^0.5.1",
+    "react": "^16.0.0",
     "react-addons-test-utils": "^15.5.1",
     "react-dom": "^15.5.4",
     "react-remarkable": "^1.1.1",
@@ -106,5 +106,8 @@
     "stylelint": "^7.10.1",
     "stylelint-config-standard": "^16.0.0",
     "webpack": "^2.5.1"
+  },
+  "peerDependencies": {
+    "react": "^16.0.0"
   }
 }
