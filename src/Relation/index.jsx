@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import getNested from 'get-nested';
 import PropTypes from 'prop-types';
+import { site } from 'hn-react';
 import CSSModules from 'react-css-modules';
 import { observer } from 'mobx-react';
-import { site } from 'hn-react';
 import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
 import RuleHint from '../RuleHint';
@@ -104,7 +104,7 @@ class Relation extends Component {
         onBlur={this.props.onBlur}
       >
         {field.lookupSent && !field.lookupSuccessful &&
-        <RuleHint component={<p className={styles['validation-message']} />} key={`relation_${this.props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(this.props.field, 'relationError', this.props.settings) || 'We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.'} />
+        <RuleHint component={<p className={styles['validation-message']} />} key={`relation_${this.props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(this.props.field, 'relationError', this.props.settings) || site.t('We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.')} />
         }
       </Fieldset>
     );

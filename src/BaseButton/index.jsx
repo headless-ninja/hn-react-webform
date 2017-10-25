@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import CSSModules from 'react-css-modules';
 import styles from './styles.pcss';
 
-const BaseButton = ({ disabled, label, formSubmitAttributes, onClick, isPrimary, type }) =>
-  (<button
+const BaseButton = ({ disabled, label, formSubmitAttributes, onClick, isPrimary, type }) => (
+  <button
     styleName={`button ${disabled ? 'disabled' : ''} ${isPrimary ? '' : 'secondary'}`}
     disabled={disabled ? 'disabled' : null}
     {...formSubmitAttributes}
@@ -12,7 +12,8 @@ const BaseButton = ({ disabled, label, formSubmitAttributes, onClick, isPrimary,
     type={type}
   >
     {label}
-  </button>);
+  </button>
+);
 
 BaseButton.propTypes = {
   disabled: PropTypes.bool,

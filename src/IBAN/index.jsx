@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import iban from 'ibantools';
 import { observer } from 'mobx-react';
+import { site } from 'hn-react';
 import Input from '../Input';
 import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
@@ -29,7 +30,7 @@ class IBAN extends Component {
     rules.set(`iban_${props.field['#webform_key']}`, {
       rule: value => iban.isValidIBAN(value),
       hint: () =>
-        <RuleHint key={`iban_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'ibanError', props.settings) || 'Please enter a valid IBAN.'} />,
+        <RuleHint key={`iban_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'ibanError', props.settings) || site.t('Please enter a valid IBAN.')} />,
       shouldValidate: field => field.isBlurred,
     });
   }

@@ -53,13 +53,13 @@ class EmailField extends Component {
     rules.set(`email_${props.field['#webform_key']}`, {
       rule: () => field.isEmpty || validator.isEmail(field.value),
       hint: value =>
-        <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'emailError', props.settings) || 'Please enter a valid email.'} tokens={{ value }} />,
+        <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'emailError', props.settings) || site.t('Please enter a valid email.')} tokens={{ value }} />,
       shouldValidate: () => field.isBlurred && !field.isEmpty,
     });
     rules.set(`email_neverbounce_${props.field['#webform_key']}`, {
       rule: () => field.isEmpty || field.lookupSuccessful,
       hint: () =>
-        <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'neverBounceError', props.settings) || 'Please enter a valid email.'} />,
+        <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'neverBounceError', props.settings) || site.t('Please enter a valid email.')} />,
       shouldValidate: () => field.isBlurred && !field.isEmpty && validator.isEmail(field.value),
     });
 
