@@ -6,7 +6,7 @@ export default styled.div`
   padding-right: 20px;
 
   @media (min-width: 768px) {
-    width: calc(${p => p.theme.inlineLabelWidth} + ${p => p.theme.inputWidth} + 20px);
+    width: calc(${p => p.theme.inputWidth} * 1.3);
   }
 
   ${p => p.labelDisplay === 'inline' && `
@@ -17,9 +17,10 @@ export default styled.div`
       display: inline-block;
     }
 
-    & :global .Select-placeholder,
-    & :global .Select--single > .Select-control .Select-value {
+    & .Select-placeholder,
+    & .Select--single > .Select-control .Select-value {
       max-width: calc(${p.theme.inputWidth} - 25px);
+      overflow: hidden;
     }
   `}
   
