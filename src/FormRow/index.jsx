@@ -1,5 +1,7 @@
 import React from 'react';
 import Fieldset from '../Fieldset';
+// styled
+import FieldsetFormRow from '../Fieldset/styled/wrapper';
 
 const FormRow = props => (
   <Fieldset
@@ -7,7 +9,7 @@ const FormRow = props => (
   />
 );
 FormRow.meta = {
-  wrapper: Fieldset.meta.wrapper,
+  wrapper: FieldsetFormRow,
   label: Fieldset.meta.label,
   wrapperProps: Fieldset.meta.wrapperProps,
   labelVisibility: Fieldset.meta.labelVisibility,
