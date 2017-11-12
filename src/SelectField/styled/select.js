@@ -414,7 +414,7 @@ export default styled(Select)`
   .Select-placeholder,
   .Select--single > .Select-control .Select-value {
     padding: 0 calc(${p => p.theme.spacingUnit} / 2);
-    line-height: inherit;
+    line-height: 2.15em;
     font-size: 0.9em;
     position: static;
   }
