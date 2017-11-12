@@ -1,42 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
-import styles from './styles.pcss';
-
-function getStepClass(i) {
-  const stepClass = `step-${i}`;
-  if(styles[stepClass]) {
-    return stepClass;
-  }
-  return '';
-}
+// styled
+import Bar from './styled/bar';
+import Step from './styled/step';
+import StepNumber from './styled/step-number';
+import StepTitle from './styled/step-title';
 
 function WizardProgress({ pages, currentPage }) {
   return (
-    <ul styleName='bar'>
-      {pages.map((page, i) => {
-        let classList = `step ${getStepClass(i + 1)}`;
-
-        switch(true) {
-          case i < currentPage:
-            classList = `${classList} done`;
-            break;
-          case i === currentPage:
-            classList = `${classList} active`;
-            break;
-          default:
-          //   classList = `${classList} todo`;
-            break;
-        }
-
-        return (
-          <li key={page['#webform_key']} styleName={classList} style={{ width: `${100 / pages.length}%` }}>
-            <span styleName='step-number'>{i + 1}</span>
-            <span styleName='step-title'>{page['#title']}</span>
-          </li>
-        );
-      })}
-    </ul>
+    <Bar>
+      {pages.map((page, i) => (
+        <Step
+          key={page['#webform_key']}
+          step={i}
+          style={{ width: `${100 / pages.length}%` }}
+          active={i === currentPage}
+          done={i < currentPage}
+        >
+          <StepNumber>{i + 1}</StepNumber>
+          <StepTitle>{page['#title']}</StepTitle>
+        </Step>
+      ))}
+    </Bar>
   );
 }
 
@@ -50,4 +35,4 @@ WizardProgress.propTypes = {
   currentPage: PropTypes.number.isRequired,
 };
 
-export default CSSModules(WizardProgress, styles, { allowMultiple: true });
+export default WizardProgress;

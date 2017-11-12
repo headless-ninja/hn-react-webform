@@ -7,8 +7,9 @@ const FormRow = props => (
   />
 );
 FormRow.meta = {
-  wrapper: <fieldset />,
-  label: <legend />,
+  wrapper: Fieldset.meta.wrapper,
+  label: Fieldset.meta.label,
+  wrapperProps: Fieldset.meta.wrapperProps,
   labelVisibility: Fieldset.meta.labelVisibility,
   hasValue: false,
 };

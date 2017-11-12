@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
 import { observer } from 'mobx-react';
 import Parser from '../Parser';
-import styles from './styles.pcss';
+import Fieldset from '../Fieldset';
+// styled
+import Wrapper from './styled/wrapper';
+import Label from './styled/label';
+import Checkbox from './styled/checkbox';
+import Indicator from './styled/indicator';
+import InnerLabel from './styled/inner-label';
 
 @observer
-@CSSModules(styles, { allowMultiple: true })
 class CheckboxField extends Component {
   static meta = {
-    wrapper: <fieldset />,
-    label: <legend />,
+    wrapper: Fieldset.meta.wrapper,
+    label: Fieldset.meta.label,
+    wrapperProps: Fieldset.meta.wrapperProps,
     field_display: {
       '#description': 'NO_DESCRIPTION',
     },
@@ -52,27 +57,17 @@ class CheckboxField extends Component {
     this.props.onBlur(e);
   }
 
-  getLabelPositionClass() {
-    const labelClass = `display-${this.props.field['#title_display']}`;
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-    return '';
-  }
-
   getValue() {
     return this.props.value === '1' || this.props.value === true ? 'checked' : false;
   }
 
   render() {
-    const cssClasses = `input-wrapper ${this.getLabelPositionClass()}`;
     const value = this.getValue();
     return (
-      <div styleName={cssClasses}>
-        <label htmlFor={this.key} styleName='checkbox-label'>
-          <input
+      <Wrapper labelDisplay={this.props.field['#title_display']}>
+        <Label htmlFor={this.key}>
+          <Checkbox
             type='checkbox'
-            styleName='checkbox'
             onChange={this.onChange}
             value={value}
             checked={value}
@@ -81,12 +76,12 @@ class CheckboxField extends Component {
             disabled={!this.props.state.enabled}
             required={this.props.state.required}
           />
-          <span styleName='indicator' />
-          <span styleName='inner-label'>
+          <Indicator />
+          <InnerLabel className='hrw-inner-label'>
             {Parser(this.props.field['#description'])}
-          </span>
-        </label>
-      </div>
+          </InnerLabel>
+        </Label>
+      </Wrapper>
     );
   }
 }

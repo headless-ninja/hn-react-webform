@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
-import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
+// styled
+import StyledTextArea from './styled/text-area';
+import ValidationIcon from './styled/validation-icon';
 
-@CSSModules(styles, { allowMultiple: true })
 class TextArea extends Component {
   static propTypes = {
     field: PropTypes.shape({
@@ -29,12 +29,8 @@ class TextArea extends Component {
     value: null,
   };
 
-  getLabelClass() {
-    const labelClass = this.props.webformElement.getLabelClass();
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-    return '';
+  getLabelPosition() {
+    return this.props.webformElement.getLabelDisplay();
   }
 
   render() {
@@ -43,20 +39,23 @@ class TextArea extends Component {
       'aria-required': this.props.field['#required'] ? true : null,
     };
 
-    return (<div>
-      <textarea
-        onBlur={this.props.onBlur}
-        onChange={this.props.onChange}
-        value={this.props.value}
-        name={this.props.field['#webform_key']}
-        id={this.props.field['#webform_key']}
-        styleName={`textarea ${this.getLabelClass()} ${this.props.webformElement.isValid() ? '' : 'validate-error'}`}
-        disabled={!this.props.state.enabled}
-        required={!this.props.state.required}
-        {...attrs}
-      />
-      <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
-    </div>);
+    return (
+      <div>
+        <StyledTextArea
+          labelDisplay={this.getLabelPosition()}
+          success={this.props.webformElement.isValid()}
+          onBlur={this.props.onBlur}
+          onChange={this.props.onChange}
+          value={this.props.value}
+          name={this.props.field['#webform_key']}
+          id={this.props.field['#webform_key']}
+          disabled={!this.props.state.enabled}
+          required={!this.props.state.required}
+          {...attrs}
+        />
+        <ValidationIcon success={this.props.webformElement.isSuccess()} />
+      </div>
+    );
   }
 }
 

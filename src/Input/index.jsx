@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
 import { observer } from 'mobx-react';
 import Parser from '../Parser';
-import styles from './styles.pcss';
 import BaseInput from '../BaseInput';
 import WebformElement from '../WebformElement';
+// styled
+import Wrapper from './styled/wrapper';
+import InnerWrapper from './styled/inner-wrapper';
+import Prefix from './styled/prefix';
+import Suffix from './styled/suffix';
+import ValidationIcon from './styled/validation-icon';
 
 @observer
-@CSSModules(styles, { allowMultiple: true })
 class Input extends Component {
   static propTypes = {
     field: PropTypes.shape({
@@ -39,38 +42,36 @@ class Input extends Component {
     webformElement: PropTypes.instanceOf(WebformElement).isRequired,
   };
 
-  getLabelClass() {
-    const labelClass = this.props.webformElement.getLabelClass();
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-    return '';
+  getLabelDisplay() {
+    return this.props.webformElement.getLabelDisplay();
   }
 
   renderTextContent(selector) {
     const value = this.props.field[`#field_${selector}`];
     if(value) {
-      const className = `${styles[selector] ? selector : ''}`;
+      const TextContent = selector === 'prefix' ? Prefix : Suffix;
 
-      return (<span styleName={className}>{Parser(value)}</span>);
+      return <TextContent>{Parser(value)}</TextContent>;
     }
-    return '';
+    return null;
   }
 
   render() {
-    return (<div>
-      <div styleName={`input-wrap ${this.getLabelClass()}`}>
-        <div styleName='input-inner-wrapper'>
-          { this.renderTextContent('prefix') }
-          <BaseInput
-            {...this.props}
-            field={this.props.field}
-          />
-          { this.renderTextContent('suffix') }
-        </div>
+    return (
+      <div>
+        <Wrapper labelDisplay={this.getLabelDisplay()}>
+          <InnerWrapper>
+            {this.renderTextContent('prefix')}
+            <BaseInput
+              {...this.props}
+              field={this.props.field}
+            />
+            {this.renderTextContent('suffix')}
+          </InnerWrapper>
+        </Wrapper>
+        <ValidationIcon success={this.props.webformElement.isSuccess()} />
       </div>
-      <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
-    </div>);
+    );
   }
 }
 

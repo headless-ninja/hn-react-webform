@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
 import getNested from 'get-nested';
 import { observer } from 'mobx-react';
 import WebformElement from '../WebformElement';
 import FormStore from '../Observables/Form';
-import styles from './styles.pcss';
+// styled
+import StyledFieldset from './styled/fieldset';
+import Legend from './styled/legend';
+import FieldsetInner from './styled/fieldset-inner';
 
 @observer
-@CSSModules(styles, { allowMultiple: true })
 class Fieldset extends Component {
   static meta = {
-    wrapper: <fieldset className={styles.fieldset} />,
-    label: <legend data-extendClassName={styles['fieldset-legend']} />,
+    wrapper: StyledFieldset,
+    wrapperProps: { className: 'hrw-fieldset hrw-form-row' },
+    label: Legend,
     labelVisibility: 'invisible',
     hasValue: false,
   };
@@ -67,8 +69,8 @@ class Fieldset extends Component {
 
   getFormElements() {
     const formElements = this.props.field.composite_elements || [];
-    return formElements.map(field =>
-      (<WebformElement
+    return formElements.map(field => (
+      <WebformElement
         key={field['#webform_key']}
         field={field}
         formStore={this.props.formStore}
@@ -80,17 +82,18 @@ class Fieldset extends Component {
         webformPage={this.props.webformPage}
         form={this.props.form}
         status={this.props.status}
-      />));
+      />
+    ));
   }
 
   render() {
     const formElements = this.getFormElements();
     return (
-      <div style={this.props.style} styleName='fieldset-inner'>
+      <FieldsetInner style={this.props.style}>
         {!this.props.childrenAdjacent && this.props.children}
         {formElements}
         {this.props.childrenAdjacent && this.props.children}
-      </div>
+      </FieldsetInner>
     );
   }
 }

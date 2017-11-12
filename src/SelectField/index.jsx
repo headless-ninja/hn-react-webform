@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
-import CSSModules from 'react-css-modules';
-import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
+// styled
+import Wrapper from './styled/wrapper';
+import Select from './styled/select';
+import ValidationIcon from './styled/validation-icon';
 
 /**
  * Select2
  * @source https://github.com/JedWatson/react-select
  */
 
-@CSSModules(styles, { allowMultiple: true })
 class SelectField extends Component {
   static propTypes = {
     field: PropTypes.shape({
@@ -44,12 +43,8 @@ class SelectField extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  getLabelPositionClass() {
-    const labelClass = this.props.webformElement.getLabelClass();
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-    return '';
+  getLabelPosition() {
+    return this.props.webformElement.getLabelDisplay();
   }
 
   handleChange(value) {
@@ -62,14 +57,16 @@ class SelectField extends Component {
   }
 
   render() {
-    const cssClassesWrapper = `select-wrapper ${this.getLabelPositionClass()} ${this.props.webformElement.isValid() ? '' : 'validate-error'}`;
     const options = this.props.field['#options'] || {};
     const mappedOptions = options.map(option => ({
       label: option.text,
       value: option.value,
     }));
     return (
-      <div styleName={cssClassesWrapper}>
+      <Wrapper
+        labelDisplay={this.getLabelPosition()}
+        success={this.props.webformElement.isValid()}
+      >
         <Select
           name={this.props.field['#webform_key']}
           id={this.props.field['#webform_key']}
@@ -84,8 +81,8 @@ class SelectField extends Component {
           placeholder={this.props.field['#empty_option'] || 'Selecteer...'}
           openAfterFocus
         />
-        <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
-      </div>
+        <ValidationIcon success={this.props.webformElement.isSuccess()} />
+      </Wrapper>
     );
   }
 }

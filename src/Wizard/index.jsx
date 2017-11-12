@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
 import { observer, inject } from 'mobx-react';
 import getNested from 'get-nested';
 import WizardProgress from './WizardProgress';
 import Fieldset from '../Fieldset';
 import BaseButton from '../BaseButton';
 import SubmitButton from '../SubmitButton';
-import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
 import Webform from '../Webform';
 import FormStore from '../Observables/Form';
+// styled
+import ButtonWrapper from './styled/button-wrapper';
+import ButtonNext from './styled/button-next';
+import ButtonPrev from './styled/button-prev';
 
 @inject('submit', 'webform')
 @observer
-@CSSModules(styles)
 class WizardPages extends Component {
 
   static propTypes = {
@@ -112,16 +113,16 @@ class WizardPages extends Component {
             status={this.props.status}
           />
         ))}
-        <div styleName='button-wrapper'>
-          <div styleName='button-prev'>
+        <ButtonWrapper>
+          <ButtonPrev>
             <BaseButton
               onClick={(e) => { e.preventDefault(); this.changePage(-1); }}
               disabled={this.props.formStore.page === pages[0]['#webform_key']}
               label={getNested(() => pages[pageI]['#prev_button_label']) || getNested(() => this.props.form.settings.wizard_prev_button_label) || 'Previous page'}
-              isPrimary={false}
+              primary={false}
             />
-          </div>
-          <div styleName='button-next'>
+          </ButtonPrev>
+          <ButtonNext>
             {(this.props.formStore.page === pages[pages.length - 1]['#webform_key'])
               ? <SubmitButton
                 form={this.props.form}
@@ -132,8 +133,8 @@ class WizardPages extends Component {
                 type='submit'
               />
             }
-          </div>
-        </div>
+          </ButtonNext>
+        </ButtonWrapper>
       </div>
     );
   }

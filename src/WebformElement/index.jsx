@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import getNested from 'get-nested';
-import CSSModules from 'react-css-modules';
 import { observer } from 'mobx-react';
 import Parser, { template } from '../Parser';
 import FormStore from '../Observables/Form';
-import styles from './styles.pcss';
-import Wrapper from '../Wrapper';
 import Hidden from '../Hidden';
-import { supportedActions } from '../Webform/conditionals';
+// styled
+import RequiredMarker from './styled/required-marker';
+import ValidationMessage from './styled/validation-message';
+import TextContent from './styled/text-content';
+import Label from './styled/label';
+import FormRow from './styled/form-row';
 
 @observer
-@CSSModules(styles, { allowMultiple: true })
 class WebformElement extends Component {
   static propTypes = {
     field: PropTypes.shape({
@@ -36,10 +37,6 @@ class WebformElement extends Component {
       composite_elements: PropTypes.array,
     }).isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
-    parent: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.object,
-    ]),
     onChange: PropTypes.func,
     onBlur: PropTypes.func,
     settings: PropTypes.shape({
@@ -138,22 +135,24 @@ class WebformElement extends Component {
     if(ElementComponent) {
       return {
         class: ElementComponent,
-        element: <ElementComponent
-          value={this.getValue()}
-          name={this.key}
-          onChange={this.onChange}
-          onBlur={this.onBlur}
-          field={this.props.field}
-          formStore={this.props.formStore}
-          validations={this.state.validations}
-          webformElement={this}
-          settings={this.props.settings}
-          webformSettings={this.props.webformSettings}
-          state={this.getField()}
-          webformPage={this.props.webformPage}
-          status={this.props.status}
-          form={this.props.form}
-        />,
+        element: (
+          <ElementComponent
+            value={this.getValue()}
+            name={this.key}
+            onChange={this.onChange}
+            onBlur={this.onBlur}
+            field={this.props.field}
+            formStore={this.props.formStore}
+            validations={this.state.validations}
+            webformElement={this}
+            settings={this.props.settings}
+            webformSettings={this.props.webformSettings}
+            state={this.getField()}
+            webformPage={this.props.webformPage}
+            status={this.props.status}
+            form={this.props.form}
+          />
+        ),
       };
     }
     return false;
@@ -167,14 +166,9 @@ class WebformElement extends Component {
     return field.getValue();
   }
 
-  getLabelClass() {
-    const labelClass = `label-display-${this.props.field['#title_display']}`;
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-
+  getLabelDisplay() {
     const elementClass = this.getField().componentClass;
-    return `label-display-${getNested(() => elementClass.meta.labelVisibility, 'inline')}`;
+    return getNested(() => elementClass.meta.labelVisibility) || this.props.field['#title_display'];
   }
 
   /**
@@ -190,10 +184,6 @@ class WebformElement extends Component {
       return true;
     }
     return field.valid;
-  }
-
-  isVisible() {
-    return this.state[supportedActions.visible] && getNested(() => this.props.parent.isVisible(), true);
   }
 
   /**
@@ -239,7 +229,8 @@ class WebformElement extends Component {
 
   renderTextContent(selector, checkValue = false, addClass = '', show = true) {
     if(show) {
-      const value = this.props.field[getNested(() => this.getField().componentClass.meta.field_display[selector], selector)]; // Value in #description field
+      const field = this.getField().componentClass;
+      const value = this.props.field[getNested(() => field.meta.field_display[selector], selector)]; // Value in #description field
       const displayValue = this.props.field[`${selector}_display`];
       const cssClass = `${selector.replace(/#/g, '').replace(/_/g, '-')}${checkValue ? `-${checkValue}` : ''}`; // '#field_suffix' and 'suffix' become .field--suffix-suffix
 
@@ -254,9 +245,15 @@ class WebformElement extends Component {
         return false;
       }
 
-      const className = `${addClass} ${styles[cssClass] ? cssClass : ''}`;
-
-      return (<span styleName={className}>{Parser(template(this.props.formStore, value))}</span>);
+      return (
+        <TextContent
+          value={cssClass}
+          class={addClass}
+          labelDisplay={this.getLabelDisplay()}
+        >
+          {Parser(template(this.props.formStore, value))}
+        </TextContent>
+      );
     }
 
     return false;
@@ -266,18 +263,16 @@ class WebformElement extends Component {
     /* If the label is a legend, it is supposed to be the first child of the fieldset wrapper. */
 
     if(this.props.field['#title'] && show) {
+      const Wrapper = getNested(() => element.class.meta.label) || Label;
       return (
-        <Wrapper
-          component={getNested(() => element.class.meta.label, <label htmlFor={this.key} />)}
-          styleName={`label ${this.getLabelClass()}`}
-        >
+        <Wrapper labelDisplay={this.getLabelDisplay()} htmlFor={this.key} className='hrw-label'>
           {Parser(template(this.props.formStore, this.props.field['#title']))}
-          {this.getField().required ? (<small styleName='required-marker'>&nbsp;*</small>) : null}
+          {this.getField().required ? (<RequiredMarker>&nbsp;*</RequiredMarker>) : null}
         </Wrapper>
       );
     }
 
-    return '';
+    return null;
   }
 
   render() {
@@ -290,28 +285,26 @@ class WebformElement extends Component {
 
     const errors = this.getField().errors.filter(error => error);
     const errorList = errors.length > 0 ? (
-      <ul role='alert' styleName={`${this.getLabelClass()} validation-message-wrapper`}> {errors} </ul>)
-      : null;
+      <ValidationMessage role='alert' labelDisplay={this.getLabelDisplay()} className='hrw-validation-message-wrapper'>{errors}</ValidationMessage>
+    ) : null;
+
+    const Wrapper = getNested(() => element.class.meta.wrapper) || FormRow;
 
     return (
-      <Wrapper
-        component={getNested(() => element.class.meta.wrapper, <div />)}
-        styleName='formrow'
-        {...!this.getField().visible ? { hidden: true } : {}}
-      >
-        { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) === 'legend') }
+      <Wrapper hidden={!this.getField().visible} className='hrw-form-row' {...getNested(() => element.class.meta.wrapperProps)}>
+        {this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) === 'legend')}
 
-        { this.renderTextContent('#description', 'before') }
-        { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-before`), getNested(() => element.class.meta.label.type) === 'legend') }
+        {this.renderTextContent('#description', 'before') }
+        {this.renderTextContent('#description', 'isUndefined', 'description-before', getNested(() => element.class.meta.label.type) === 'legend')}
 
-        { this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) !== 'legend') }
+        {this.renderFieldLabel(element, getNested(() => element.class.meta.label.type) !== 'legend')}
 
-        { element.element }
+        {element.element}
 
-        { this.renderTextContent('#description', 'after', this.getLabelClass()) }
-        { this.renderTextContent('#description', 'isUndefined', (`${this.getLabelClass()} description-after`), getNested(() => element.class.meta.label.type) !== 'legend') }
+        {this.renderTextContent('#description', 'after', this.getLabelDisplay())}
+        {this.renderTextContent('#description', 'isUndefined', 'description-after', getNested(() => element.class.meta.label.type) !== 'legend')}
 
-        { errorList }
+        {errorList}
       </Wrapper>
     );
   }

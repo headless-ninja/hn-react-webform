@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
 import validator from 'validator';
 import { observer } from 'mobx-react';
 import { site } from 'hn-react';
-import styles from './styles.pcss';
-import Input from '../Input';
 import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
 import composeLookUp from '../LookUp';
 import WebformUtils from '../WebformUtils';
 import FormStore from '../Observables/Form';
+// styled
+import Email from './styled/email';
 
 @observer
-@CSSModules(styles)
 class EmailField extends Component {
   static meta = {
     validations: [
@@ -89,10 +87,9 @@ class EmailField extends Component {
 
   render() {
     return (
-      <Input
+      <Email
         {...this.props}
         type='email'
-        styleName='email'
         autoComplete='email'
         onBlur={this.props.onBlur}
         onChange={this.props.onChange}

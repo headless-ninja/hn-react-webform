@@ -1,15 +1,13 @@
 import React from 'react';
-import CSSModules from 'react-css-modules';
-import styles from './styles.pcss';
-import Input from '../Input';
+// styled
+import Phone from './styled/phone';
 
 const PhoneField = props => (
-  <Input
+  <Phone
     {...props}
     type='tel'
-    styleName='phone'
     autoComplete='tel'
   />
 );
 
-export default CSSModules(PhoneField, styles);
+export default PhoneField;

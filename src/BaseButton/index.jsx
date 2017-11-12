@@ -1,25 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
-import styles from './styles.pcss';
+import Button from './styled/button';
 
-const BaseButton = ({ disabled, label, formSubmitAttributes, onClick, isPrimary, type }) => (
-  <button
-    styleName={`button ${disabled ? 'disabled' : ''} ${isPrimary ? '' : 'secondary'}`}
+const BaseButton = ({ disabled, label, formSubmitAttributes, onClick, primary, type }) => (
+  <Button
     disabled={disabled ? 'disabled' : null}
+    primary={primary}
     {...formSubmitAttributes}
     onClick={onClick}
     type={type}
+    className='hrw-button'
   >
     {label}
-  </button>
+  </Button>
 );
 
 BaseButton.propTypes = {
   disabled: PropTypes.bool,
   formSubmitAttributes: PropTypes.arrayOf(PropTypes.string),
   label: PropTypes.string,
-  isPrimary: PropTypes.bool,
+  primary: PropTypes.bool,
   onClick: PropTypes.func,
   type: PropTypes.string,
 };
@@ -28,9 +28,9 @@ BaseButton.defaultProps = {
   disabled: null,
   formSubmitAttributes: [],
   label: '',
-  isPrimary: true,
+  primary: true,
   onClick: () => {},
   type: 'button',
 };
 
-export default CSSModules(BaseButton, styles, { allowMultiple: true });
+export default BaseButton;

@@ -2,18 +2,17 @@ import React, { Component } from 'react';
 import getNested from 'get-nested';
 import PropTypes from 'prop-types';
 import { site } from 'hn-react';
-import CSSModules from 'react-css-modules';
 import { observer } from 'mobx-react';
 import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
 import RuleHint from '../RuleHint';
-import styles from './styles.pcss';
 import rules from '../Webform/rules';
 import FormStore from '../Observables/Form';
 import WebformUtils from '../WebformUtils';
+// styled
+import ValidationMessage from './styled/validation-message';
 
 @observer
-@CSSModules(styles)
 class Relation extends Component {
   static meta = {
     labelVisibility: Fieldset.meta.labelVisibility,
@@ -25,7 +24,10 @@ class Relation extends Component {
     field: PropTypes.shape({
       '#webform_key': PropTypes.string.isRequired,
       '#relationError': PropTypes.string,
-      '#membership_validation': PropTypes.number,
+      '#membership_validation': PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.bool,
+      ]),
       composite_elements: PropTypes.arrayOf(PropTypes.shape()),
     }).isRequired,
     fields: PropTypes.arrayOf(PropTypes.shape()).isRequired,
@@ -103,9 +105,9 @@ class Relation extends Component {
         {...this.props}
         onBlur={this.props.onBlur}
       >
-        {field.lookupSent && !field.lookupSuccessful &&
-        <RuleHint component={<p className={styles['validation-message']} />} key={`relation_${this.props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(this.props.field, 'relationError', this.props.settings) || site.t('We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.')} />
-        }
+        {field.lookupSent && !field.lookupSuccessful && (
+          <RuleHint component={<ValidationMessage />} key={`relation_${this.props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(this.props.field, 'relationError', this.props.settings) || site.t('We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.')} />
+        )}
       </Fieldset>
     );
   }

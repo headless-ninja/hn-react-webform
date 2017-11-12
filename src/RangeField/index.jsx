@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
-import styles from './styles.pcss';
-import BaseInput from '../BaseInput';
 import WebformElement from '../WebformElement';
+// styled
+import Wrapper from './styled/wrapper';
+import Range from './styled/range';
+import RangeValueWrapper from './styled/range-value-wrapper';
+import RangeValue from './styled/range-value';
+import ValidationIcon from './styled/validation-icon';
 
-@CSSModules(styles, { allowMultiple: true })
 class RangeField extends Component {
-
   static propTypes = {
     field: PropTypes.shape({
       '#title_display': PropTypes.string,
@@ -29,12 +30,8 @@ class RangeField extends Component {
     this.props.onChange(value);
   }
 
-  getLabelPositionClass() {
-    const labelClass = `display-${this.props.field['#title_display']}`;
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-    return '';
+  getLabelPosition() {
+    return this.props.field['#title_display'];
   }
 
   getPercentageValue() {
@@ -48,19 +45,20 @@ class RangeField extends Component {
   }
 
   render() {
-    const cssClassesWrapper = `input-wrapper ${this.getLabelPositionClass()}`;
-
-    return (<div>
-      <div styleName={cssClassesWrapper}>
-        <BaseInput
-          {...this.props}
-          type='range'
-          styleName='range'
-        />
-        <span styleName={`range-value-wrapper ${this.getLabelPositionClass()}`}><span styleName='range-value' style={{ left: `${this.getPercentageValue()}%` }}>{this.props.value}</span></span>
-        <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
+    return (
+      <div>
+        <Wrapper labelDisplay={this.getLabelPosition()}>
+          <Range
+            {...this.props}
+            type='range'
+          />
+          <RangeValueWrapper labelDisplay={this.getLabelPosition()}>
+            <RangeValue style={{ left: `${this.getPercentageValue()}%` }}>{this.props.value}</RangeValue>
+          </RangeValueWrapper>
+          <ValidationIcon success={this.props.webformElement.isSuccess()} />
+        </Wrapper>
       </div>
-    </div>);
+    );
   }
 }
 

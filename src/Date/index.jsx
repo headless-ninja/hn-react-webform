@@ -3,9 +3,6 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { site } from 'hn-react';
-import CSSModules from 'react-css-modules';
-import DayPicker from 'react-day-picker';
-import 'react-day-picker/lib/style.css';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import BaseInput from '../BaseInput';
 import Fieldset from '../Fieldset';
@@ -15,10 +12,14 @@ import rules from '../Webform/rules';
 import WebformElement from '../WebformElement';
 import WebformUtils from '../WebformUtils';
 import labelTranslations from './labelTranslations';
-import styles from './rdw-date-theme.pcss';
+// styled
+import Wrapper from './styled/wrapper';
+import OverlayWrapper from './styled/overlay-wrapper';
+import Overlay from './styled/overlay';
+import DayPicker from './styled/day-picker';
+import ValidationIcon from './styled/validation-icon';
 
 @observer
-@CSSModules(styles, { allowMultiple: true })
 class Date extends Component {
   static meta = {
     validations: [
@@ -168,12 +169,8 @@ class Date extends Component {
     return result;
   }
 
-  getLabelPositionClass() {
-    const labelClass = this.props.webformElement.getLabelClass();
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-    return '';
+  getLabelDisplay() {
+    return this.props.webformElement.getLabelDisplay();
   }
 
   calculateDateRange(value) {
@@ -271,36 +268,35 @@ class Date extends Component {
         onFocus={this.handleInputFocus}
         onBlur={this.handleInputBlur}
         value={value}
-      />);
-
-    const cssClassesWrapper = `input-wrapper ${this.getLabelPositionClass()}`;
+      />
+    );
 
     return (
-      <div
+      <Wrapper
         onMouseDown={this.handleContainerMouseDown}
         onBlur={this.handleInputBlur}
-        styleName={cssClassesWrapper}
+        labelDisplay={this.getLabelDisplay()}
       >
         {DateInput}
-        {this.state.showOverlay &&
-        <div styleName='overlay-wrapper'>
-          <div styleName='overlay'>
-            <DayPicker
-              ref={el => this.setRef('daypicker', el)}
-              initialMonth={this.state.selectedDay || undefined}
-              onDayClick={this.handleDayClick}
-              selectedDays={this.state.selectedDay}
-              locale={this.props.locale}
-              localeUtils={MomentLocaleUtils}
-              labels={labelTranslations[this.props.locale]}
-              enableOutsideDays
-              disabledDays={[this.calculateDisabledDates]}
-            />
-          </div>
-        </div>
-        }
-        <span styleName={`validation-icon ${this.props.webformElement.isSuccess() ? 'validate-success' : ''}`} />
-      </div>
+        {this.state.showOverlay && (
+          <OverlayWrapper>
+            <Overlay>
+              <DayPicker
+                ref={el => this.setRef('daypicker', el)}
+                initialMonth={this.state.selectedDay || undefined}
+                onDayClick={this.handleDayClick}
+                selectedDays={this.state.selectedDay}
+                locale={this.props.locale}
+                localeUtils={MomentLocaleUtils}
+                labels={labelTranslations[this.props.locale]}
+                enableOutsideDays
+                disabledDays={[this.calculateDisabledDates]}
+              />
+            </Overlay>
+          </OverlayWrapper>
+        )}
+        <ValidationIcon success={this.props.webformElement.isSuccess()} />
+      </Wrapper>
     );
   }
 }

@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
-import getNested from 'get-nested';
 import { inject } from 'mobx-react';
 import Parser, { template } from '../Parser';
-import styles from './styles.pcss';
 import FormStore from '../Observables/Form';
+// styled
+import ValidationMessage from './styled/validation-message';
 
 @inject('formStore')
-@CSSModules(styles)
 class RuleHint extends Component {
   static propTypes = {
     hint: PropTypes.oneOfType([
@@ -46,9 +44,9 @@ class RuleHint extends Component {
 
   render() {
     const hint = this.getHint();
-    const RuleComponent = this.props.component.type || this.props.component;
+    const RuleComponent = ValidationMessage.withComponent(this.props.component.type || this.props.component);
     return (
-      <RuleComponent styleName='validation-message' className={getNested(() => this.props.component.props.className)}>
+      <RuleComponent className='hrw-validation-message'>
         <span>
           {Parser(template(this.props.formStore, hint))}
         </span>

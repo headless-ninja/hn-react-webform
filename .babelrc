@@ -22,6 +22,10 @@
       {
         "polyfill": true
       }
-    ]
+    ],
+    ["styled-components", {
+      "ssr": false,
+      "displayName": false
+    }]
   ]
 }

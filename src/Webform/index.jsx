@@ -4,17 +4,22 @@ import GoogleTag from 'google_tag';
 import { observer, Provider } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import CSSModules from 'react-css-modules';
 import Script from 'react-load-script';
+import { ThemeProvider } from 'styled-components';
 import { site } from 'hn-react';
 import Forms from '../Observables/Forms';
 import Parser from '../Parser';
 import SubmitButton from '../SubmitButton';
-import ThankYouMessage from '../ThankYouMessage';
+import ThankYouMessage from './ThankYouMessage';
 import WebformElement from '../WebformElement';
-import styles from './styles.pcss';
+import theme from '../styles/theme';
+// styled
+import StyledWebform from './styled/webform';
+import FormTitle from './styled/form-title';
+import List from './styled/list';
+import ListItem from './styled/list-item';
+import Element from './styled/element';
 
-@CSSModules(styles, { allowMultiple: true })
 @observer
 class Webform extends Component {
   static formStates = {
@@ -66,15 +71,13 @@ class Webform extends Component {
     hiddenData: PropTypes.objectOf(PropTypes.string),
     noValidation: PropTypes.bool,
     showThankYouMessage: PropTypes.bool,
+    theme: PropTypes.shape(),
   };
 
   static defaultProps = {
-    onSubmit: () => {
-    },
-    onSubmitSuccess: () => {
-    },
-    onSubmitFail: () => {
-    },
+    onSubmit: () => {},
+    onSubmitSuccess: () => {},
+    onSubmitFail: () => {},
     nm_gtm_id: false,
     settings: {
       tracking: false,
@@ -83,6 +86,7 @@ class Webform extends Component {
     hiddenData: {},
     noValidation: true,
     showThankYouMessage: true,
+    theme: {},
   };
 
   constructor(props) {
@@ -153,8 +157,8 @@ class Webform extends Component {
 
   getFormElements() {
     const formElements = getNested(() => this.props.form.elements, []);
-    return formElements.map(field =>
-      (<WebformElement
+    return formElements.map(field => (
+      <WebformElement
         key={field['#webform_key']}
         field={field}
         formStore={this.formStore}
@@ -162,7 +166,8 @@ class Webform extends Component {
         webformSettings={this.props.settings}
         status={this.state.status}
         form={this.props.form}
-      />));
+      />
+    ));
   }
 
   converted() {
@@ -232,59 +237,61 @@ class Webform extends Component {
       requiredHint = <span>{Parser(this.props.form.settings.nm_required_hint)}</span>;
     }
     const errors = (
-      <ul styleName='list'>
+      <List>
         {Object.entries(this.state.errors).map(([key, error]) => (
-          <li styleName='list-item' key={key}>
-            <span styleName='element error'>{key.replace(/]\[/g, '.')}: <em>{Parser(error)}</em></span>
-          </li>
+          <ListItem key={key}>
+            <Element error>{key.replace(/]\[/g, '.')}: <em>{Parser(error)}</em></Element>
+          </ListItem>
           ),
         )}
-      </ul>
+      </List>
     );
 
     return (
       <Provider formStore={this.formStore} submit={this.submit} webform={this}>
-        <div styleName='webform'>
-          <h1 styleName='formtitle'>{this.props.settings.title}</h1>
-          { this.state.status !== Webform.formStates.SENT && errors }
-          { this.state.status !== Webform.formStates.SENT &&
-            <form
-              method='POST'
-              onSubmit={this.onSubmit}
-              name={this.props.form.form_id}
-              id={this.props.form.form_id}
-              noValidate={this.props.noValidation}
-            >
-              { requiredHint }
-              { formElements }
-              { !multipage &&
-                <SubmitButton
-                  form={this.props.form}
-                  status={this.state.status}
+        <ThemeProvider theme={{ ...theme, ...this.props.theme }}>
+          <StyledWebform>
+            <FormTitle>{this.props.settings.title}</FormTitle>
+            {this.state.status !== Webform.formStates.SENT && errors}
+            {this.state.status !== Webform.formStates.SENT && (
+              <form
+                method='POST'
+                onSubmit={this.onSubmit}
+                name={this.props.form.form_id}
+                id={this.props.form.form_id}
+                noValidate={this.props.noValidation}
+              >
+                {requiredHint}
+                {formElements}
+                {!multipage && (
+                  <SubmitButton
+                    form={this.props.form}
+                    status={this.state.status}
+                  />
+                )}
+              </form>
+            )}
+            {this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT && (
+              <ThankYouMessage message={this.props.form.settings.confirmation_message} />
+            )}
+            {this.props.settings.tracking !== false && (
+              <div>
+                <Script
+                  url='//cdn-static.formisimo.com/tracking/js/tracking.js'
+                  onLoad={() => {}}
+                  onError={() => {}}
                 />
-              }
-            </form>
-          }
-          { this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT &&
-          <ThankYouMessage message={this.props.form.settings.confirmation_message} />
-           }
-          {this.props.settings.tracking !== false &&
-          <div>
-            <Script
-              url='//cdn-static.formisimo.com/tracking/js/tracking.js'
-              onLoad={() => {}}
-              onError={() => {}}
-            />
-            {this.state.status === Webform.formStates.SENT &&
-            <Script
-              url='//cdn-static.formisimo.com/tracking/js/conversion.js'
-              onLoad={this.converted}
-              onError={() => {}}
-            />
-            }
-          </div>
-          }
-        </div>
+                {this.state.status === Webform.formStates.SENT && (
+                  <Script
+                    url='//cdn-static.formisimo.com/tracking/js/conversion.js'
+                    onLoad={this.converted}
+                    onError={() => {}}
+                  />
+                )}
+              </div>
+            )}
+          </StyledWebform>
+        </ThemeProvider>
       </Provider>
     );
   }

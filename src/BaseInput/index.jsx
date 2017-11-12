@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
 import InputMask from 'react-input-mask';
 import { observer } from 'mobx-react';
-import styles from './styles.pcss';
 import WebformElement from '../WebformElement';
+// styled
+import Input from './styled/input';
 
 @observer
-@CSSModules(styles, { allowMultiple: true })
 class BaseInput extends Component {
   static propTypes = {
     field: PropTypes.shape({
@@ -58,7 +57,7 @@ class BaseInput extends Component {
 
   static defaultProps = {
     id: 0,
-    className: null,
+    className: undefined,
     type: 'text',
     autoComplete: '',
     onFocus: () => {},
@@ -75,11 +74,11 @@ class BaseInput extends Component {
       autoComplete: fieldAttrs ? fieldAttrs.autoComplete : null,
     };
 
-    let InputComponent = 'input'; // Input HTML element is 'input' by default
+    let InputComponent = Input; // Input HTML element is 'input' by default
 
     // When there is a mask from Drupal.
     if(this.props.field['#mask']) {
-      InputComponent = InputMask; // Use InputMask element instead.
+      InputComponent = Input.withComponent(InputMask); // Use InputMask element instead.
       attrs.mask = this.props.field['#mask'];
       attrs.alwaysShowMask = this.props.field['#alwaysShowMask'] || true;
     }
@@ -91,8 +90,8 @@ class BaseInput extends Component {
         name={this.props.field['#webform_key']}
         id={this.props.id || this.props.field['#webform_key']}
         placeholder={this.props.field['#placeholder']}
-        styleName={`input ${this.props.webformElement.isValid() ? '' : 'validate-error'}`}
-        className={this.props.className ? this.props.className : ''}
+        error={(!this.props.webformElement.isValid()).toString()}
+        className={this.props.className}
         min={this.props.field['#min']}
         max={this.props.field['#max']}
         step={this.props.field['#step']}

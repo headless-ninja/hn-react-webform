@@ -9,8 +9,9 @@ const FormulaParser = require('hot-formula-parser').Parser;
 @observer
 class Converse extends Component {
   static meta = {
-    wrapper: <fieldset />,
-    label: <legend />,
+    wrapper: Fieldset.meta.wrapper,
+    label: Fieldset.meta.label,
+    wrapperProps: Fieldset.meta.wrapperProps,
     labelVisibility: Fieldset.meta.labelVisibility,
     hasValue: false,
   };

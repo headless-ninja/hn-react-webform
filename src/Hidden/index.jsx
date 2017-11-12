@@ -1,18 +1,17 @@
 import React from 'react';
-import CSSModules from 'react-css-modules';
-import styles from './styles.pcss';
-import Input from '../Input';
+// styled
+import StyledHidden from './styled/hidden';
 
 const Hidden = props => (
-  <Input
+  <StyledHidden
     {...props}
     type='hidden'
-    styleName='hidden'
   />
 );
 
 Hidden.meta = {
-  wrapper: <div className={styles.hidden} />,
+  wrapper: 'div',
+  wrapperProps: { style: { display: 'none' } },
 };
 
-export default CSSModules(Hidden, styles);
+export default Hidden;

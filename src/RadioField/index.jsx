@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CSSModules from 'react-css-modules';
 import getNested from 'get-nested';
 import Parser from '../Parser';
 import WebformElement from '../WebformElement';
-import styles from './styles.pcss';
 import Field from '../Observables/Field';
+import Fieldset from '../Fieldset';
+// styled
+import Wrapper from './styled/wrapper';
+import RadioLabel from './styled/radio-label';
+import Radio from './styled/radio';
+import Indicator from './styled/indicator';
 
-@CSSModules(styles, { allowMultiple: true })
 class RadioField extends Component {
   static meta = {
-    wrapper: <fieldset />,
-    label: <legend />,
+    wrapper: Fieldset.meta.wrapper,
+    label: Fieldset.meta.label,
+    wrapperProps: Fieldset.meta.wrapperProps,
   };
 
   static propTypes = {
@@ -36,56 +40,52 @@ class RadioField extends Component {
     state: PropTypes.instanceOf(Field).isRequired,
   };
 
-  getOptionPositionClass() {
-    const optionClass = `radio-display-${this.props.field['#options_display']}`;
-    if(styles[optionClass]) {
-      return optionClass;
-    }
-    return '';
+  getOptionPositionDisplay() {
+    return this.props.field['#options_display'];
   }
 
-  getLabelPositionClass() {
-    const labelClass = `display-${this.props.field['#title_display']}`;
-    if(styles[labelClass]) {
-      return labelClass;
-    }
-    return '';
+  getLabelPositionDisplay() {
+    return this.props.field['#title_display'];
   }
 
   render() {
-    const cssClassesWrapper = `input-wrapper ${this.getLabelPositionClass()}`;
-    const cssClassesRadio = `radio-label ${this.getOptionPositionClass()}`;
-
     const wrapperAttrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,
       'aria-required': this.props.field['#required'] ? true : null,
     };
 
     return (
-      <div styleName={cssClassesWrapper} role='radiogroup' {...wrapperAttrs}>
+      <Wrapper
+        role='radiogroup'
+        {...wrapperAttrs}
+        labelDisplay={this.getLabelPositionDisplay()}
+      >
         {
           getNested(() => this.props.field['#options'], []).map((option, index) => {
             const labelKey = `${this.props.field['#webform_key']}_${index}`;
             return (
-              <label key={option.value} styleName={cssClassesRadio} htmlFor={labelKey}>
-                <input
+              <RadioLabel
+                key={option.value}
+                htmlFor={labelKey}
+                optionDisplay={this.getOptionPositionDisplay()}
+              >
+                <Radio
                   type='radio'
                   onChange={this.props.onChange}
                   onBlur={this.props.onBlur}
                   value={option.value}
                   name={this.props.field['#webform_key']}
-                  styleName='radio'
                   id={labelKey}
                   disabled={!this.props.state.enabled}
                   checked={this.props.value === option.value.toString()}
                 />
-                <span styleName='indicator' />
-                { Parser(option.text) }
-              </label>
+                <Indicator />
+                {Parser(option.text)}
+              </RadioLabel>
             );
           })
         }
-      </div>
+      </Wrapper>
     );
   }
 }
