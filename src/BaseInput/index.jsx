@@ -6,6 +6,8 @@ import WebformElement from '../WebformElement';
 // styled
 import Input from './styled/input';
 
+const StyledInputMask = Input.withComponent(({ error, ...p }) => <InputMask {...p} />);
+
 @observer
 class BaseInput extends Component {
   static propTypes = {
@@ -78,7 +80,7 @@ class BaseInput extends Component {
 
     // When there is a mask from Drupal.
     if(this.props.field['#mask']) {
-      InputComponent = Input.withComponent(InputMask); // Use InputMask element instead.
+      InputComponent = StyledInputMask; // Use InputMask element instead.
       attrs.mask = this.props.field['#mask'];
       attrs.alwaysShowMask = this.props.field['#alwaysShowMask'] || true;
     }
@@ -90,7 +92,7 @@ class BaseInput extends Component {
         name={this.props.field['#webform_key']}
         id={this.props.id || this.props.field['#webform_key']}
         placeholder={this.props.field['#placeholder']}
-        error={(!this.props.webformElement.isValid()).toString()}
+        error={!this.props.webformElement.isValid()}
         className={this.props.className}
         min={this.props.field['#min']}
         max={this.props.field['#max']}
