@@ -9,12 +9,12 @@ import Label from './styled/label';
 import Checkbox from './styled/checkbox';
 import Indicator from './styled/indicator';
 import InnerLabel from './styled/inner-label';
-import FieldsetFormRow from '../Fieldset/styled/wrapper';
+import StyledFieldsetFormRow from './styled/fieldset';
 
 @observer
 class CheckboxField extends Component {
   static meta = {
-    wrapper: FieldsetFormRow,
+    wrapper: StyledFieldsetFormRow,
     label: Fieldset.meta.label,
     wrapperProps: Fieldset.meta.wrapperProps,
     field_display: {
