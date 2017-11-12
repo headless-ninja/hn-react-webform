@@ -8,11 +8,13 @@ export default styled.label`
   vertical-align: top;
   line-height: ${p => p.theme.inputHeight};
 
-  @media (min-width: 768px) {
-    float: left;
-    width: ${p => p.theme.inlineLabelWidth};
-    padding-right: calc(${p => p.theme.spacingUnit} / 2);
-  }
+  ${p => p.labelDisplay === 'inline' && `
+    @media (min-width: 768px) {
+      float: left;
+      width: ${p.theme.inlineLabelWidth};
+      padding-right: calc(${p.theme.spacingUnit} / 2);
+    }
+  `}
 
   ${p => p.labelDisplay === 'invisible' && `
     display: none;
