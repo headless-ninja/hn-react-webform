@@ -2,6 +2,8 @@ import { observer, inject } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import Fieldset from '../Fieldset';
+// styled
+import FieldsetFormRow from '../Fieldset/styled/wrapper';
 
 const FormulaParser = require('hot-formula-parser').Parser;
 
@@ -9,7 +11,7 @@ const FormulaParser = require('hot-formula-parser').Parser;
 @observer
 class Converse extends Component {
   static meta = {
-    wrapper: Fieldset.meta.wrapper,
+    wrapper: FieldsetFormRow,
     label: Fieldset.meta.label,
     wrapperProps: Fieldset.meta.wrapperProps,
     labelVisibility: Fieldset.meta.labelVisibility,

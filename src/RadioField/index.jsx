@@ -10,10 +10,11 @@ import Wrapper from './styled/wrapper';
 import RadioLabel from './styled/radio-label';
 import Radio from './styled/radio';
 import Indicator from './styled/indicator';
+import FieldsetFormRow from '../Fieldset/styled/wrapper';
 
 class RadioField extends Component {
   static meta = {
-    wrapper: Fieldset.meta.wrapper,
+    wrapper: FieldsetFormRow,
     label: Fieldset.meta.label,
     wrapperProps: Fieldset.meta.wrapperProps,
   };
