@@ -4,11 +4,13 @@ import { observer } from 'mobx-react';
 import { site } from 'hn-react';
 import composeLookUp from '../LookUp';
 import Fieldset from '../Fieldset';
+// styled
+import FieldsetFormRow from '../Fieldset/styled/wrapper';
 
 @observer
 class Address extends Component {
   static meta = {
-    wrapper: Fieldset.meta.wrapper,
+    wrapper: FieldsetFormRow,
     label: Fieldset.meta.label,
     wrapperProps: Fieldset.meta.wrapperProps,
     labelVisibility: Fieldset.meta.labelVisibility,
@@ -73,7 +75,7 @@ class Address extends Component {
       },
     };
 
-    this.lookUpBase = `${site.url}/postcode-api/address?_format=json`;
+    this.lookUpBase = `${site.url}/drupal/postcode-api/address?_format=json`;
   }
 
   prepareLookUp(fields) {

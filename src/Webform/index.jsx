@@ -214,7 +214,7 @@ class Webform extends Component {
     if(!extraFields.in_draft) {
       this.setState({ status: Webform.formStates.PENDING });
     }
-    return fetch(`${site.url}/hn-webform-submission?_format=json`, {
+    return fetch(`${site.url}/drupal/hn-webform-submission?_format=json`, {
       headers,
       method: 'POST',
       body: JSON.stringify(Object.assign({

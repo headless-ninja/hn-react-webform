@@ -61,7 +61,7 @@ class EmailField extends Component {
       shouldValidate: () => field.isBlurred && !field.isEmpty && validator.isEmail(field.value),
     });
 
-    this.lookUpBase = `${site.url}/neverbounce/validate-single?_format=json`;
+    this.lookUpBase = `${site.url}/drupal/neverbounce/validate-single?_format=json`;
   }
 
   prepareLookUp(fields) {
