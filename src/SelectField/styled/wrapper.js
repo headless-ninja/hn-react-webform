@@ -33,6 +33,7 @@ export default styled.div`
 
     & .Select--single > .Select-control .Select-value {
       height: calc((${p.theme.spacingUnit} / 2) + ${p.theme.inputLineHeight});
+      overflow: hidden;
     }
   `}
 
