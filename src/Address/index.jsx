@@ -75,7 +75,7 @@ class Address extends Component {
       },
     };
 
-    this.lookUpBase = `${site.url}/drupal/postcode-api/address?_format=json`;
+    this.lookUpBase = `${site.url}/postcode-api/address?_format=json`;
   }
 
   prepareLookUp(fields) {

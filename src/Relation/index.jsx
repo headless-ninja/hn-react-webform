@@ -57,7 +57,7 @@ class Relation extends Component {
       },
     };
 
-    this.lookUpBase = `${site.url}/drupal/salesforce-lookup/contact?_format=json`;
+    this.lookUpBase = `${site.url}/salesforce-lookup/contact?_format=json`;
 
     const field = props.formStore.getField(props.field['#webform_key']);
 
