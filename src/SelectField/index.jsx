@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Select from 'react-select';
 import WebformElement from '../WebformElement';
 // styled
 import Wrapper from './styled/wrapper';
-import Select from './styled/select';
 import ValidationIcon from './styled/validation-icon';
 
 /**
