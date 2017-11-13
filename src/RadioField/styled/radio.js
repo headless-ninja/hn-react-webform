@@ -12,7 +12,7 @@ export default styled.input`
   opacity: 0;
 
   &:focus {
-    & + .indicator {
+    & + ${Indicator} {
       box-shadow: 0 0 2px 3px ${p => p.theme.focusColor};
     }
   }
