@@ -99,11 +99,6 @@ class Webform extends Component {
 
     this.key = props.form.form_id;
 
-    /**
-     * @var {Form}
-     */
-    this.formStore = this.getFormstore(props);
-
     this.onSubmit = this.onSubmit.bind(this);
     this.converted = this.converted.bind(this);
     this.submit = this.submit.bind(this);
@@ -115,6 +110,13 @@ class Webform extends Component {
     if(GTM) {
       GoogleTag.addTag(GTM);
     }
+
+    // TODO: create formStore in willMount to support SSR
+    /**
+     * @var {Form}
+     */
+    this.formStore = this.getFormstore(this.props);
+    this.forceUpdate();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -226,6 +228,7 @@ class Webform extends Component {
   }
 
   render() {
+    if(!this.formStore) return null;
     const formElements = this.getFormElements();
     const multipage = this.isMultipage();
 
