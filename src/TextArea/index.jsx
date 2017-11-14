@@ -53,7 +53,7 @@ class TextArea extends Component {
           required={!this.props.state.required}
           {...attrs}
         />
-        <ValidationIcon success={this.props.webformElement.isSuccess()} />
+        <ValidationIcon success={this.props.webformElement.isSuccess()} className='hrw-validation-icon' />
       </div>
     );
   }

@@ -55,7 +55,7 @@ class RangeField extends Component {
           <RangeValueWrapper labelDisplay={this.getLabelPosition()}>
             <RangeValue style={{ left: `${this.getPercentageValue()}%` }}>{this.props.value}</RangeValue>
           </RangeValueWrapper>
-          <ValidationIcon success={this.props.webformElement.isSuccess()} />
+          <ValidationIcon success={this.props.webformElement.isSuccess()} className='hrw-validation-icon' />
         </Wrapper>
       </div>
     );

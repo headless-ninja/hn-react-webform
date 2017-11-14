@@ -59,7 +59,7 @@ class Input extends Component {
   render() {
     return (
       <div>
-        <Wrapper labelDisplay={this.getLabelDisplay()}>
+        <Wrapper labelDisplay={this.getLabelDisplay()} className={`hrw-input-wrap hrw-label-display-${this.getLabelDisplay()}`}>
           <InnerWrapper>
             {this.renderTextContent('prefix')}
             <BaseInput
@@ -69,7 +69,7 @@ class Input extends Component {
             {this.renderTextContent('suffix')}
           </InnerWrapper>
         </Wrapper>
-        <ValidationIcon success={this.props.webformElement.isSuccess()} />
+        <ValidationIcon success={this.props.webformElement.isSuccess()} className='hrw-validation-icon' />
       </div>
     );
   }

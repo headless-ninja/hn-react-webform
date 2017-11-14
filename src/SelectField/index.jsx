@@ -66,6 +66,7 @@ class SelectField extends Component {
       <Wrapper
         labelDisplay={this.getLabelPosition()}
         success={this.props.webformElement.isValid()}
+        className='hrw-select-wrapper'
       >
         <Select
           name={this.props.field['#webform_key']}
@@ -81,7 +82,7 @@ class SelectField extends Component {
           placeholder={this.props.field['#empty_option'] || 'Selecteer...'}
           openAfterFocus
         />
-        <ValidationIcon success={this.props.webformElement.isSuccess()} />
+        <ValidationIcon success={this.props.webformElement.isSuccess()} className='hrw-validation-icon' />
       </Wrapper>
     );
   }

@@ -250,6 +250,7 @@ class WebformElement extends Component {
           value={cssClass}
           class={addClass}
           labelDisplay={this.getLabelDisplay()}
+          className={`hrw-position-${cssClass} hrw-label-display-${this.getLabelDisplay()}`}
         >
           {Parser(template(this.props.formStore, value))}
         </TextContent>
@@ -265,7 +266,7 @@ class WebformElement extends Component {
     if(this.props.field['#title'] && show) {
       const Wrapper = getNested(() => element.class.meta.label) || Label;
       return (
-        <Wrapper labelDisplay={this.getLabelDisplay()} htmlFor={this.key} className='hrw-label'>
+        <Wrapper labelDisplay={this.getLabelDisplay()} htmlFor={this.key} className={`hrw-label hrw-label-display-${this.getLabelDisplay()}`}>
           {Parser(template(this.props.formStore, this.props.field['#title']))}
           {this.getField().required ? (<RequiredMarker>&nbsp;*</RequiredMarker>) : null}
         </Wrapper>

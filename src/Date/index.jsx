@@ -295,7 +295,7 @@ class Date extends Component {
             </Overlay>
           </OverlayWrapper>
         )}
-        <ValidationIcon success={this.props.webformElement.isSuccess()} />
+        <ValidationIcon success={this.props.webformElement.isSuccess()} className='hrw-validation-icon' />
       </Wrapper>
     );
   }
