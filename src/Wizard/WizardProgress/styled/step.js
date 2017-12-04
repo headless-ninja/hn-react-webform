@@ -7,6 +7,11 @@ export default styled.li`
   margin-right: 5px;
   background: #f4f4f4;
   z-index: ${p => 11 - p.step};
+  margin-left: -5px;
+  
+  &:first-child {
+    margin-left: 0;
+  }
 
   &::before {
     position: absolute;
@@ -14,8 +19,8 @@ export default styled.li`
     top: 0;
     left: 0;
     border-left: 20px solid #fff;
-    border-bottom: 24px solid transparent;
-    border-top: 24px solid transparent;
+    border-bottom: 22.5px solid transparent;
+    border-top: 22.5px solid transparent;
     clear: both;
   }
 
@@ -25,12 +30,12 @@ export default styled.li`
     top: 0;
     right: -20px;
     border-left: 20px solid #f4f4f4;
-    border-bottom: 24px solid transparent;
-    border-top: 24px solid transparent;
+    border-bottom: 22.5px solid transparent;
+    border-top: 22.5px solid transparent;
     clear: both;
   }
   
-  ${p => p.step === 1 && `
+  ${p => p.step === 0 && `
     &::before {
       display: none;
     }
