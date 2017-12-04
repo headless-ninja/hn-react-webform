@@ -30,7 +30,7 @@ export default styled.li`
     clear: both;
   }
   
-  ${p => p.step === 1 `
+  ${p => p.step === 1 && `
     &::before {
       display: none;
     }
