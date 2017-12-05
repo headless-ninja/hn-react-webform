@@ -16,22 +16,22 @@ export default styled.li`
   &::before {
     position: absolute;
     content: '';
-    top: 0;
+    top: -1px;
     left: 0;
     border-left: 20px solid #fff;
-    border-bottom: 22.5px solid transparent;
-    border-top: 22.5px solid transparent;
+    border-bottom: 23.5px solid transparent;
+    border-top: 23.5px solid transparent;
     clear: both;
   }
 
   &::after {
     position: absolute;
     content: '';
-    top: 0;
-    right: -20px;
+    top: -1px;
+    right: -19px;
     border-left: 20px solid #f4f4f4;
-    border-bottom: 22.5px solid transparent;
-    border-top: 22.5px solid transparent;
+    border-bottom: 23.5px solid transparent;
+    border-top: 23.5px solid transparent;
     clear: both;
   }
   
