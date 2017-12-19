@@ -282,7 +282,7 @@ class Date extends Component {
           <OverlayWrapper>
             <Overlay>
               <DayPicker
-                ref={el => this.setRef('daypicker', el)}
+                innerRef={el => this.setRef('daypicker', el)}
                 initialMonth={this.state.selectedDay || undefined}
                 onDayClick={this.handleDayClick}
                 selectedDays={this.state.selectedDay}
