@@ -172,10 +172,11 @@ class Webform extends Component {
     ));
   }
 
-  converted() {
+  converted(converted) {
     this.props.onSubmitSuccess({
       webform: this,
       response: this.response,
+      converted,
     }); // Trigger onSubmitSuccess hook.
   }
 
@@ -287,8 +288,8 @@ class Webform extends Component {
                 {this.state.status === Webform.formStates.SENT && (
                   <Script
                     url='//cdn-static.formisimo.com/tracking/js/conversion.js'
-                    onLoad={this.converted}
-                    onError={this.converted}
+                    onLoad={() => this.converted(true)}
+                    onError={() => this.converted(false)}
                   />
                 )}
               </div>
