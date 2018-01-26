@@ -288,7 +288,7 @@ class Webform extends Component {
                   <Script
                     url='//cdn-static.formisimo.com/tracking/js/conversion.js'
                     onLoad={this.converted}
-                    onError={() => {}}
+                    onError={this.converted}
                   />
                 )}
               </div>
