@@ -82,7 +82,7 @@ class Form {
     const values = {};
 
     this.visibleFields.filter(field => !field.isEmpty).forEach((field) => {
-      values[field.key] = typeof field.componentClass.rewriteValue === 'function' ? field.componentClass.rewriteValue(field.value) : field.value;
+      values[field.key] = typeof field.componentClass.rewriteValue === 'function' ? field.componentClass.rewriteValue(field.value, values) : field.value;
     });
 
     return values;
