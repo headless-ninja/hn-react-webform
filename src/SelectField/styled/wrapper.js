@@ -463,7 +463,7 @@ export default styled.div`
   padding-right: 20px;
 
   @media (min-width: 768px) {
-    width: calc(${p => p.theme.inputWidth} * 1.3);
+    width: calc(${p => p.theme.inlineLabelWidth} + ${p => p.theme.inputWidth} + 20px);
   }
 
   ${p => p.labelDisplay === 'inline' && `
@@ -472,6 +472,7 @@ export default styled.div`
 
     @media (min-width: 768px) {
       display: inline-block;
+      width: calc(${p.theme.inputWidth} * 1.3);
     }
 
     & .Select-placeholder,
