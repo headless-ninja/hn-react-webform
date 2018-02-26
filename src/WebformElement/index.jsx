@@ -168,7 +168,7 @@ class WebformElement extends Component {
 
   getLabelDisplay() {
     const elementClass = this.getField().componentClass;
-    return getNested(() => elementClass.meta.labelVisibility) || this.props.field['#title_display'];
+    return getNested(() => elementClass.meta.labelVisibility) || this.props.field['#title_display'] || 'inline';
   }
 
   /**
