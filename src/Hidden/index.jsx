@@ -22,7 +22,7 @@ const Hidden = props => (
  * @returns {*}
  */
 Hidden.rewriteValue = (value, values) => {
-  if(!value.startsWith('~') || !value.endsWith('~')) return value;
+  if(!value || !value.toString().startsWith('~') || !value.toString().endsWith('~')) return value;
   return Converse.calculateFormula(values, value.slice(1, -1));
 };
 
