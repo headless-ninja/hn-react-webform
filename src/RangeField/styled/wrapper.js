@@ -23,7 +23,7 @@ export default styled.div`
     padding-right: 20px;
 
     @media (min-width: 768px) {
-      width: calc(50% + ${p.theme.inputWidth} + 20px);
+      width: calc(${p.theme.inlineLabelWidth} + ${p.theme.inputWidth} + 20px);
     }
   `}
 `;
