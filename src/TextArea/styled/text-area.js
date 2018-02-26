@@ -24,7 +24,7 @@ export default styled.textarea`
     resize:vertical;
 
     @media (min-width: 768px) {
-      width: calc(50% + ${p.theme.inputWidth});
+      width: calc(${p.theme.inlineLabelWidth} + ${p.theme.inputWidth});
     }
   `}
 
