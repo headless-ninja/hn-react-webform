@@ -461,6 +461,7 @@ export default styled.div`
   position: relative;
   width: calc(${p => p.theme.inputWidth} + 20px);
   padding-right: 20px;
+  max-width: calc(100% + 20px);
 
   @media (min-width: 768px) {
     width: calc(${p => p.theme.inlineLabelWidth} + ${p => p.theme.inputWidth} + 20px);

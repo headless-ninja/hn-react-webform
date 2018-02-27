@@ -9,6 +9,7 @@ export default styled.div`
 
   ${p => p.labelDisplay === 'before' && `
     width: ${p.theme.inputWidth};
+    max-width: 100%;
 
     @media (min-width: 768px) {
       width: calc(${p.theme.inlineLabelWidth} + ${p.theme.inputWidth});
