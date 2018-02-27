@@ -10,7 +10,7 @@ export default styled.label`
     'two_columns',
     'three_columns',
   ].includes(p.optionDisplay) && `
-    margin-right: calc(${p.theme.spacingUnit} / 1.5);
+    margin-right: calc(${p.theme.spacingUnit} / 1);
     display: inline-block;
     width: auto;
   `}
