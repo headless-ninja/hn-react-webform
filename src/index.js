@@ -20,6 +20,7 @@ import FormRow from './FormRow';
 import Parser from './Parser';
 import Number from './Number';
 import Converse from './Converse';
+import Label from './WebformElement/styled/label';
 
 const components = {
 
@@ -67,4 +68,4 @@ const components = {
 };
 
 export default Webform;
-export { components, FetchForm, Parser };
+export { components, FetchForm, Parser, Label };
