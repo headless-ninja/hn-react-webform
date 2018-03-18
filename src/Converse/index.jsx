@@ -44,7 +44,7 @@ class Converse extends Component {
    */
   static calculateFormula(values, formula) {
     const parser = new FormulaParser();
-    const formattedFormula = formula.replace(/\|([0-9])\|/g, ''); // Remove all fallback values from formula (|1|)
+    const formattedFormula = formula.replace(/\|([0-9]+)\|/g, ''); // Remove all fallback values from formula (|1|)
     const formulaParts = formula.split('|'); // Split formula into parts, an array of fields & fallback values ('field|1| + field2|0|' => ['field', 1, 'field2', 0])
     parser.on('callVariable', (name, done) => { // Get's called on every variable during calculation
       const value = values[name]; // Get field value from store
