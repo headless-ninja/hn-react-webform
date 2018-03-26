@@ -11,7 +11,12 @@ class Forms {
 
     this.forms[formID] = Forms.createForm(formID, options);
 
-    return this.getForm(formID);
+    return this.forms[formID];
+  }
+
+  @action
+  deleteForm(formID) {
+    delete this.forms[formID];
   }
 
   @action

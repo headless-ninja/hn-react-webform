@@ -188,6 +188,11 @@ class Webform extends Component {
     return getNested(() => this.props.form.elements, []).find(element => element['#webform_key'] === 'wizard_pages') !== undefined;
   }
 
+  resetForm() {
+    Forms.deleteForm(this.props.form.form_id);
+    this.formStore = this.getFormstore(this.props);
+  }
+
   async updateSubmission() {
     let response = await this.props.onSubmit(this); // Trigger onSubmit hook and store response.
     if(!response || response.submit !== false) { // If onSubmit hook response is false, don't trigger default submit.
@@ -197,6 +202,7 @@ class Webform extends Component {
     if(response.status === 200 || response.status === 201) {
       this.response = response;
       this.setState({ status: Webform.formStates.SENT });
+      this.resetForm();
     } else {
       this.setState({
         status: Webform.formStates.ERROR,
@@ -217,15 +223,20 @@ class Webform extends Component {
     if(!extraFields.in_draft) {
       this.setState({ status: Webform.formStates.PENDING });
     }
-    return fetch(`${site.url}/hn-webform-submission?_format=json`, {
-      headers,
-      method: 'POST',
-      body: JSON.stringify(Object.assign({
-        form_id: this.props.form.form_id,
-      }, extraFields, values)),
-    })
-      .then(response => response.json())
-      .catch(console.error);
+
+    try {
+      const response = await fetch(`${site.url}/hn-webform-submission?_format=json`, {
+        headers,
+        method: 'POST',
+        body: JSON.stringify(Object.assign({
+          form_id: this.props.form.form_id,
+        }, extraFields, values)),
+      });
+      return response.json();
+    } catch(err) {
+      console.error(err);
+      return null;
+    }
   }
 
   render() {
