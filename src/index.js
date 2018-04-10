@@ -49,6 +49,7 @@ const components = {
   natuurmonumenten_relation: Relation,
   natuurmonumenten_relation_address: Relation,
   webform_converse_payment: Converse,
+  webform_element_converse_payment: Converse,
 
   // Legacy elements
   webform_email_custom: EmailField,
