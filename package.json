@@ -33,7 +33,6 @@
     "react-day-picker": "^5.5.1",
     "react-html-parser": "^1.0.3",
     "react-input-mask": "^0.8.0",
-    "react-load-script": "0.0.3",
     "react-select": "^1.0.0-rc.4",
     "styled-components": "^2.2.3",
     "validator": "^7.0.0"

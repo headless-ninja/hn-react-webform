@@ -4,7 +4,6 @@ import GoogleTag from 'google_tag';
 import { observer, Provider } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Script from 'react-load-script';
 import { ThemeProvider } from 'styled-components';
 import { site } from 'hn-react';
 import Forms from '../Observables/Forms';
@@ -100,7 +99,6 @@ class Webform extends Component {
     this.key = props.form.form_id;
 
     this.onSubmit = this.onSubmit.bind(this);
-    this.converted = this.converted.bind(this);
     this.submit = this.submit.bind(this);
   }
 
@@ -172,14 +170,6 @@ class Webform extends Component {
     ));
   }
 
-  converted(converted) {
-    this.props.onSubmitSuccess({
-      webform: this,
-      response: this.response,
-      converted,
-    }); // Trigger onSubmitSuccess hook.
-  }
-
   isValid() {
     return this.formStore.valid;
   }
@@ -202,6 +192,11 @@ class Webform extends Component {
     if(response.status === 200 || response.status === 201) {
       this.response = response;
       this.setState({ status: Webform.formStates.SENT });
+      this.props.onSubmitSuccess({
+        webform: this,
+        response: this.response,
+        values: this.formStore.values,
+      }); // Trigger onSubmitSuccess hook.
       this.resetForm();
     } else {
       this.setState({
@@ -288,22 +283,6 @@ class Webform extends Component {
             )}
             {this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT && (
               <ThankYouMessage message={this.props.form.settings.confirmation_message} />
-            )}
-            {this.props.settings.tracking !== false && (
-              <div>
-                <Script
-                  url='//cdn-static.formisimo.com/tracking/js/tracking.js'
-                  onLoad={() => {}}
-                  onError={() => {}}
-                />
-                {this.state.status === Webform.formStates.SENT && (
-                  <Script
-                    url='//cdn-static.formisimo.com/tracking/js/conversion.js'
-                    onLoad={() => this.converted(true)}
-                    onError={() => this.converted(false)}
-                  />
-                )}
-              </div>
             )}
           </StyledWebform>
         </ThemeProvider>
