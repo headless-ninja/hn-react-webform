@@ -10,11 +10,17 @@ const SubmitButton = ({ form, formStore, status, ...props }) => {
   const settings = form.settings;
   const disabled = status === Webform.formStates.PENDING;
 
+  const label = template(formStore, settings.form_submit_label);
+
+  if(!label || label === '') {
+    return null;
+  }
+
   return (
     <div>
       <BaseButton
         disabled={disabled}
-        label={template(formStore, settings.form_submit_label)}
+        label={label}
         formSubmitAttributes={settings.form_submit_attributes}
         {...props}
         type='submit'
