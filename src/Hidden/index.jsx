@@ -38,4 +38,6 @@ DecoratedHidden.meta = {
   wrapperProps: { style: { display: 'none' } },
 };
 
+DecoratedHidden.rewriteValue = Hidden.rewriteValue;
+
 export default DecoratedHidden;
