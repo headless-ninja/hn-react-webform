@@ -100,6 +100,8 @@ class Webform extends Component {
 
     this.onSubmit = this.onSubmit.bind(this);
     this.submit = this.submit.bind(this);
+
+    this.formStore = this.getFormstore(props);
   }
 
   componentDidMount() {
@@ -108,13 +110,6 @@ class Webform extends Component {
     if(GTM) {
       GoogleTag.addTag(GTM);
     }
-
-    // TODO: create formStore in willMount to support SSR
-    /**
-     * @var {Form}
-     */
-    this.formStore = this.getFormstore(this.props);
-    this.forceUpdate();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -246,14 +241,14 @@ class Webform extends Component {
     ) {
       requiredHint = <span>{Parser(this.props.form.settings.nm_required_hint)}</span>;
     }
-    const errors = (
+    const errors = Object.entries(this.state.errors);
+    const errorsEl = errors.length > 0 && (
       <List>
-        {Object.entries(this.state.errors).map(([key, error]) => (
+        {errors.map(([key, error]) => (
           <ListItem key={key}>
             <Element error>{key.replace(/]\[/g, '.')}: <em>{Parser(error)}</em></Element>
           </ListItem>
-          ),
-        )}
+        ))}
       </List>
     );
 
@@ -261,8 +256,10 @@ class Webform extends Component {
       <Provider formStore={this.formStore} submit={this.submit} webform={this}>
         <ThemeProvider theme={{ ...theme, ...this.props.theme }}>
           <StyledWebform>
-            <FormTitle>{this.props.settings.title}</FormTitle>
-            {this.state.status !== Webform.formStates.SENT && errors}
+            {this.props.settings.title && (
+              <FormTitle>{this.props.settings.title}</FormTitle>
+            )}
+            {this.state.status !== Webform.formStates.SENT && errorsEl}
             {this.state.status !== Webform.formStates.SENT && (
               <form
                 method='POST'
