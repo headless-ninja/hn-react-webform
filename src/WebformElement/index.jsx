@@ -137,20 +137,14 @@ class WebformElement extends Component {
         class: ElementComponent,
         element: (
           <ElementComponent
+            {...this.props}
             value={this.getValue()}
             name={this.key}
             onChange={this.onChange}
             onBlur={this.onBlur}
-            field={this.props.field}
-            formStore={this.props.formStore}
             validations={this.state.validations}
             webformElement={this}
-            settings={this.props.settings}
-            webformSettings={this.props.webformSettings}
             state={this.getField()}
-            webformPage={this.props.webformPage}
-            status={this.props.status}
-            form={this.props.form}
           />
         ),
       };
