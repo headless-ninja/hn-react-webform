@@ -8,7 +8,6 @@ import { ThemeProvider } from 'styled-components';
 import { site } from 'hn-react';
 import Forms from '../Observables/Forms';
 import Parser from '../Parser';
-import SubmitButton from '../SubmitButton';
 import ThankYouMessage from './ThankYouMessage';
 import WebformElement from '../WebformElement';
 import theme from '../styles/theme';
@@ -71,6 +70,8 @@ class Webform extends Component {
     noValidation: PropTypes.bool,
     showThankYouMessage: PropTypes.bool,
     theme: PropTypes.shape(),
+    loadingTimeout: PropTypes.number,
+    loadingComponent: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   };
 
   static defaultProps = {
@@ -86,6 +87,8 @@ class Webform extends Component {
     noValidation: true,
     showThankYouMessage: true,
     theme: {},
+    loadingTimeout: 500,
+    loadingComponent: undefined,
   };
 
   constructor(props) {
@@ -94,6 +97,7 @@ class Webform extends Component {
     this.state = {
       status: Webform.formStates.DEFAULT,
       errors: {},
+      loadingTimeout: false,
     };
 
     this.key = props.form.form_id;
@@ -114,6 +118,10 @@ class Webform extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.formStore = this.getFormstore(nextProps);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.loadingTimeout);
   }
 
   onSubmit(e) {
@@ -161,6 +169,8 @@ class Webform extends Component {
         webformSettings={this.props.settings}
         status={this.state.status}
         form={this.props.form}
+        loadingTimeout={this.state.loadingTimeout}
+        loadingComponent={this.props.loadingComponent}
       />
     ));
   }
@@ -169,20 +179,25 @@ class Webform extends Component {
     return this.formStore.valid;
   }
 
-  isMultipage() {
-    return getNested(() => this.props.form.elements, []).find(element => element['#webform_key'] === 'wizard_pages') !== undefined;
-  }
-
   resetForm() {
     Forms.deleteForm(this.props.form.form_id);
     this.formStore = this.getFormstore(this.props);
   }
 
   async updateSubmission() {
+    if(this.props.loadingComponent) {
+      this.loadingTimeout = setTimeout(() => {
+        this.setState({ loadingTimeout: true });
+      }, this.props.loadingTimeout);
+    }
+
     let response = await this.props.onSubmit(this); // Trigger onSubmit hook and store response.
     if(!response || response.submit !== false) { // If onSubmit hook response is false, don't trigger default submit.
       response = await this.submit();
     }
+
+    clearTimeout(this.loadingTimeout);
+    this.setState({ loadingTimeout: false });
 
     if(response.status === 200 || response.status === 201) {
       this.response = response;
@@ -232,7 +247,6 @@ class Webform extends Component {
   render() {
     if(!this.formStore) return null;
     const formElements = this.getFormElements();
-    const multipage = this.isMultipage();
 
     let requiredHint = null;
     if(
@@ -270,12 +284,6 @@ class Webform extends Component {
               >
                 {requiredHint}
                 {formElements}
-                {!multipage && (
-                  <SubmitButton
-                    form={this.props.form}
-                    status={this.state.status}
-                  />
-                )}
               </form>
             )}
             {this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT && (
