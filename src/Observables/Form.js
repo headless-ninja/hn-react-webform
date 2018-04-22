@@ -1,4 +1,5 @@
 import { observable, computed, action } from 'mobx';
+import getNested from 'get-nested';
 import Field from './Field';
 
 class Form {
@@ -117,6 +118,11 @@ class Form {
   }
 
   @observable isSubmitting = false;
+
+  @action.bound
+  isMultipage() {
+    return (getNested(() => this.form.elements) || []).find(element => element['#webform_key'] === 'wizard_pages') !== undefined;
+  }
 
 }
 
