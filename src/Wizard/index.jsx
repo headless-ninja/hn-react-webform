@@ -22,9 +22,7 @@ class WizardPages extends Component {
     field: PropTypes.shape({
       composite_elements: PropTypes.arrayOf(PropTypes.shape()).isRequired,
     }).isRequired,
-    form: PropTypes.shape({
-      settings: PropTypes.object.isRequired,
-    }).isRequired,
+    form: PropTypes.shape().isRequired,
     status: PropTypes.string.isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
     submit: PropTypes.func.isRequired,
@@ -124,14 +122,21 @@ class WizardPages extends Component {
           </ButtonPrev>
           <ButtonNext>
             {(this.props.formStore.page === pages[pages.length - 1]['#webform_key'])
-              ? <SubmitButton
-                form={this.props.form}
-                status={this.props.status}
-              />
-              : <BaseButton
-                label={getNested(() => pages[pageI]['#next_button_label']) || getNested(() => this.props.form.settings.wizard_next_button_label) || 'Next page'}
-                type='submit'
-              />
+              ? (
+                <SubmitButton
+                  form={this.props.form}
+                  formStore={this.props.formStore}
+                  status={this.props.status}
+                  field={this.props.form.elements.find(element => element['#type'] === 'webform_actions')}
+                  show
+                />
+              )
+              : (
+                <BaseButton
+                  label={getNested(() => pages[pageI]['#next_button_label']) || getNested(() => this.props.form.settings.wizard_next_button_label) || 'Next page'}
+                  type='submit'
+                />
+              )
             }
           </ButtonNext>
         </ButtonWrapper>

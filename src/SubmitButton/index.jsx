@@ -6,11 +6,14 @@ import { template } from '../Parser';
 import BaseButton from '../BaseButton';
 import FormStore from '../Observables/Form';
 
-const SubmitButton = ({ form, formStore, status, ...props }) => {
-  const settings = form.settings;
+const SubmitButton = ({ field, formStore, status, show, loadingTimeout, loadingComponent }) => {
+  if(field['#submit__hide'] === true || (show === false && formStore.isMultipage())) {
+    return null;
+  }
+
   const disabled = status === Webform.formStates.PENDING;
 
-  const label = template(formStore, settings.form_submit_label);
+  const label = template(formStore, field['#submit__label']);
 
   if(!label || label === '') {
     return null;
@@ -21,24 +24,37 @@ const SubmitButton = ({ form, formStore, status, ...props }) => {
       <BaseButton
         disabled={disabled}
         label={label}
-        formSubmitAttributes={settings.form_submit_attributes}
-        {...props}
+        formSubmitAttributes={field['#submit__attributes']}
         type='submit'
       />
+      {loadingTimeout && (
+        loadingComponent
+      )}
     </div>
   );
 };
 
+SubmitButton.meta = {
+  labelVisibility: 'invisible',
+};
+
 SubmitButton.propTypes = {
-  form: PropTypes.shape({
-    settings: PropTypes.object.isRequired,
-  }).isRequired,
+  field: PropTypes.shape().isRequired,
   status: PropTypes.string.isRequired,
   formStore: PropTypes.instanceOf(FormStore).isRequired,
+  show: PropTypes.bool,
+  loadingTimeout: PropTypes.bool.isRequired,
+  loadingComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
 };
 
 SubmitButton.defaultProps = {
   type: 'button',
+  show: false,
+  loadingComponent: undefined,
 };
 
-export default inject('formStore')(observer(SubmitButton));
+const DecoratedSubmitButton = inject('formStore')(observer(SubmitButton));
+
+DecoratedSubmitButton.meta = SubmitButton.meta;
+
+export default DecoratedSubmitButton;

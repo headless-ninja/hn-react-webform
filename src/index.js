@@ -21,6 +21,7 @@ import Parser from './Parser';
 import Number from './Number';
 import Converse from './Converse';
 import Label from './WebformElement/styled/label';
+import SubmitButton from './SubmitButton';
 
 const components = {
 
@@ -40,6 +41,7 @@ const components = {
   webform_wizard_pages: WizardPages,
   webform_wizard_page: Fieldset,
   webform_message: ParagraphField,
+  webform_actions: SubmitButton,
 
   // Custom elements
   dutch_address: Address,
