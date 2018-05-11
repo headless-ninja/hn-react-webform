@@ -30,7 +30,7 @@ class IBAN extends Component {
     rules.set(`iban_${props.field['#webform_key']}`, {
       rule: value => isValidIBAN(value),
       hint: () =>
-        <RuleHint key={`iban_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'ibanError', props.settings) || site.t('Please enter a valid IBAN.')} />,
+        <RuleHint key={`iban_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'ibanError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || site.t('Please enter a valid IBAN.')} />,
       shouldValidate: field => field.isBlurred,
     });
   }
