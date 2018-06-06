@@ -14,6 +14,11 @@ class WebformUtils {
     return getNested(() => settings.custom_elements[key]['#default_value'], null);
   }
 
+  static getErrorMessage(field, key) {
+    const errorMessage = getNested(() => field[key], null);
+    return errorMessage && errorMessage !== '' ? errorMessage : null;
+  }
+
   static validateRule(rule, field, force = false) {
     if(!rule) return true;
     else if(force || !rule.shouldValidate || rule.shouldValidate(field)) {

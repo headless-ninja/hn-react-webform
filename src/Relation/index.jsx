@@ -106,7 +106,7 @@ class Relation extends Component {
         onBlur={this.props.onBlur}
       >
         {field.lookupSent && !field.lookupSuccessful && (
-          <RuleHint component={<ValidationMessage />} key={`relation_${this.props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(this.props.field, 'relationError', this.props.settings) || site.t('We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.')} />
+          <RuleHint component={<ValidationMessage />} key={`relation_${this.props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(this.props.field, 'relationError', this.props.settings) || WebformUtils.getErrorMessage(this.props.field, '#required_error') || site.t('We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.')} />
         )}
       </Fieldset>
     );
