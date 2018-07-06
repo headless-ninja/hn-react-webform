@@ -27,10 +27,14 @@ export const parse = (formula, values) => {
     return result.replace(variable, value);
   }, formattedFormula);
 
-  if(replacedFormula.match(/[^-()\d\s/*+.]/g)) {
-    throw new Error(`Invalid characters found in formula ${replacedFormula.toString()}`);
+  // Replace comma's with periods.
+  const removeCommasFormula = replacedFormula.replace(/,/g, '.');
+
+  if(removeCommasFormula.match(/[^-()\d\s/*+.]/g)) {
+    console.error(`Invalid characters found in formula ${removeCommasFormula.toString()}`);
+    return 0;
   }
 
   // eslint-disable-next-line no-eval
-  return eval(replacedFormula);
+  return eval(removeCommasFormula);
 };
