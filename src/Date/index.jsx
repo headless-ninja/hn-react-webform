@@ -70,7 +70,7 @@ class Date extends Component {
 
   static rewriteValue(value) {
     const date = moment(value, Date.dateFormat, true);
-    return date.format('YYYY/MM/DD');
+    return date.format('DD-MM-YYYY');
   }
 
   static dateFormat = 'DD/MM/YYYY';
