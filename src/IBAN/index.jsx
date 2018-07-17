@@ -22,6 +22,10 @@ class IBAN extends Component {
     settings: PropTypes.shape().isRequired,
   };
 
+  static rewriteValue(value) {
+    return (value || '').replace(/\s/g, '').toUpperCase();
+  }
+
   constructor(props) {
     super(props);
 
