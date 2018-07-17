@@ -21,6 +21,8 @@ function composeLookUp(LookUpComponent) {
       onChange: PropTypes.func.isRequired,
     };
 
+    static rewriteValue = LookUpComponent.rewriteValue;
+
     constructor(props) {
       super(props);
 
