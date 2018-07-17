@@ -37,7 +37,7 @@ class Address extends Component {
       postcode: {
         elementKey: 'postcode',
         formKey: `address_postcode${props.formKeySuffix}`,
-        apiValue: () => false,
+        apiValue: address => (address.postcode || '').toUpperCase(),
         triggerLookup: true,
       },
       number: {
