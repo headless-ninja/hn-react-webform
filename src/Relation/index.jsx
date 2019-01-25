@@ -93,7 +93,7 @@ class Relation extends Component {
 
     return {
       query,
-      checkResponse: json => (json.Id && (!this.props.field['#membership_validation'] || json.Aantal_lidmaatschappen__c.toString() === '1')) || false,
+      checkResponse: json => (json.Id && (!this.props.field['#membership_validation'] || parseInt(json.Aantal_lidmaatschappen__c, 10) > 0)) || false,
       isSuccessful: response => (!!response),
     };
   }
