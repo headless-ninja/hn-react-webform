@@ -32,6 +32,8 @@ class Date extends Component {
     field: PropTypes.shape({
       '#webform_key': PropTypes.string,
       '#default_value': PropTypes.string,
+      '#date_date_min': PropTypes.string,
+      '#date_date_max': PropTypes.string,
       '#min': PropTypes.string,
       '#max': PropTypes.string,
       '#mask': PropTypes.oneOfType([
@@ -78,8 +80,8 @@ class Date extends Component {
   constructor(props) {
     super(props);
 
-    this.min = props.field['#min'];
-    this.max = props.field['#max'];
+    this.min = props.field['#min'] || props.field['#date_date_min'];
+    this.max = props.field['#max'] || props.field['#date_date_max'];
 
     rules.set(`date_${props.field['#webform_key']}`, {
       rule: (value) => {
