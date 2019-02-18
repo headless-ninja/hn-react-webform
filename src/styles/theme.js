@@ -6,6 +6,7 @@ const theme = {
   borderRadius: '2px',
   secondaryColor: 'blue',
   inputWidth: '250px',
+  textAreaHeight: '40px',
   inputLineHeight: '1.6em',
   inputBgColor: '#fdfdfd',
   inlineLabelWidth: '50%',
