@@ -20,7 +20,7 @@ export default styled.textarea`
     width: ${p.theme.inputWidth};
     max-width: calc(100% - 10px);
     min-width: ${p.theme.inputWidth};
-    min-height: 40px;
+    min-height: ${p.theme.textAreaHeight};
     resize:vertical;
 
     @media (min-width: 768px) {
