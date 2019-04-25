@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import validator from 'validator';
+import { get } from 'mobx';
 import { observer } from 'mobx-react';
 import { site } from 'hn-react';
 import rules from '../Webform/rules';
@@ -31,6 +32,7 @@ class EmailField extends Component {
     onBlur: PropTypes.func.isRequired,
     settings: PropTypes.shape().isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
+    registerLookUp: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -40,12 +42,13 @@ class EmailField extends Component {
       email: {
         elementKey: 'email',
         formKey: props.field['#webform_key'],
-        triggerLookup: true,
+        triggerLookUp: true,
         apiValue: () => false,
         required: true,
       },
     };
 
+    const lookUpKey = this.getLookUpKey(props);
     const field = props.formStore.getField(props.field['#webform_key']);
 
     rules.set(`email_${props.field['#webform_key']}`, {
@@ -55,13 +58,21 @@ class EmailField extends Component {
       shouldValidate: () => field.isBlurred && !field.isEmpty,
     });
     rules.set(`email_neverbounce_${props.field['#webform_key']}`, {
-      rule: () => field.isEmpty || field.lookupSuccessful,
+      rule: () => {
+        const lookup = get(field.lookups, lookUpKey);
+        return field.isEmpty || !lookup || lookup.lookupSuccessful;
+      },
       hint: () =>
         <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'neverBounceError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || site.t('Please enter a valid email.')} />,
       shouldValidate: () => field.isBlurred && !field.isEmpty && validator.isEmail(field.value),
     });
 
-    this.lookUpBase = `${site.url}/neverbounce/validate-single?_format=json`;
+
+    props.registerLookUp(lookUpKey, this.lookUpFields);
+  }
+
+  getLookUpKey(props) {
+    return `${(props || this.props).field['#webform_key']}-email`;
   }
 
   prepareLookUp(fields) {

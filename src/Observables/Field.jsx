@@ -1,5 +1,5 @@
 import React from 'react';
-import { observable, computed } from 'mobx';
+import { observable, computed, values } from 'mobx';
 import getNested from 'get-nested';
 import { site } from 'hn-react';
 import RuleHint from '../RuleHint';
@@ -51,11 +51,7 @@ class Field {
    */
   @observable isBlurred = false;
 
-  @observable lookupSent = false;
-
-  @observable lookupSuccessful = true;
-
-  @observable lookupHide = false;
+  @observable lookups = {};
 
   constructor(formStore, element, parent) {
     if(!element['#webform_key']) {
@@ -177,7 +173,8 @@ class Field {
   }
 
   @computed get visible() {
-    if(this.lookupHide && !this.lookupSent) return false;
+    const lookups = values(this.lookups);
+    if(lookups.length > 0 && lookups.every(l => l.lookupHide && !l.lookupSent)) return false;
     return (this.parent ? this.parent.visible : true) && (typeof this.conditionalLogicResults.visible === 'undefined') ? true : this.conditionalLogicResults.visible;
   }
 
