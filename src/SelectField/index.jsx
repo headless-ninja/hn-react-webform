@@ -81,6 +81,7 @@ class SelectField extends Component {
           autoBlur
           placeholder={this.props.field['#empty_option'] || 'Selecteer...'}
           openAfterFocus
+          joinValues
         />
         <ValidationIcon success={this.props.webformElement.isSuccess()} className='hrw-validation-icon' />
       </Wrapper>
