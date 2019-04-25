@@ -103,8 +103,6 @@ class EmailField extends Component {
         {...this.props}
         type='email'
         autoComplete='email'
-        onBlur={this.props.onBlur}
-        onChange={this.props.onChange}
       />
     );
   }

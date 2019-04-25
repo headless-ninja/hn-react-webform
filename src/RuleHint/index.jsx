@@ -22,6 +22,7 @@ class RuleHint extends Component {
           className: PropTypes.string,
         }),
       }),
+      PropTypes.node,
     ]),
     formStore: PropTypes.instanceOf(FormStore).isRequired,
   };
