@@ -4212,27 +4212,6 @@ hmac-drbg@^1.0.0:
     minimalistic-assert "^1.0.0"
     minimalistic-crypto-utils "^1.0.1"
 
-hn-react@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/hn-react/-/hn-react-1.6.1.tgz#0f0991b0d0a931de0a1d94e5051e28e89322d7b3"
-  dependencies:
-    babel-runtime "^6.25.0"
-    get-nested "^4.0.0"
-    prop-types "^15.5.10"
-
-hn@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/hn/-/hn-0.5.0.tgz#f26890bf2cbfd097d07d0038745df2956b9c6780"
-  dependencies:
-    deepmerge "^1.5.0"
-    es6-promise "^4.1.1"
-    fetch-ponyfill "^4.1.0"
-    get-nested "^4.0.0"
-    isomorphic-fetch "^2.2.1"
-    query-string "^5.0.0"
-    rimraf "^2.6.2"
-    universal-fetch "^1.0.0"
-
 hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"

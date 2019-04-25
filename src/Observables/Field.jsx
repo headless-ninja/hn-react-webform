@@ -1,7 +1,6 @@
 import React from 'react';
 import { observable, computed, values } from 'mobx';
 import getNested from 'get-nested';
-import { site } from 'hn-react';
 import RuleHint from '../RuleHint';
 import rules from '../Webform/rules';
 import { components } from '../index';
@@ -81,7 +80,7 @@ class Field {
       hint: value =>
         (<RuleHint
           key={`req_${this.key}`}
-          hint={WebformUtils.getCustomValue(this.element, 'requiredError', this.formStore.form.settings) || WebformUtils.getErrorMessage(element, '#required_error') || site.t('This field is required')}
+          hint={WebformUtils.getCustomValue(this.element, 'requiredError', this.formStore.form.settings) || WebformUtils.getErrorMessage(element, '#required_error') || 'This field is required'}
           tokens={{
             value,
             name: this.element['#title'],
@@ -96,7 +95,7 @@ class Field {
         rule: (value = '') => new RegExp(pattern).test(value) || this.isEmpty,
         hint: (value) => {
           const patternError = WebformUtils.getCustomValue(this.element, 'patternError', this.formStore.form.settings);
-          const populatedPatternError = getNested(() => this.formStore.form.settings.custom_elements.patternError['#options'][patternError], this.element['#patternError'] || WebformUtils.getErrorMessage(element, '#required_error') || site.t('Please enter a valid value.'));
+          const populatedPatternError = getNested(() => this.formStore.form.settings.custom_elements.patternError['#options'][patternError], this.element['#patternError'] || WebformUtils.getErrorMessage(element, '#required_error') || 'Please enter a valid value.');
           return <RuleHint key={`pattern_${this.key}`} hint={populatedPatternError} tokens={{ value }} />;
         },
         shouldValidate: field => field.isBlurred && WebformUtils.validateRule(rules.get(`${supportedActions.required}_${this.key}`), field),
@@ -124,10 +123,6 @@ class Field {
       .map(validation => validation(this) || null);
 
     populatedValidations.push(...customValidationKeys.map(k => rules.get(k)).filter(k => k));
-
-    // rules.keys().filter(ruleKey => customValidationKeys.includes(ruleKey)).forEach((ruleKey) => {
-    //   if(rules.get(ruleKey)) populatedValidations.push(rules.get(ruleKey));
-    // });
 
     return populatedValidations;
   }

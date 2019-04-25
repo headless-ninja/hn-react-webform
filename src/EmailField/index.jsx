@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import validator from 'validator';
 import { get } from 'mobx';
 import { observer } from 'mobx-react';
-import { site } from 'hn-react';
 import rules from '../Webform/rules';
 import RuleHint from '../RuleHint';
 import composeLookUp from '../LookUp';
@@ -31,6 +30,7 @@ class EmailField extends Component {
     onChange: PropTypes.func.isRequired,
     onBlur: PropTypes.func.isRequired,
     settings: PropTypes.shape().isRequired,
+    url: PropTypes.string.isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
     registerLookUp: PropTypes.func.isRequired,
   };
@@ -47,6 +47,7 @@ class EmailField extends Component {
         required: true,
       },
     };
+    this.lookUpBase = `${props.url}/neverbounce/validate-single?_format=json`;
 
     const lookUpKey = this.getLookUpKey(props);
     const field = props.formStore.getField(props.field['#webform_key']);
@@ -54,7 +55,7 @@ class EmailField extends Component {
     rules.set(`email_${props.field['#webform_key']}`, {
       rule: () => field.isEmpty || validator.isEmail(field.value),
       hint: value =>
-        <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'emailError', props.settings) || WebformUtils.getErrorMessage(field, '#required_error') || site.t('Please enter a valid email.')} tokens={{ value }} />,
+        <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'emailError', props.settings) || WebformUtils.getErrorMessage(field, '#required_error') || 'Please enter a valid email.'} tokens={{ value }} />,
       shouldValidate: () => field.isBlurred && !field.isEmpty,
     });
     rules.set(`email_neverbounce_${props.field['#webform_key']}`, {
@@ -63,7 +64,7 @@ class EmailField extends Component {
         return field.isEmpty || !lookup || lookup.lookupSuccessful;
       },
       hint: () =>
-        <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'neverBounceError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || site.t('Please enter a valid email.')} />,
+        <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'neverBounceError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || 'Please enter a valid email.'} />,
       shouldValidate: () => field.isBlurred && !field.isEmpty && validator.isEmail(field.value),
     });
 

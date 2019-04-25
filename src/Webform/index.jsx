@@ -5,7 +5,6 @@ import { observer, Provider } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
-import { site } from 'hn-react';
 import Forms from '../Observables/Forms';
 import Parser from '../Parser';
 import ThankYouMessage from './ThankYouMessage';
@@ -38,6 +37,7 @@ class Webform extends Component {
   };
 
   static propTypes = {
+    url: PropTypes.string.isRequired,
     settings: PropTypes.shape({
       title: PropTypes.string,
       tracking: PropTypes.oneOfType([
@@ -171,6 +171,7 @@ class Webform extends Component {
         form={this.props.form}
         loadingTimeout={this.state.loadingTimeout}
         loadingComponent={this.props.loadingComponent}
+        url={this.props.url}
       />
     ));
   }
@@ -230,7 +231,7 @@ class Webform extends Component {
     }
 
     try {
-      const response = await fetch(`${site.url}/hn-webform-submission?_format=json`, {
+      const response = await fetch(`${this.props.url}/hn-webform-submission?_format=json`, {
         headers,
         method: 'POST',
         body: JSON.stringify(Object.assign({

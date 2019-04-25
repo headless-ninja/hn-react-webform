@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import getNested from 'get-nested';
 import PropTypes from 'prop-types';
-import { site } from 'hn-react';
 import { observer } from 'mobx-react';
 import { get } from 'mobx';
 import composeLookUp from '../LookUp';
@@ -35,6 +34,7 @@ class Relation extends Component {
     onBlur: PropTypes.func.isRequired,
     formKeySuffix: PropTypes.string.isRequired,
     formStore: PropTypes.instanceOf(FormStore).isRequired,
+    url: PropTypes.string.isRequired,
     settings: PropTypes.shape().isRequired,
     registerLookUp: PropTypes.func.isRequired,
   };

@@ -2,7 +2,6 @@ import { observer } from 'mobx-react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { site } from 'hn-react';
 import MomentLocaleUtils from 'react-day-picker/moment';
 import BaseInput from '../BaseInput';
 import Fieldset from '../Fieldset';
@@ -91,7 +90,7 @@ class Date extends Component {
       hint: () =>
         (<RuleHint
           key={`date_${props.field['#webform_key']}`}
-          hint={WebformUtils.getCustomValue(props.field, 'dateError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || site.t('Please enter a valid date.')}
+          hint={WebformUtils.getCustomValue(props.field, 'dateError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || 'Please enter a valid date.'}
         />),
       shouldValidate: field => field.isBlurred && !WebformUtils.isEmpty(field, field.getValue()),
     });
@@ -104,14 +103,14 @@ class Date extends Component {
 
         switch(result.type) {
           case 'before':
-            hint = WebformUtils.getCustomValue(props.field, 'dateBeforeError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || site.t('Please enter a date before {{max}}');
+            hint = WebformUtils.getCustomValue(props.field, 'dateBeforeError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || 'Please enter a date before {{max}}';
             break;
           case 'after':
-            hint = WebformUtils.getCustomValue(props.field, 'dateAfterError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || site.t('Please enter a date after {{min}}');
+            hint = WebformUtils.getCustomValue(props.field, 'dateAfterError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || 'Please enter a date after {{min}}';
             break;
           default:
           case 'range':
-            hint = WebformUtils.getCustomValue(props.field, 'dateRangeError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || site.t('Please enter a date between {{min}} and {{max}}');
+            hint = WebformUtils.getCustomValue(props.field, 'dateRangeError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || 'Please enter a date between {{min}} and {{max}}';
             break;
         }
 

@@ -27,7 +27,7 @@ Hidden.rewriteValue = (value, values) => {
 };
 
 Hidden.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.number.isRequired]).isRequired,
   formStore: PropTypes.instanceOf(Form).isRequired,
 };
 

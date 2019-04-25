@@ -61,8 +61,6 @@
     "eslint-plugin-react": "^7.0.1",
     "eslint-watch": "^3.1.0",
     "highlight.js": "^9.11.0",
-    "hn": "^0.5.0",
-    "hn-react": "^1.6.1",
     "husky": "^0.13.3",
     "jest": "^20.0.4",
     "jest-cli": "^20.0.3",
@@ -82,8 +80,6 @@
     "webpack": "^2.5.1"
   },
   "peerDependencies": {
-    "hn": "^0.5.0",
-    "hn-react": "^1.6.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0"
   }
