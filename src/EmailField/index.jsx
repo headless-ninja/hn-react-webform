@@ -60,8 +60,8 @@ class EmailField extends Component {
     });
     rules.set(`email_neverbounce_${props.field['#webform_key']}`, {
       rule: () => {
-        const lookup = get(field.lookups, lookUpKey);
-        return field.isEmpty || !lookup || lookup.lookupSuccessful;
+        const lookUp = get(field.lookUps, lookUpKey);
+        return field.isEmpty || !lookUp || lookUp.lookUpSuccessful;
       },
       hint: () =>
         <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'neverBounceError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || 'Please enter a valid email.'} />,

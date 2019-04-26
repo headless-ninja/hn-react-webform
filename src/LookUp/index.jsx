@@ -96,18 +96,19 @@ function composeLookUp(LookUpComponent) {
       if(!field) return;
 
       const lookUpKey = this.el.getLookUpKey();
-      const lookup = get(field.lookups, lookUpKey);
-      if(lookup && lookup.lookupSent) this.triggerLookUp();
+      const lookUp = get(field.lookUps, lookUpKey);
+      if(lookUp && lookUp.lookUpSent) this.triggerLookUp();
     }
 
     setFieldVisibility() {
       const lookUpKey = this.el.getLookUpKey();
       this.fieldIterator((field, element) => {
-        const lookup = get(field.lookups, lookUpKey);
-        if(element.hideField && lookup) {
-          set(field.lookups, lookUpKey, {
-            ...lookup,
-            lookupHide: true,
+        const lookUp = get(field.lookUps, lookUpKey);
+        if(lookUp) {
+          set(field.lookUps, lookUpKey, {
+            ...lookUp,
+            lookUpHide: !!element.hideField,
+            lookUpDisabled: !!element.disableField,
           });
         }
       });
@@ -153,10 +154,11 @@ function composeLookUp(LookUpComponent) {
     registerLookUp(lookUpKey, lookUpFields) {
       this.lookUpFields = lookUpFields;
       this.fieldIterator((field, element) => {
-        set(field.lookups, lookUpKey, {
-          lookupSent: false,
-          lookupSuccessful: true,
-          lookUpHide: element.lookups,
+        set(field.lookUps, lookUpKey, {
+          lookUpSent: false,
+          lookUpSuccessful: true,
+          lookUpHide: element.lookUps,
+          lookUpDisabled: false,
         });
       });
     }
@@ -214,7 +216,7 @@ function composeLookUp(LookUpComponent) {
       isSuccessful = () => true,
     }) {
       if(this.state.query !== query) {
-        console.warn('A lookup query was returned, but we already fired another one. Ignoring this result.', query, jsonResponse);
+        console.warn('A lookUp query was returned, but we already fired another one. Ignoring this result.', query, jsonResponse);
         return;
       }
 
@@ -224,18 +226,20 @@ function composeLookUp(LookUpComponent) {
       const lookUpKey = this.el.getLookUpKey();
       const lookUpField = this.props.formStore.getField(this.props.field['#webform_key']);
 
-      set(lookUpField.lookups, lookUpKey, {
-        lookupSent: true,
-        lookupSuccessful: successful,
+      set(lookUpField.lookUps, lookUpKey, {
+        ...get(lookUpField.lookUps, lookUpKey),
+        lookUpSent: true,
+        lookUpSuccessful: successful,
       });
 
-      // Let every field know the lookup was sent, and if it was successful
+      // Let every field know the lookUp was sent, and if it was successful
       Object.keys(this.lookUpFields).forEach((elementKey) => {
         const { field } = this.getField(elementKey);
         if(field) {
-          set(field.lookups, lookUpKey, {
-            lookupSent: true,
-            lookupSuccessful: successful,
+          set(field.lookUps, lookUpKey, {
+            ...get(field.lookUps, lookUpKey),
+            lookUpSent: true,
+            lookUpSuccessful: successful,
           });
         }
       });

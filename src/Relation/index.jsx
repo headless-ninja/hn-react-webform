@@ -66,9 +66,9 @@ class Relation extends Component {
 
     rules.set(`relation_membership_${props.field['#webform_key']}`, {
       rule: () => {
-        const lookup = get(field.lookups, lookUpKey);
-        return !field.element['#membership_validation'] || !lookup || !lookup.lookupSent || (
-          lookup.lookupSent && lookup.lookupSuccessful
+        const lookUp = get(field.lookUps, lookUpKey);
+        return !field.element['#membership_validation'] || !lookUp || !lookUp.lookUpSent || (
+          lookUp.lookUpSent && lookUp.lookUpSuccessful
         );
       },
       hint: () => null,
@@ -117,11 +117,11 @@ class Relation extends Component {
   render() {
     const field = this.props.formStore.getField(this.lookUpFields.relation_number.formKey);
     const lookUpKey = this.getLookUpKey();
-    const lookup = get(field.lookups, lookUpKey);
+    const lookUp = get(field.lookUps, lookUpKey);
 
     return (
       <Fieldset {...this.props}>
-        {lookup && lookup.lookupSent && !lookup.lookupSuccessful && (
+        {lookUp && lookUp.lookUpSent && !lookUp.lookUpSuccessful && (
           <RuleHint component={<ValidationMessage />} key={`relation_${lookUpKey}`} hint={WebformUtils.getCustomValue(this.props.field, 'relationError', this.props.settings) || WebformUtils.getErrorMessage(this.props.field, '#required_error') || 'We don\'t recognise this combination of relation number and postal code. Please check again, or proceed anyway.'} />
         )}
       </Fieldset>

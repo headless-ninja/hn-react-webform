@@ -50,7 +50,7 @@ class Field {
    */
   @observable isBlurred = false;
 
-  @observable lookups = {};
+  @observable lookUps = {};
 
   constructor(formStore, element, parent) {
     if(!element['#webform_key']) {
@@ -168,8 +168,8 @@ class Field {
   }
 
   @computed get visible() {
-    const lookups = values(this.lookups);
-    if(lookups.length > 0 && lookups.every(l => l.lookupHide && !l.lookupSent)) return false;
+    const lookUps = values(this.lookUps);
+    if(lookUps.length > 0 && lookUps.every(l => l.lookUpHide && !l.lookUpSent)) return false;
     return (this.parent ? this.parent.visible : true) && (typeof this.conditionalLogicResults.visible === 'undefined') ? true : this.conditionalLogicResults.visible;
   }
 
