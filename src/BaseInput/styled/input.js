@@ -19,7 +19,7 @@ export default styled.input`
   }
 
   &:disabled {
-    background-color: color(${p => p.theme.inputBgColor} blackness(50%));
+    background-color: ${p => p.theme.inputDisabledBgColor};
   }
 
   &::placeholder {
