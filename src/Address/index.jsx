@@ -21,6 +21,7 @@ class Address extends Component {
     wrapperProps: Fieldset.meta.wrapperProps,
     labelVisibility: Fieldset.meta.labelVisibility,
     validations: [el => `address_${el.key}`],
+    hasValue: false,
   };
 
   static propTypes = {
@@ -48,12 +49,18 @@ class Address extends Component {
   constructor(props) {
     super(props);
 
+    const field = props.formStore.getField(props.field['#webform_key']);
+
+    const lookUpIsBlocking = field.element['#address_validation'] || (
+      field.parent && field.parent.element['#address_validation']);
+
     this.lookUpFields = {
       street: {
         elementKey: 'street',
         formKey: `address_street${props.formKeySuffix}`,
         apiValue: address => address.street,
         hideField: true,
+        disableField: lookUpIsBlocking,
       },
       postcode: {
         elementKey: 'postcode',
@@ -78,6 +85,7 @@ class Address extends Component {
         formKey: `address_city${props.formKeySuffix}`,
         apiValue: address => address.city.label,
         hideField: true,
+        disableField: lookUpIsBlocking,
       },
       locationLat: {
         elementKey: 'locationLat',
@@ -96,7 +104,6 @@ class Address extends Component {
       },
     };
 
-    const field = props.formStore.getField(props.field['#webform_key']);
 
     this.lookUpBase = `${props.url}/postcode-api/address?_format=json`;
 
@@ -104,11 +111,9 @@ class Address extends Component {
 
     rules.set(`address_${props.field['#webform_key']}`, {
       rule: () => {
-        const lookup = get(field.lookups, lookUpKey);
-        return !(field.element['#address_validation'] || (
-            field.parent && field.parent.element['#address_validation'])
-        ) || !lookup || !lookup.lookupSent || (
-          lookup.lookupSent && lookup.lookupSuccessful
+        const lookUp = get(field.lookUps, lookUpKey);
+        return !lookUpIsBlocking || !lookUp || !lookUp.lookUpSent || (
+          lookUp.lookUpSent && lookUp.lookUpSuccessful
         );
       },
       hint: () => null,
@@ -148,11 +153,11 @@ class Address extends Component {
   render() {
     const field = this.props.formStore.getField(this.lookUpFields.postcode.formKey);
     const lookUpKey = this.getLookUpKey();
-    const lookup = get(field.lookups, lookUpKey);
+    const lookUp = get(field.lookUps, lookUpKey);
 
     return (
       <Fieldset {...this.props}>
-        {lookup && lookup.lookupSent && !lookup.lookupSuccessful && (
+        {lookUp && lookUp.lookUpSent && !lookUp.lookUpSuccessful && (
           <RuleHint
             component={<ValidationMessage />}
             key={`address_${this.props.field['#webform_key']}`}
