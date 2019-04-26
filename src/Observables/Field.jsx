@@ -178,6 +178,8 @@ class Field {
   }
 
   @computed get enabled() {
+    const lookUps = values(this.lookUps);
+    if(lookUps.length > 0 && lookUps.every(l => l.lookUpDisabled)) return false;
     return (typeof this.conditionalLogicResults.enabled === 'undefined') ? true : this.conditionalLogicResults.enabled;
   }
 
