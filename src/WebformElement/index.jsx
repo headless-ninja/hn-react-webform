@@ -53,6 +53,7 @@ class WebformElement extends Component {
       settings: PropTypes.object.isRequired,
     }).isRequired,
     status: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
   };
 
   static defaultProps = {

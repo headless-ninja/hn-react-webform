@@ -9,6 +9,7 @@ const theme = {
   textAreaHeight: '40px',
   inputLineHeight: '1.6em',
   inputBgColor: '#fdfdfd',
+  inputDisabledBgColor: '#dcd9d9',
   inlineLabelWidth: '50%',
   fieldsetBgColor: '#f5f5f5',
   fieldsetBorder: 'none',

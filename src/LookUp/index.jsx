@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fetch from 'fetch-everywhere';
 import getNested from 'get-nested';
+import { get, set } from 'mobx';
 import FormStore from '../Observables/Form';
 
 function composeLookUp(LookUpComponent) {
@@ -34,7 +35,7 @@ function composeLookUp(LookUpComponent) {
        *    formKey: 'street', // #webform_key in Drupal
        *    apiValue: response => response.street, // Method that receives the response object, and returns the value to pre-fill or false if not to pre-fill.
        *    hideField: true, // Boolean to determine default state of field.
-       *    triggerLookup: false, // Boolean to determine whether blurring this field should trigger the look-up.
+       *    triggerLookUp: false, // Boolean to determine whether blurring this field should trigger the look-up.
        *  },
        * }
        */
@@ -53,6 +54,8 @@ function composeLookUp(LookUpComponent) {
       this.getField = this.getField.bind(this);
       this.getState = this.getState.bind(this);
       this.fieldIterator = this.fieldIterator.bind(this);
+      this.triggerLookUp = this.triggerLookUp.bind(this);
+      this.registerLookUp = this.registerLookUp.bind(this);
     }
 
     componentDidMount() {
@@ -70,38 +73,43 @@ function composeLookUp(LookUpComponent) {
 
     onBlur(e) {
       const triggerElement = Object.values(this.lookUpFields).find(element => element.formKey === e.target.name);
-      if(!triggerElement || !triggerElement.triggerLookup) {
+      if(!triggerElement || !triggerElement.triggerLookUp) {
         return;
       }
 
-      const fields = {};
-      this.fieldIterator((field, element) => {
-        const value = field.value;
-        if(!field.empty) {
-          fields[element.elementKey] = value;
-        }
-      });
-
-      const lookUpObject = this.el.prepareLookUp ? this.el.prepareLookUp(fields) : false;
-      if(lookUpObject && lookUpObject.query !== this.state.query) {
-        this.lookUp(lookUpObject);
-      }
+      this.triggerLookUp();
 
       this.props.onBlur(e);
     }
 
     onChange(e) {
       const triggerElement = Object.values(this.lookUpFields).find(element => element.formKey === e.target.name);
-      if(triggerElement && !triggerElement.triggerLookup) {
+      if(triggerElement && !triggerElement.triggerLookUp) {
         this.setManualOverride(true);
       }
       this.props.onChange(e);
+
+      if(!triggerElement) return;
+
+      const field = this.props.formStore.getField(triggerElement.formKey);
+
+      if(!field) return;
+
+      const lookUpKey = this.el.getLookUpKey();
+      const lookUp = get(field.lookUps, lookUpKey);
+      if(lookUp && lookUp.lookUpSent) this.triggerLookUp();
     }
 
     setFieldVisibility() {
+      const lookUpKey = this.el.getLookUpKey();
       this.fieldIterator((field, element) => {
-        if(element.hideField) {
-          field.lookupHide = true;
+        const lookUp = get(field.lookUps, lookUpKey);
+        if(lookUp) {
+          set(field.lookUps, lookUpKey, {
+            ...lookUp,
+            lookUpHide: !!element.hideField,
+            lookUpDisabled: !!element.disableField,
+          });
         }
       });
     }
@@ -143,6 +151,33 @@ function composeLookUp(LookUpComponent) {
       return this.state;
     }
 
+    registerLookUp(lookUpKey, lookUpFields) {
+      this.lookUpFields = lookUpFields;
+      this.fieldIterator((field, element) => {
+        set(field.lookUps, lookUpKey, {
+          lookUpSent: false,
+          lookUpSuccessful: true,
+          lookUpHide: element.lookUps,
+          lookUpDisabled: false,
+        });
+      });
+    }
+
+    triggerLookUp() {
+      const fields = {};
+      this.fieldIterator((field, element) => {
+        const value = field.value;
+        if(!field.empty) {
+          fields[element.elementKey] = value;
+        }
+      });
+
+      const lookUpObject = this.el.prepareLookUp ? this.el.prepareLookUp(fields) : false;
+      if(lookUpObject && lookUpObject.query !== this.state.query) {
+        this.lookUp(lookUpObject);
+      }
+    }
+
     fieldIterator(cb) {
       let stop = false;
       if(!this.lookUpFields) {
@@ -181,23 +216,31 @@ function composeLookUp(LookUpComponent) {
       isSuccessful = () => true,
     }) {
       if(this.state.query !== query) {
-        console.warn('A lookup query was returned, but we already fired another one. Ignoring this result.', query, jsonResponse);
+        console.warn('A lookUp query was returned, but we already fired another one. Ignoring this result.', query, jsonResponse);
         return;
       }
 
       const response = checkResponse(jsonResponse);
       const successful = isSuccessful(response);
 
+      const lookUpKey = this.el.getLookUpKey();
       const lookUpField = this.props.formStore.getField(this.props.field['#webform_key']);
-      lookUpField.lookupSent = true;
-      lookUpField.lookupSuccessful = successful;
 
-      // Let every field know the lookup was sent, and if it was successful
+      set(lookUpField.lookUps, lookUpKey, {
+        ...get(lookUpField.lookUps, lookUpKey),
+        lookUpSent: true,
+        lookUpSuccessful: successful,
+      });
+
+      // Let every field know the lookUp was sent, and if it was successful
       Object.keys(this.lookUpFields).forEach((elementKey) => {
         const { field } = this.getField(elementKey);
         if(field) {
-          field.lookupSent = true;
-          field.lookupSuccessful = successful;
+          set(field.lookUps, lookUpKey, {
+            ...get(field.lookUps, lookUpKey),
+            lookUpSent: true,
+            lookUpSuccessful: successful,
+          });
         }
       });
 
@@ -229,6 +272,7 @@ function composeLookUp(LookUpComponent) {
           getField={this.getField}
           getState={this.getState}
           fields={this.getFields()}
+          registerLookUp={this.registerLookUp}
         />
       );
     }

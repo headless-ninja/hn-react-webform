@@ -38,6 +38,7 @@ class Fieldset extends Component {
     }).isRequired,
     status: PropTypes.string.isRequired,
     childrenAdjacent: PropTypes.bool,
+    url: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -82,6 +83,7 @@ class Fieldset extends Component {
         webformPage={this.props.webformPage}
         form={this.props.form}
         status={this.props.status}
+        url={this.props.url}
       />
     ));
   }
