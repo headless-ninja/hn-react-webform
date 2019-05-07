@@ -140,7 +140,7 @@ class Address extends Component {
       return false;
     }
 
-    const query = `&postcode=${fields.postcode}${fields.number ? `&number=${fields.number}${fields.addition || ''}` : ''}`;
+    const query = `&postcode=${fields.postcode}${fields.number ? `&number=${fields.number}` : ''}`;
 
     return {
       query,
