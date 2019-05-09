@@ -80,7 +80,8 @@ class Field {
       hint: value =>
         (<RuleHint
           key={`req_${this.key}`}
-          hint={WebformUtils.getCustomValue(this.element, 'requiredError', this.formStore.form.settings) || WebformUtils.getErrorMessage(element, '#required_error') || 'This field is required'}
+          hint={WebformUtils.getCustomValue(this.element, 'requiredError', this.formStore.form.settings) || WebformUtils.getErrorMessage(element, '#required_error') ||
+          WebformUtils.getErrorMessage(element, '#help') || 'This field is required'}
           tokens={{
             value,
             name: this.element['#title'],
