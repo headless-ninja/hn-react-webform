@@ -55,7 +55,7 @@ class EmailField extends Component {
     rules.set(`email_${props.field['#webform_key']}`, {
       rule: () => field.isEmpty || validator.isEmail(field.value),
       hint: value =>
-        <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'emailError', props.settings) || WebformUtils.getErrorMessage(field, '#required_error') || 'Please enter a valid email.'} tokens={{ value }} />,
+        <RuleHint key={`email_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'emailError', props.settings) || WebformUtils.getErrorMessage(field.element, '#required_error') || 'Please enter a valid email.'} tokens={{ value }} />,
       shouldValidate: () => field.isBlurred && !field.isEmpty,
     });
     rules.set(`email_neverbounce_${props.field['#webform_key']}`, {
@@ -64,7 +64,7 @@ class EmailField extends Component {
         return field.isEmpty || !lookUp || lookUp.lookUpSuccessful;
       },
       hint: () =>
-        <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'neverBounceError', props.settings) || WebformUtils.getErrorMessage(props.field, '#required_error') || 'Please enter a valid email.'} />,
+        <RuleHint key={`email_neverbounce_${props.field['#webform_key']}`} hint={WebformUtils.getCustomValue(props.field, 'neverBounceError', props.settings) || WebformUtils.getErrorMessage(field.element, '#required_error') || 'Please enter a valid email.'} />,
       shouldValidate: () => field.isBlurred && !field.isEmpty && validator.isEmail(field.value),
     });
 
