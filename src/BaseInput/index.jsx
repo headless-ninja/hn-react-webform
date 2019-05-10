@@ -69,11 +69,10 @@ class BaseInput extends Component {
   };
 
   render() {
-    const fieldAttrs = this.props.field['#attributes'];
     const attrs = {
       'aria-invalid': this.props.webformElement.isValid() ? null : true,
       'aria-required': this.props.state.required ? true : null,
-      autoComplete: fieldAttrs ? fieldAttrs.autoComplete : null,
+      ...(this.props.field['#attributes'] || {}),
     };
 
     let InputComponent = Input; // Input HTML element is 'input' by default
