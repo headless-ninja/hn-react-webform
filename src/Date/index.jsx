@@ -277,6 +277,7 @@ class Date extends Component {
         onMouseDown={this.handleContainerMouseDown}
         onBlur={this.handleInputBlur}
         labelDisplay={this.getLabelDisplay()}
+        className={`hrw-input-wrap hrw-date-wrap hrw-label-display-${this.getLabelDisplay()}`}
       >
         {DateInput}
         {this.state.showOverlay && (
