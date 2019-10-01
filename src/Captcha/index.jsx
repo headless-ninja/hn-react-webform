@@ -1,11 +1,9 @@
-import { Component } from 'react';
-import { observer } from 'mobx-react';
+import { PureComponent } from 'react';
 
 /**
  * This component is necessary for the recaptcha element to appear.
  */
-@observer
-class Captcha extends Component {
+class Captcha extends PureComponent {
   render() {
     return null;
   }

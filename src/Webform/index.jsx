@@ -108,8 +108,6 @@ class Webform extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.submit = this.submit.bind(this);
 
-    this.recaptchaRef = React.createRef();
-
     this.formStore = this.getFormstore(props);
   }
 
@@ -148,8 +146,8 @@ class Webform extends Component {
 
     const isValid = this.isValid();
     if(isValid) {
-      if(this.getCaptchaField()) {
-        return this.recaptchaRef.current.execute();
+      if(this.getCaptchaField() && this.recaptchaRef) {
+        return this.recaptchaRef.execute();
       }
       return this.updateSubmission();
     }
@@ -257,6 +255,8 @@ class Webform extends Component {
     }
   }
 
+  recaptchaRef = null;
+
   render() {
     if(!this.formStore) return null;
     const formElements = this.getFormElements();
@@ -296,7 +296,7 @@ class Webform extends Component {
           <ReCAPTCHA
             size='invisible'
             sitekey={field.element['#captcha_sitekey']}
-            ref={this.recaptchaRef}
+            ref={(ref) => { this.recaptchaRef = ref; }}
             onChange={() => this.updateSubmission()}
             hl={this.props.settings.langcode || this.props.form.langcode || 'en'}
           />
