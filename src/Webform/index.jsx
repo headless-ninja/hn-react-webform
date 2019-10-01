@@ -5,6 +5,7 @@ import { observer, Provider } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { ThemeProvider } from 'styled-components';
+import ReCAPTCHA from 'react-google-recaptcha';
 import Forms from '../Observables/Forms';
 import Parser from '../Parser';
 import ThankYouMessage from './ThankYouMessage';
@@ -49,6 +50,7 @@ class Webform extends Component {
         }),
         PropTypes.bool,
       ]),
+      langcode: PropTypes.string,
     }).isRequired,
     form: PropTypes.shape({
       form_id: PropTypes.string.isRequired,
@@ -61,6 +63,7 @@ class Webform extends Component {
         '#type': PropTypes.string.isRequired,
       })).isRequired,
       token: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
+      langcode: PropTypes.string,
     }).isRequired,
     onSubmit: PropTypes.func,
     onSubmitSuccess: PropTypes.func,
@@ -143,11 +146,18 @@ class Webform extends Component {
 
     const isValid = this.isValid();
     if(isValid) {
+      if(this.getCaptchaField() && this.recaptchaRef) {
+        return this.recaptchaRef.execute();
+      }
       return this.updateSubmission();
     }
     console.warn('The user tried to submit a form, but not all fields are valid.');
 
     return true;
+  }
+
+  getCaptchaField() {
+    return this.formStore.form.elements.find(field => field['#type'] === 'captcha');
   }
 
   getFormstore(props) {
@@ -245,6 +255,8 @@ class Webform extends Component {
     }
   }
 
+  recaptchaRef = null;
+
   render() {
     if(!this.formStore) return null;
     const formElements = this.getFormElements();
@@ -267,6 +279,31 @@ class Webform extends Component {
       </List>
     );
 
+    const renderCaptcha = () => {
+      const field = this.getCaptchaField();
+
+      if(!field) {
+        return null;
+      }
+
+      if(!field['#captcha_sitekey']) {
+        console.warn('No google reCaptcha sitekey found.');
+        return null;
+      }
+
+      return (
+        <div className='hrw-captcha-wrap'>
+          <ReCAPTCHA
+            size='invisible'
+            sitekey={field['#captcha_sitekey']}
+            ref={(ref) => { this.recaptchaRef = ref; }}
+            onChange={() => this.updateSubmission()}
+            hl={this.props.settings.langcode || this.props.form.langcode || 'en'}
+          />
+        </div>
+      );
+    };
+
     return (
       <Provider formStore={this.formStore} submit={this.submit} webform={this}>
         <ThemeProvider theme={{ ...theme, ...this.props.theme }}>
@@ -285,6 +322,7 @@ class Webform extends Component {
               >
                 {requiredHint}
                 {formElements}
+                {renderCaptcha()}
               </form>
             )}
             {this.props.showThankYouMessage && this.state.status === Webform.formStates.SENT && (
