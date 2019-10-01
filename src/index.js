@@ -22,7 +22,7 @@ import Number from './Number';
 import Converse from './Converse';
 import Label from './WebformElement/styled/label';
 import SubmitButton from './SubmitButton';
-import Captcha from './Captcha';
+// import Captcha from './Captcha';
 
 const components = {
 
@@ -43,7 +43,7 @@ const components = {
   webform_wizard_page: Fieldset,
   webform_message: ParagraphField,
   webform_actions: SubmitButton,
-  captcha: Captcha,
+  // captcha: Captcha,
 
   // Custom elements
   dutch_address: Address,

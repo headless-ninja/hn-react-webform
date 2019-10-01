@@ -157,7 +157,7 @@ class Webform extends Component {
   }
 
   getCaptchaField() {
-    return this.formStore.visibleFields.find(field => field.key === 'captcha');
+    return this.formStore.form.elements.find(field => field['#type'] === 'captcha');
   }
 
   getFormstore(props) {
@@ -286,7 +286,7 @@ class Webform extends Component {
         return null;
       }
 
-      if(!field.element['#captcha_sitekey']) {
+      if(!field['#captcha_sitekey']) {
         console.warn('No google reCaptcha sitekey found.');
         return null;
       }
@@ -295,7 +295,7 @@ class Webform extends Component {
         <div className='hrw-captcha-wrap'>
           <ReCAPTCHA
             size='invisible'
-            sitekey={field.element['#captcha_sitekey']}
+            sitekey={field['#captcha_sitekey']}
             ref={(ref) => { this.recaptchaRef = ref; }}
             onChange={() => this.updateSubmission()}
             hl={this.props.settings.langcode || this.props.form.langcode || 'en'}
