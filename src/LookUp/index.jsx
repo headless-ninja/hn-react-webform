@@ -41,6 +41,8 @@ function composeLookUp(LookUpComponent) {
        */
       this.lookUpFields = {};
 
+      this.lookUpOnBlurOnly = false;
+
       this.lookUpBase = null;
       this.el = null;
 
@@ -89,7 +91,7 @@ function composeLookUp(LookUpComponent) {
       }
       this.props.onChange(e);
 
-      if(!triggerElement) return;
+      if(!triggerElement || this.lookUpOnBlurOnly) return;
 
       const field = this.props.formStore.getField(triggerElement.formKey);
 
@@ -151,8 +153,9 @@ function composeLookUp(LookUpComponent) {
       return this.state;
     }
 
-    registerLookUp(lookUpKey, lookUpFields) {
+    registerLookUp(lookUpKey, lookUpFields, lookUpOnBlurOnly = false) {
       this.lookUpFields = lookUpFields;
+      this.lookUpOnBlurOnly = lookUpOnBlurOnly;
       this.fieldIterator((field, element) => {
         set(field.lookUps, lookUpKey, {
           lookUpSent: false,
