@@ -140,7 +140,7 @@ class Address extends Component {
       return false;
     }
 
-    const query = `&postcode=${fields.postcode}${fields.number ? `&number=${fields.number}` : ''}`;
+    const query = `&postcode=${fields.postcode.toUpperCase()}${fields.number ? `&number=${fields.number}` : ''}`;
 
     return {
       query,
