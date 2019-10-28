@@ -124,7 +124,7 @@ class Address extends Component {
         ),
     });
 
-    props.registerLookUp(lookUpKey, this.lookUpFields);
+    props.registerLookUp(lookUpKey, this.lookUpFields, true);
   }
 
   getLookUpKey(props) {
