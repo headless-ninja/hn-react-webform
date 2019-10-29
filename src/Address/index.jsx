@@ -124,7 +124,7 @@ class Address extends Component {
         ),
     });
 
-    props.registerLookUp(lookUpKey, this.lookUpFields);
+    props.registerLookUp(lookUpKey, this.lookUpFields, true);
   }
 
   getLookUpKey(props) {
@@ -135,12 +135,13 @@ class Address extends Component {
 
   prepareLookUp(fields) {
     const postCodeField = this.props.getField('postcode').field;
+    const numberField = this.props.getField('number').field;
 
-    if(!fields.postcode || !postCodeField || !postCodeField.valid) {
+    if(!fields.postcode || !postCodeField || !numberField || !postCodeField.valid || !fields.number || !numberField.valid) {
       return false;
     }
 
-    const query = `&postcode=${fields.postcode}${fields.number ? `&number=${fields.number}` : ''}`;
+    const query = `&postcode=${fields.postcode.toUpperCase()}${fields.number ? `&number=${fields.number}` : ''}`;
 
     return {
       query,
