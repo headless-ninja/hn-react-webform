@@ -135,8 +135,9 @@ class Address extends Component {
 
   prepareLookUp(fields) {
     const postCodeField = this.props.getField('postcode').field;
+    const numberField = this.props.getField('number').field;
 
-    if(!fields.postcode || !postCodeField || !postCodeField.valid || !fields.number) {
+    if(!fields.postcode || !postCodeField || !numberField || !postCodeField.valid || !fields.number || !numberField.valid) {
       return false;
     }
 
